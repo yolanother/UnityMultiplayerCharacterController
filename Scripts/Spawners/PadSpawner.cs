@@ -8,12 +8,12 @@ public class PadSpawner : PlayerSpawner
     [SerializeField] private PlayerSpawnPoint[] playerSpawnPoints;
     [SerializeField] private bool scanSceneForAdditionalSpawnPoints;
 
-    protected List<PlayerSpawnPoint> sceneSpawnPoints = new List<PlayerSpawnPoint>();
 
     public List<PlayerSpawnPoint> SpawnPoints
     {
         get
         {
+            List <PlayerSpawnPoint> sceneSpawnPoints = new List< PlayerSpawnPoint>();
             if (null != playerSpawnPoints)
             {
                 sceneSpawnPoints.AddRange(playerSpawnPoints);

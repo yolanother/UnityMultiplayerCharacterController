@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Mirror;
+using UnityEngine;
 
 namespace DoubTech.Multiplayer
 {
@@ -17,9 +18,11 @@ namespace DoubTech.Multiplayer
         public event Action OnClientConnected;
         public event Action OnClientDisconnected;
 
+        public event Action<NetworkConnection, GameObject> OnPlayerSpawned;
+
         public override void OnServerAddPlayer(NetworkConnection conn)
         {
-            playerSpawner.Spawn(conn);
+            playerSpawner.Spawn(conn, p => OnPlayerSpawned?.Invoke(conn, p));
         }
 
         public override void OnClientDisconnect(NetworkConnection conn)

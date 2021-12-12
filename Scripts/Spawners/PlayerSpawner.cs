@@ -13,29 +13,30 @@ public abstract class PlayerSpawner : MonoBehaviour
         NetworkClient.RegisterPrefab(playerPrefab);
     }
 
-    public void Spawn(NetworkConnection conn)
+    public void Spawn(NetworkConnection conn, Action<GameObject> onPlayerSpawned)
     {
         Debug.Log($"Spawn for {conn}");
-        StartCoroutine(SpawnAsync(conn));
+        StartCoroutine(SpawnAsync(conn, onPlayerSpawned));
     }
 
-    protected IEnumerator SpawnAsync(NetworkConnection conn)
+    protected IEnumerator SpawnAsync(NetworkConnection conn, Action<GameObject> onPlayerSpawned)
     {
         yield return OnPrePlayerSpawn();
 
-        yield return OnSpawnPlayer(conn);
+        yield return OnSpawnPlayer(conn, onPlayerSpawned);
 
         yield return OnPostPlayerSpawn();
 
         OnClientSpawnCompleted();
     }
 
-    protected virtual IEnumerator OnSpawnPlayer(NetworkConnection conn)
+    protected virtual IEnumerator OnSpawnPlayer(NetworkConnection conn, Action<GameObject> onPlayerSpawned)
     {
         var transform = OnGetSpawnPoint();
         Debug.Log($"Spawning {playerPrefab.name} at {transform.position}");
         var player = Instantiate(playerPrefab, transform.position, transform.rotation);
         NetworkServer.AddPlayerForConnection(conn, player);
+        onPlayerSpawned?.Invoke(player);
 
         yield return null;
     }

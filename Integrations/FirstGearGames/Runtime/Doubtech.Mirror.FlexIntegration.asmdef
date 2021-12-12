@@ -1,0 +1,25 @@
+{
+    "name": "Doubtech.Mirror.FlexIntegration",
+    "rootNamespace": "",
+    "references": [
+        "GUID:30817c1a0e6d646d99c048fc403f5979",
+        "GUID:a525cbcc229dac5489e0e0f634176bc8",
+        "GUID:ab51fe285d6fc5e45b84c9b36e274f00",
+        "GUID:de845979c24cace4ea45f2f6656bfec2"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [
+        {
+            "name": "com.firstgeargames.mirror",
+            "expression": "0.0.1",
+            "define": "FIRST_GEAR_GAMES"
+        }
+    ],
+    "noEngineReferences": false
+}
