@@ -1,4 +1,5 @@
 ﻿using System;
+using DoubTech.Multiplayer.Input;
 using DoubTech.Networking;
 using Mirror;
 using UnityEngine;
@@ -9,9 +10,9 @@ using UnityEngine.InputSystem;
 /* Note: animations are called via the controller for both the character and capsule using animator null checks
  */
 
-namespace StarterAssets
+namespace DoubTech.Multiplayer.Input
 {
-    [RequireComponent(typeof(CharacterController))]
+    [RequireComponent(typeof(UnityEngine.CharacterController))]
     public class NetworkCharacterController : NetworkBehaviour
     {
         [Header("Player")] [Tooltip("Move speed of the character in m/s")]
@@ -106,7 +107,7 @@ namespace StarterAssets
 
 
         private Animator _animator;
-        private CharacterController _controller;
+        private UnityEngine.CharacterController _controller;
         private NetworkMultiplayerInput _input;
         private GameObject _mainCamera;
 
@@ -131,7 +132,7 @@ namespace StarterAssets
 
         private void Start()
         {
-            _controller = GetComponent<CharacterController>();
+            _controller = GetComponent<UnityEngine.CharacterController>();
 
             AssignAnimationIDs();
 
