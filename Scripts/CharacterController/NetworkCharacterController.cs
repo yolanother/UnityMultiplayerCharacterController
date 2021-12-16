@@ -1,11 +1,6 @@
-﻿using System;
-using DoubTech.Multiplayer.Input;
-using DoubTech.Networking;
+﻿using DoubTech.Networking;
 using Mirror;
 using UnityEngine;
-#if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
-using UnityEngine.InputSystem;
-#endif
 
 /* Note: animations are called via the controller for both the character and capsule using animator null checks
  */
@@ -15,6 +10,8 @@ namespace DoubTech.Multiplayer.Input
     [RequireComponent(typeof(UnityEngine.CharacterController))]
     public class NetworkCharacterController : NetworkBehaviour
     {
+        [SerializeField] private NetworkInputSync playerInput;
+
         [Header("Player")] [Tooltip("Move speed of the character in m/s")]
         public float MoveSpeed = 2.0f;
 
@@ -108,18 +105,13 @@ namespace DoubTech.Multiplayer.Input
 
         private Animator _animator;
         private UnityEngine.CharacterController _controller;
-        private NetworkMultiplayerInput _input;
+        private NetworkInputSync _input;
         private GameObject _mainCamera;
 
         private const float _threshold = 0.01f;
 
         private bool _hasAnimator;
-        private Vector2 _inputLook;
-        private bool _inputSprint;
-        private Vector2 _inputMove;
-        private bool _inputAnalogMovement;
-        private bool _inputJump;
-        private float _cameraAngle;
+
 
         private void Awake()
         {
@@ -143,7 +135,7 @@ namespace DoubTech.Multiplayer.Input
 
         private void OnEnable()
         {
-            _input = FindObjectOfType<NetworkMultiplayerInput>();
+            _input = GetComponent<NetworkInputSync>();
             ResetAnimator();
         }
 
@@ -162,83 +154,7 @@ namespace DoubTech.Multiplayer.Input
                 Move();
             }
 
-            if (isLocalPlayer)
-            {
-                if (_inputLook != _input.look)
-                {
-                    _inputLook = _input.look;
-                    UpdateLookServerRpc(_input.look);
-                }
-
-                if (_inputSprint != _input.sprint)
-                {
-                    _inputSprint = _input.sprint;
-                    UpdateSprintServerRpc(_inputSprint);
-                }
-
-                if (_inputJump != _input.jump)
-                {
-                    _inputJump = _input.jump;
-                    UpdateJumpServerRpc(_inputJump);
-                }
-
-                if (_inputMove != _input.move)
-                {
-                    _inputMove = _input.move;
-                    UpdateMoveServerRpc(_inputMove);
-                }
-
-                if (_inputAnalogMovement != _input.analogMovement)
-                {
-                    _inputAnalogMovement = _input.analogMovement;
-                    UpdateAnalogMoveServerRpc(_inputAnalogMovement);
-                }
-
-                if (_cameraAngle != _mainCamera.transform.eulerAngles.y)
-                {
-                    _cameraAngle = _mainCamera.transform.eulerAngles.y;
-                    UpdateCameraAngleServerRpc(_cameraAngle);
-                }
-            }
-
             UpdateAnims();
-        }
-
-        [Command]
-        private void UpdateCameraAngleServerRpc(float cameraAngle)
-        {
-            _cameraAngle = cameraAngle;
-        }
-
-        [Command]
-        private void UpdateJumpServerRpc(bool inputJump)
-        {
-            _inputJump = inputJump;
-            Debug.Log("Jump.");
-        }
-
-        [Command]
-        private void UpdateAnalogMoveServerRpc(bool inputAnalogMovement)
-        {
-            _inputAnalogMovement = inputAnalogMovement;
-        }
-
-        [Command]
-        private void UpdateMoveServerRpc(Vector2 inputMove)
-        {
-            _inputMove = inputMove;
-        }
-
-        [Command]
-        private void UpdateSprintServerRpc(bool inputSprint)
-        {
-            _inputSprint = inputSprint;
-        }
-
-        [Command]
-        private void UpdateLookServerRpc(Vector2 inputLook)
-        {
-            _inputLook = inputLook;
         }
 
         private void UpdateAnims()
@@ -282,10 +198,10 @@ namespace DoubTech.Multiplayer.Input
         private void CameraRotation()
         {
             // if there is an input and camera position is not fixed
-            if (_inputLook.sqrMagnitude >= _threshold && !LockCameraPosition)
+            if (_input.inputLook.sqrMagnitude >= _threshold && !LockCameraPosition)
             {
-                _cinemachineTargetYaw += _inputLook.x * Time.deltaTime;
-                _cinemachineTargetPitch += _inputLook.y * Time.deltaTime;
+                _cinemachineTargetYaw += _input.inputLook.x * Time.deltaTime;
+                _cinemachineTargetPitch += _input.inputLook.y * Time.deltaTime;
             }
 
             // clamp our rotations so our values are limited 360 degrees
@@ -301,20 +217,20 @@ namespace DoubTech.Multiplayer.Input
         private void Move()
         {
             // set target speed based on move speed, sprint speed and if sprint is pressed
-            float targetSpeed = _inputSprint ? SprintSpeed : MoveSpeed;
+            float targetSpeed = _input.inputSprint ? SprintSpeed : MoveSpeed;
 
             // a simplistic acceleration and deceleration designed to be easy to remove, replace, or iterate upon
 
             // note: Vector2's == operator uses approximation so is not floating point error prone, and is cheaper than magnitude
             // if there is no input, set the target speed to 0
-            if (_inputMove == Vector2.zero) targetSpeed = 0.0f;
+            if (_input.inputMove == Vector2.zero) targetSpeed = 0.0f;
 
             // a reference to the players current horizontal velocity
             float currentHorizontalSpeed =
                 new Vector3(_controller.velocity.x, 0.0f, _controller.velocity.z).magnitude;
 
             float speedOffset = 0.1f;
-            float inputMagnitude = _inputAnalogMovement ? _inputMove.magnitude : 1f;
+            float inputMagnitude = _input.inputAnalogMovement ? _input.inputMove.magnitude : 1f;
 
             // accelerate or decelerate to target speed
             if (currentHorizontalSpeed < targetSpeed - speedOffset ||
@@ -337,14 +253,14 @@ namespace DoubTech.Multiplayer.Input
                 Time.deltaTime * SpeedChangeRate);
 
             // normalise input direction
-            Vector3 inputDirection = new Vector3(_inputMove.x, 0.0f, _inputMove.y).normalized;
+            Vector3 inputDirection = new Vector3(_input.inputMove.x, 0.0f, _input.inputMove.y).normalized;
 
             // note: Vector2's != operator uses approximation so is not floating point error prone, and is cheaper than magnitude
             // if there is a move input rotate player when the player is moving
-            if (_inputMove != Vector2.zero)
+            if (_input.inputMove != Vector2.zero)
             {
                 _targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg +
-                                  _cameraAngle;
+                                  _input.cameraAngle;
                 float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, _targetRotation,
                     ref _rotationVelocity, RotationSmoothTime);
 
@@ -381,7 +297,7 @@ namespace DoubTech.Multiplayer.Input
                 }
 
                 // Jump
-                if (_inputJump && _jumpTimeoutDelta <= 0.0f)
+                if (_input.inputJump && _jumpTimeoutDelta <= 0.0f)
                 {
                     // the square root of H * -2 * G = how much velocity needed to reach desired height
                     _verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity);
@@ -415,7 +331,7 @@ namespace DoubTech.Multiplayer.Input
                 }
 
                 // if we are not grounded, do not jump
-                _inputJump = false;
+                _input.inputJump = false;
             }
 
             // apply gravity over time if under terminal (multiply by delta time twice to linearly speed up over time)
