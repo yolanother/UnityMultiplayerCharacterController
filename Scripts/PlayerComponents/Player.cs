@@ -1,3 +1,4 @@
+using System;
 using Cinemachine;
 using Mirror;
 using UnityEngine;
@@ -5,7 +6,7 @@ using UnityEngine.Events;
 
 namespace DoubTech.Multiplayer
 {
-    public class Player : NetworkBehaviour
+    public class Player : MonoBehaviour, INetworkPlayer
     {
         [SerializeField] private Transform fpsFollowTarget;
         [SerializeField] private Transform tpsFollowTarget;
@@ -16,8 +17,15 @@ namespace DoubTech.Multiplayer
         [SerializeField] public UnityEvent onSwitchedToFPS = new UnityEvent();
         [SerializeField] public UnityEvent onSwitchedToTPS = new UnityEvent();
 
+        private IPlayerInfoProvider playerInfo;
+
         public bool IsFPS => CinemachineCore.Instance?.GetActiveBrain(0)?.ActiveVirtualCamera
             ?.VirtualCameraGameObject?.CompareTag("FPSVirtualCamera") ?? false;
+
+        private void Awake()
+        {
+            playerInfo = GetComponent<IPlayerInfoProvider>();
+        }
 
         private void OnEnable()
         {
@@ -39,38 +47,23 @@ namespace DoubTech.Multiplayer
             if (IsFPS) onSwitchedToFPS.Invoke();
             else onSwitchedToTPS.Invoke();
         }
-
-        public override void OnStartClient()
+        
+        public virtual void OnStartLocalPlayer()
         {
-            Debug.Log($"OnStartClient: {netIdentity.netId}");
-            base.OnStartClient();
-            name = $"Player {netIdentity.netId}";
-        }
-
-        public override void OnStartServer()
-        {
-            Debug.Log($"OnStartServer: {netIdentity.netId}");
-            base.OnStartServer();
-        }
-
-        public override void OnStartAuthority()
-        {
-            Debug.Log($"OnStartAuthority: {netIdentity.netId}");
-            base.OnStartAuthority();
-        }
-
-        public override void OnStartLocalPlayer()
-        {
-            base.OnStartLocalPlayer();
-            name = $"Player {netIdentity.netId}";
+            name = $"Player {playerInfo.PlayerId} - {playerInfo.PlayerName}";
             Debug.Log($"Staring local player: {name}");
             AssignCamera("FPSVirtualCamera", fpsFollowTarget);
             AssignCamera("TPSVirtualCamera", tpsFollowTarget);
         }
 
+        public virtual void OnStartRemotePlayer()
+        {
+            
+        }
+
         public void DisableUnownedComponents()
         {
-            if (!isLocalPlayer)
+            if (!playerInfo.IsLocalPlayer)
             {
                 foreach (var component in localPlayerBehaviours)
                 {
@@ -93,5 +86,26 @@ namespace DoubTech.Multiplayer
                 virtualCamera.Follow = target;
             }
         }
+    }
+
+    public interface INetworkPlayer
+    {
+        /// <summary>
+        /// Called when the the player is created on the client. This is useful for activating local cameras etc.
+        /// </summary>
+        void OnStartLocalPlayer();
+        
+        /// <summary>
+        /// Called when another player is created
+        /// </summary>
+        void OnStartRemotePlayer();
+    }
+
+    public interface IPlayerInfoProvider
+    {
+        string PlayerName { get; set; }
+        uint PlayerId { get; }
+        bool IsLocalPlayer { get; }
+        bool IsServer { get; }
     }
 }

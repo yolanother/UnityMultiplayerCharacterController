@@ -1,5 +1,4 @@
 ﻿using DoubTech.Networking;
-using Mirror;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Events;
@@ -9,10 +8,8 @@ using UnityEngine.Events;
 
 namespace DoubTech.Multiplayer.Input
 {
-    [RequireComponent(typeof(NetworkIdentity))]
-    public class NetworkInputSync : NetworkBehaviour
+    public class NetworkInputSync : MonoBehaviour
     {
-
         [Header("Cinemachine")]
         [Tooltip(
             "The follow target set in the Cinemachine Virtual Camera that the camera will follow in FPS mode")]
@@ -35,7 +32,7 @@ namespace DoubTech.Multiplayer.Input
         [Tooltip("For locking the camera position on all axis")]
         public bool LockCameraPosition = false;
 
-        private NetworkMultiplayerInput _input;
+        [SerializeField] private NetworkMultiplayerInput _input;
 
         public GameObject _mainCamera;
 
@@ -59,6 +56,9 @@ namespace DoubTech.Multiplayer.Input
         [ReadOnly] public bool inputJump;
         [ReadOnly] public float cameraAngle;
 
+        private IPlayerInfoProvider playerInfo;
+        private IPlayerInputSync playerInputSync;
+        
         private void Awake()
         {
             // get a reference to our main camera
@@ -66,6 +66,9 @@ namespace DoubTech.Multiplayer.Input
             {
                 _mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
             }
+
+            playerInfo = GetComponent<IPlayerInfoProvider>();
+            playerInputSync = GetComponent<IPlayerInputSync>();
         }
 
         private void OnEnable()
@@ -75,83 +78,45 @@ namespace DoubTech.Multiplayer.Input
 
         private void Update()
         {
-            if (!NetworkManager.singleton || isLocalPlayer)
+            if (playerInfo.IsLocalPlayer)
             {
                 if (inputLook != _input.look)
                 {
                     inputLook = _input.look;
-                    UpdateLookServerRpc(_input.look);
+                    playerInputSync.UpdateLookServerRpc(_input.look);
                 }
 
                 if (inputSprint != _input.sprint)
                 {
                     inputSprint = _input.sprint;
-                    UpdateSprintServerRpc(inputSprint);
+                    playerInputSync.UpdateSprintServerRpc(inputSprint);
                 }
 
                 if (inputJump != _input.jump)
                 {
                     inputJump = _input.jump;
-                    UpdateJumpServerRpc(inputJump);
+                    playerInputSync.UpdateJumpServerRpc(inputJump);
                 }
 
+                Debug.Log("_input.move: " + _input.move);
                 if (inputMove != _input.move)
                 {
                     inputMove = _input.move;
-                    UpdateMoveServerRpc(inputMove);
+                    playerInputSync.UpdateMoveServerRpc(inputMove);
                 }
 
                 if (inputAnalogMovement != _input.analogMovement)
                 {
                     inputAnalogMovement = _input.analogMovement;
-                    UpdateAnalogMoveServerRpc(inputAnalogMovement);
+                    playerInputSync.UpdateAnalogMoveServerRpc(inputAnalogMovement);
                 }
 
                 if (cameraAngle != _mainCamera.transform.eulerAngles.y)
                 {
                     cameraAngle = _mainCamera.transform.eulerAngles.y;
-                    UpdateCameraAngleServerRpc(cameraAngle);
+                    playerInputSync.UpdateCameraAngleServerRpc(cameraAngle);
                 }
             }
-        }
-
-        [Command]
-        private void UpdateCameraAngleServerRpc(float cameraAngle)
-        {
-            this.cameraAngle = cameraAngle;
-        }
-
-        [Command]
-        private void UpdateJumpServerRpc(bool inputJump)
-        {
-            this.inputJump = inputJump;
-            onJump.Invoke();
-        }
-
-        [Command]
-        private void UpdateAnalogMoveServerRpc(bool inputAnalogMovement)
-        {
-            this.inputAnalogMovement = inputAnalogMovement;
-        }
-
-        [Command]
-        private void UpdateMoveServerRpc(Vector2 inputMove)
-        {
-            this.inputMove = inputMove;
-        }
-
-        [Command]
-        private void UpdateSprintServerRpc(bool inputSprint)
-        {
-            this.inputSprint = inputSprint;
-            if(inputSprint) onSprintStarted.Invoke();
-            else onSprintEnded.Invoke();
-        }
-
-        [Command]
-        private void UpdateLookServerRpc(Vector2 inputLook)
-        {
-            this.inputLook = inputLook;
         }
 
         private void LateUpdate()
@@ -185,5 +150,15 @@ namespace DoubTech.Multiplayer.Input
             if (lfAngle > 360f) lfAngle -= 360f;
             return Mathf.Clamp(lfAngle, lfMin, lfMax);
         }
+    }
+
+    public interface IPlayerInputSync
+    {
+        void UpdateCameraAngleServerRpc(float cameraAngle);
+        void UpdateJumpServerRpc(bool inputJump);
+        void UpdateAnalogMoveServerRpc(bool inputAnalogMovement);
+        void UpdateMoveServerRpc(Vector2 inputMove);
+        void UpdateSprintServerRpc(bool inputSprint);
+        void UpdateLookServerRpc(Vector2 inputLook);
     }
 }
