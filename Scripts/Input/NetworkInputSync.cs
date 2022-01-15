@@ -83,38 +83,37 @@ namespace DoubTech.Multiplayer.Input
                 if (inputLook != _input.look)
                 {
                     inputLook = _input.look;
-                    playerInputSync.UpdateLookServerRpc(_input.look);
+                    playerInputSync.UpdateLook(_input.look);
                 }
 
                 if (inputSprint != _input.sprint)
                 {
                     inputSprint = _input.sprint;
-                    playerInputSync.UpdateSprintServerRpc(inputSprint);
+                    playerInputSync.UpdateSprint(inputSprint);
                 }
 
                 if (inputJump != _input.jump)
                 {
                     inputJump = _input.jump;
-                    playerInputSync.UpdateJumpServerRpc(inputJump);
+                    playerInputSync.UpdateJump(inputJump);
                 }
 
-                Debug.Log("_input.move: " + _input.move);
                 if (inputMove != _input.move)
                 {
                     inputMove = _input.move;
-                    playerInputSync.UpdateMoveServerRpc(inputMove);
+                    playerInputSync.UpdateMove(inputMove);
                 }
 
                 if (inputAnalogMovement != _input.analogMovement)
                 {
                     inputAnalogMovement = _input.analogMovement;
-                    playerInputSync.UpdateAnalogMoveServerRpc(inputAnalogMovement);
+                    playerInputSync.UpdateAnalogMove(inputAnalogMovement);
                 }
 
                 if (cameraAngle != _mainCamera.transform.eulerAngles.y)
                 {
                     cameraAngle = _mainCamera.transform.eulerAngles.y;
-                    playerInputSync.UpdateCameraAngleServerRpc(cameraAngle);
+                    playerInputSync.UpdateCameraAngle(cameraAngle);
                 }
             }
         }
@@ -154,11 +153,11 @@ namespace DoubTech.Multiplayer.Input
 
     public interface IPlayerInputSync
     {
-        void UpdateCameraAngleServerRpc(float cameraAngle);
-        void UpdateJumpServerRpc(bool inputJump);
-        void UpdateAnalogMoveServerRpc(bool inputAnalogMovement);
-        void UpdateMoveServerRpc(Vector2 inputMove);
-        void UpdateSprintServerRpc(bool inputSprint);
-        void UpdateLookServerRpc(Vector2 inputLook);
+        void UpdateCameraAngle(float cameraAngle);
+        void UpdateJump(bool inputJump);
+        void UpdateAnalogMove(bool inputAnalogMovement);
+        void UpdateMove(Vector2 inputMove);
+        void UpdateSprint(bool inputSprint);
+        void UpdateLook(Vector2 inputLook);
     }
 }

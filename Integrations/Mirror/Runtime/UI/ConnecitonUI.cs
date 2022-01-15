@@ -1,3 +1,4 @@
+#if MIRROR
 using Mirror;
 using UnityEngine;
 using UnityEngine.UI;
@@ -93,3 +94,4 @@ namespace DoubTech.Multiplayer
         }
     }
 }
+#endif

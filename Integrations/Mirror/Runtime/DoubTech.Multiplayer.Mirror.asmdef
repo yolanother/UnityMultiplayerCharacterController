@@ -1,9 +1,10 @@
 {
-    "name": "DoubTech.Multiplayer",
+    "name": "DoubTech.Multiplayer.Mirror",
     "rootNamespace": "",
     "references": [
-        "GUID:75469ad4d38634e559750d17036d5f7c",
-        "GUID:4307f53044263cf4b835bd812fc161a4"
+        "GUID:a525cbcc229dac5489e0e0f634176bc8",
+        "GUID:30817c1a0e6d646d99c048fc403f5979",
+        "GUID:72872094b21c16e48b631b2224833d49"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

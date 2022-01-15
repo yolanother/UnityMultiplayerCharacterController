@@ -66,7 +66,6 @@ namespace DoubTech.Networking
 
 		public void MoveInput(Vector2 newMoveDirection)
 		{
-			Debug.Log("move: " + newMoveDirection);
 			move = newMoveDirection;
 		}
 

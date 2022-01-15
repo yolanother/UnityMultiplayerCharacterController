@@ -1,9 +1,8 @@
 using System.Collections.Generic;
 using DoubTech.Networking.PlayerComponents;
-using Mirror;
 using UnityEngine;
 
-public class PadSpawner : PlayerSpawner
+public class PadSpawner : MonoBehaviour
 {
     [SerializeField] private PlayerSpawnPoint[] playerSpawnPoints;
     [SerializeField] private bool scanSceneForAdditionalSpawnPoints;
@@ -28,7 +27,7 @@ public class PadSpawner : PlayerSpawner
         }
     }
 
-    protected override Transform OnGetSpawnPoint()
+    public Transform OnGetSpawnPoint()
     {
         var sceneSpawnPoints = SpawnPoints;
         var spawnPoint = sceneSpawnPoints[0];

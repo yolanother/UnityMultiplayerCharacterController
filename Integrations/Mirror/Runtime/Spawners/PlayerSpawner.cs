@@ -1,3 +1,4 @@
+#if MIRROR
 using System;
 using System.Collections;
 using DoubTech.Multiplayer;
@@ -58,3 +59,4 @@ public abstract class PlayerSpawner : MonoBehaviour
 
     }
 }
+#endif

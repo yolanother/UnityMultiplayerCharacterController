@@ -1,3 +1,4 @@
+#if MIRROR
 using System.Collections;
 using System.Collections.Generic;
 using Mirror;
@@ -10,3 +11,4 @@ namespace DoubTech.Multiplayer
         void Spawn(NetworkConnection conn, bool isClientAuthority);
     }
 }
+#endif

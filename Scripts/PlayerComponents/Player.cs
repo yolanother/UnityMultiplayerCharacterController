@@ -1,6 +1,4 @@
-using System;
 using Cinemachine;
-using Mirror;
 using UnityEngine;
 using UnityEngine.Events;
 

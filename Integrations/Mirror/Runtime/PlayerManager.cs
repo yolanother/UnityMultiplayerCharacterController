@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿#if MIRROR
+using System.Collections;
 using System.Collections.Generic;
 using Mirror;
 using UnityEngine;
@@ -101,3 +102,4 @@ namespace DoubTech.Networking.PlayerComponents
         }
     }
 }
+#endif

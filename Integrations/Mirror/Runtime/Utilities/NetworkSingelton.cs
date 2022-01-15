@@ -1,3 +1,4 @@
+#if MIRROR
 using Mirror;
 using UnityEngine;
 
@@ -33,3 +34,4 @@ namespace DoubTech.Networking
         }
     }*/
 }
+#endif

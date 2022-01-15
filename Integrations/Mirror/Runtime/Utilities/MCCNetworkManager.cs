@@ -1,3 +1,4 @@
+#if MIRROR
 using System;
 using System.Collections.Generic;
 using Mirror;
@@ -44,3 +45,4 @@ namespace DoubTech.Multiplayer
         }
     }
 }
+#endif
