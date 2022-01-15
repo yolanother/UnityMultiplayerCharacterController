@@ -95,7 +95,6 @@ namespace DoubTech.Multiplayer.Input
         
         private Animator _animator;
         private UnityEngine.CharacterController _controller;
-        private NetworkInputSync _input;
         private GameObject _mainCamera;
 
         private const float _threshold = 0.01f;
@@ -103,6 +102,7 @@ namespace DoubTech.Multiplayer.Input
         private bool _hasAnimator;
         private IPlayerInfoProvider playerInfo;
         private IPlayerAnimSync playerAnimSync;
+        private IPlayerInputSync playerInputSync;
 
 
         private void Awake()
@@ -129,7 +129,7 @@ namespace DoubTech.Multiplayer.Input
 
         private void OnEnable()
         {
-            _input = GetComponent<NetworkInputSync>();
+            playerInputSync = GetComponent<IPlayerInputSync>();
             ResetAnimator();
         }
 
@@ -196,10 +196,10 @@ namespace DoubTech.Multiplayer.Input
         private void CameraRotation()
         {
             // if there is an input and camera position is not fixed
-            if (_input.inputLook.sqrMagnitude >= _threshold && !LockCameraPosition)
+            if (playerInputSync.Look.sqrMagnitude >= _threshold && !LockCameraPosition)
             {
-                _cinemachineTargetYaw += _input.inputLook.x * Time.deltaTime;
-                _cinemachineTargetPitch += _input.inputLook.y * Time.deltaTime;
+                _cinemachineTargetYaw += playerInputSync.Look.x * Time.deltaTime;
+                _cinemachineTargetPitch += playerInputSync.Look.y * Time.deltaTime;
             }
 
             // clamp our rotations so our values are limited 360 degrees
@@ -215,20 +215,20 @@ namespace DoubTech.Multiplayer.Input
         private void Move()
         {
             // set target speed based on move speed, sprint speed and if sprint is pressed
-            float targetSpeed = _input.inputSprint ? SprintSpeed : MoveSpeed;
+            float targetSpeed = playerInputSync.Sprint ? SprintSpeed : MoveSpeed;
 
             // a simplistic acceleration and deceleration designed to be easy to remove, replace, or iterate upon
 
             // note: Vector2's == operator uses approximation so is not floating point error prone, and is cheaper than magnitude
             // if there is no input, set the target speed to 0
-            if (_input.inputMove == Vector2.zero) targetSpeed = 0.0f;
+            if (playerInputSync.Move == Vector2.zero) targetSpeed = 0.0f;
 
             // a reference to the players current horizontal velocity
             float currentHorizontalSpeed =
                 new Vector3(_controller.velocity.x, 0.0f, _controller.velocity.z).magnitude;
 
             float speedOffset = 0.1f;
-            float inputMagnitude = _input.inputAnalogMovement ? _input.inputMove.magnitude : 1f;
+            float inputMagnitude = playerInputSync.AnalogMovement ? playerInputSync.Move.magnitude : 1f;
 
             // accelerate or decelerate to target speed
             if (currentHorizontalSpeed < targetSpeed - speedOffset ||
@@ -251,21 +251,20 @@ namespace DoubTech.Multiplayer.Input
                 Time.deltaTime * SpeedChangeRate);
 
             // normalise input direction
-            Vector3 inputDirection = new Vector3(_input.inputMove.x, 0.0f, _input.inputMove.y).normalized;
+            Vector3 inputDirection = new Vector3(playerInputSync.Move.x, 0.0f, playerInputSync.Move.y).normalized;
 
             // note: Vector2's != operator uses approximation so is not floating point error prone, and is cheaper than magnitude
             // if there is a move input rotate player when the player is moving
-            if (_input.inputMove != Vector2.zero)
+            if (playerInputSync.Move != Vector2.zero)
             {
                 _targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg +
-                                  _input.cameraAngle;
+                                  playerInputSync.CameraAngle;
                 float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, _targetRotation,
                     ref _rotationVelocity, RotationSmoothTime);
 
                 // rotate to face input direction relative to camera position
                 transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
             }
-
 
             Vector3 targetDirection =
                 Quaternion.Euler(0.0f, _targetRotation, 0.0f) * Vector3.forward;
@@ -295,7 +294,7 @@ namespace DoubTech.Multiplayer.Input
                 }
 
                 // Jump
-                if (_input.inputJump && _jumpTimeoutDelta <= 0.0f)
+                if (playerInputSync.Jump && _jumpTimeoutDelta <= 0.0f)
                 {
                     // the square root of H * -2 * G = how much velocity needed to reach desired height
                     _verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity);
@@ -329,7 +328,7 @@ namespace DoubTech.Multiplayer.Input
                 }
 
                 // if we are not grounded, do not jump
-                _input.inputJump = false;
+                playerInputSync.Jump = false;
             }
 
             // apply gravity over time if under terminal (multiply by delta time twice to linearly speed up over time)

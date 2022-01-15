@@ -1,4 +1,5 @@
-﻿using DoubTech.Networking;
+﻿using System;
+using DoubTech.Networking;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Events;
@@ -48,17 +49,10 @@ namespace DoubTech.Multiplayer.Input
         public UnityEvent onSprintStarted = new UnityEvent();
         public UnityEvent onSprintEnded = new UnityEvent();
 
-        [Header("Current Input State")]
-        [ReadOnly] public Vector2 inputLook;
-        [ReadOnly] public bool inputSprint;
-        [ReadOnly] public Vector2 inputMove;
-        [ReadOnly] public bool inputAnalogMovement;
-        [ReadOnly] public bool inputJump;
-        [ReadOnly] public float cameraAngle;
-
         private IPlayerInfoProvider playerInfo;
-        private IPlayerInputSync playerInputSync;
-        
+        private IPlayerInputSync inputSync;
+        private double TOLERANCE = .0001f;
+
         private void Awake()
         {
             // get a reference to our main camera
@@ -68,7 +62,7 @@ namespace DoubTech.Multiplayer.Input
             }
 
             playerInfo = GetComponent<IPlayerInfoProvider>();
-            playerInputSync = GetComponent<IPlayerInputSync>();
+            inputSync = GetComponent<IPlayerInputSync>();
         }
 
         private void OnEnable()
@@ -80,35 +74,31 @@ namespace DoubTech.Multiplayer.Input
         {
             if (playerInfo.IsLocalPlayer)
             {
-                if (inputLook != _input.look)
+                if (inputSync.Look != _input.look)
                 {
-                    playerInputSync.UpdateLook(_input.look);
+                    inputSync.Look = _input.look;
                 }
 
-                if (inputSprint != _input.sprint)
+                if (inputSync.Sprint != _input.sprint)
                 {
-                    playerInputSync.UpdateSprint(_input.sprint);
+                    inputSync.Sprint = _input.sprint;
                 }
 
-                if (inputJump != _input.jump)
+                if (inputSync.Jump != _input.jump)
                 {
-                    playerInputSync.UpdateJump(_input.jump);
+                    inputSync.Jump = _input.jump;
                 }
 
-                if (inputMove != _input.move)
+                if (inputSync.Move != _input.move)
                 {
-                    playerInputSync.UpdateMove(_input.move);
+                    inputSync.Move = _input.move;
                 }
 
-                if (inputAnalogMovement != _input.analogMovement)
+                if (inputSync.AnalogMovement != _input.analogMovement)
                 {
-                    playerInputSync.UpdateAnalogMove(_input.analogMovement);
+                    inputSync.AnalogMovement = _input.analogMovement;
                 }
-
-                if (cameraAngle != _mainCamera.transform.eulerAngles.y)
-                {
-                    playerInputSync.UpdateCameraAngle(_mainCamera.transform.eulerAngles.y);
-                }
+                inputSync.CameraAngle = _mainCamera.transform.eulerAngles.y;
             }
         }
 
@@ -120,10 +110,10 @@ namespace DoubTech.Multiplayer.Input
         private void CameraRotation()
         {
             // if there is an input and camera position is not fixed
-            if (inputLook.sqrMagnitude >= _threshold && !LockCameraPosition)
+            if (inputSync.Look.sqrMagnitude >= _threshold && !LockCameraPosition)
             {
-                _cinemachineTargetYaw += inputLook.x * Time.deltaTime;
-                _cinemachineTargetPitch += inputLook.y * Time.deltaTime;
+                _cinemachineTargetYaw += inputSync.Look.x * Time.deltaTime;
+                _cinemachineTargetPitch += inputSync.Look.y * Time.deltaTime;
             }
 
             // clamp our rotations so our values are limited 360 degrees
@@ -147,11 +137,11 @@ namespace DoubTech.Multiplayer.Input
 
     public interface IPlayerInputSync
     {
-        void UpdateCameraAngle(float cameraAngle);
-        void UpdateJump(bool inputJump);
-        void UpdateAnalogMove(bool inputAnalogMovement);
-        void UpdateMove(Vector2 inputMove);
-        void UpdateSprint(bool inputSprint);
-        void UpdateLook(Vector2 inputLook);
+        float CameraAngle { get; set; }
+        bool Jump { get; set; }
+        bool AnalogMovement { get; set; }
+        Vector2 Move { get; set; }
+        bool Sprint { get; set; }
+        Vector2 Look { get; set; }
     }
 }

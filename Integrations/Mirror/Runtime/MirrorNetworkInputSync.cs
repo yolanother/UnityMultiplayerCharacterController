@@ -19,6 +19,14 @@ namespace DoubTech.Multiplayer.Input
         [SyncVar] private bool animSyncJump;
         [SyncVar] private bool animSyncFreeFall;
         [SyncVar] private float animSyncMotionSpeed;
+
+        [Header("Current Input State")]
+        [SyncVar] public Vector2 syncedLook;
+        [SyncVar] public bool syncedSprint;
+        [SyncVar] public Vector2 syncedMove;
+        [SyncVar] public bool syncedAnalogMovement;
+        [SyncVar] public bool syncedJump;
+        [SyncVar] public float syncedCameraAngle;
         private double TOLERANCE = .0001f;
 
         private void Awake()
@@ -29,68 +37,38 @@ namespace DoubTech.Multiplayer.Input
         [Command(requiresAuthority = false)]
         public void UpdateCameraAngleServerRpc(float cameraAngle)
         {
-            networkInputSync.cameraAngle = cameraAngle;
+            syncedCameraAngle = cameraAngle;
         }
 
         [Command(requiresAuthority = false)]
         public void UpdateJumpServerRpc(bool inputJump)
         {
-            networkInputSync.inputJump = inputJump;
+            syncedJump = inputJump;
             networkInputSync.onJump?.Invoke();
         }
 
         [Command(requiresAuthority = false)]
         public void UpdateAnalogMoveServerRpc(bool inputAnalogMovement)
         {
-            networkInputSync.inputAnalogMovement = inputAnalogMovement;
+            syncedAnalogMovement = inputAnalogMovement;
         }
 
         [Command(requiresAuthority = false)]
         public void UpdateMoveServerRpc(Vector2 inputMove)
         {
-            networkInputSync.inputMove = inputMove;
+            syncedMove = inputMove;
         }
 
         [Command(requiresAuthority = false)]
         public void UpdateSprintServerRpc(bool inputSprint)
         {
-            networkInputSync.inputSprint = inputSprint;
+            syncedSprint = inputSprint;
         }
 
         [Command(requiresAuthority = false)]
         public void UpdateLookServerRpc(Vector2 inputLook)
         {
-            networkInputSync.inputLook = inputLook;
-        }
-
-        public void UpdateCameraAngle(float cameraAngle)
-        {
-            UpdateCameraAngleServerRpc(cameraAngle);
-        }
-
-        public void UpdateJump(bool inputJump)
-        {
-            UpdateJumpServerRpc(inputJump);
-        }
-
-        public void UpdateAnalogMove(bool inputAnalogMovement)
-        {
-            UpdateAnalogMoveServerRpc(inputAnalogMovement);
-        }
-
-        public void UpdateMove(Vector2 inputMove)
-        {
-            UpdateMoveServerRpc(inputMove);
-        }
-
-        public void UpdateSprint(bool inputSprint)
-        {
-            UpdateSprintServerRpc(inputSprint);
-        }
-
-        public void UpdateLook(Vector2 inputLook)
-        {
-            UpdateLookServerRpc(inputLook);
+            syncedLook = inputLook;
         }
 
         [Command]
@@ -164,6 +142,56 @@ namespace DoubTech.Multiplayer.Input
             set
             {
                 if(animSyncIsGrounded != value) SetAnimSyncIsGrounded(value);
+            }
+        }
+
+        public float CameraAngle
+        {
+            get => syncedCameraAngle;
+            set
+            {
+                if(Math.Abs(syncedCameraAngle - value) > TOLERANCE) UpdateCameraAngleServerRpc(value);
+            }
+        }
+
+        public bool Jump
+        {
+            get => syncedJump;
+            set
+            {
+                if(syncedJump != value) UpdateJumpServerRpc(value);
+            }
+        }
+        public bool AnalogMovement
+        {
+            get => syncedAnalogMovement;
+            set
+            {
+                if(syncedAnalogMovement != value) UpdateAnalogMoveServerRpc(value);
+            }
+        }
+        public Vector2 Move
+        {
+            get => syncedMove;
+            set
+            {
+                if(syncedMove != value) UpdateMoveServerRpc(value);
+            }
+        }
+        public bool Sprint
+        {
+            get => syncedSprint;
+            set
+            {
+                if(syncedSprint != value) UpdateSprintServerRpc(value);
+            }
+        }
+        public Vector2 Look
+        {
+            get => syncedLook;
+            set
+            {
+                if(syncedLook != value) UpdateLookServerRpc(value);
             }
         }
     }
