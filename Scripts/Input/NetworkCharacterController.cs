@@ -69,6 +69,9 @@ namespace DoubTech.Multiplayer.Input
 
         [Tooltip("For locking the camera position on all axis")]
         public bool LockCameraPosition = false;
+        
+        [SerializeField] private bool hasHeadTracking;
+        [SerializeField] private float maxHeadRotation = 45;
 
         // cinemachine
         private float _cinemachineTargetYaw;
@@ -255,7 +258,7 @@ namespace DoubTech.Multiplayer.Input
 
             // note: Vector2's != operator uses approximation so is not floating point error prone, and is cheaper than magnitude
             // if there is a move input rotate player when the player is moving
-            if (playerInputSync.Move != Vector2.zero)
+            if (!hasHeadTracking || playerInputSync.Move != Vector2.zero || Mathf.Abs(playerInputSync.CameraAngle - transform.eulerAngles.y) > maxHeadRotation)
             {
                 _targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg +
                                   playerInputSync.CameraAngle;
