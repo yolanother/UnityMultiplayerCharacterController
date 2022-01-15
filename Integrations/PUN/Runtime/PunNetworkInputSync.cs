@@ -19,6 +19,14 @@ namespace DoubTech.Multiplayer.Input
         private bool animSyncFreeFall;
         private float animSyncMotionSpeed;
 
+        [Header("Current Input State")]
+        public Vector2 syncedLook;
+        public bool syncedSprint;
+        public Vector2 syncedMove;
+        public bool syncedAnalogMovement;
+        public bool syncedJump;
+        public float syncedCameraAngle;
+
         private void Awake()
         {
             networkInputSync = GetComponent<NetworkInputSync>();
@@ -26,7 +34,7 @@ namespace DoubTech.Multiplayer.Input
 
         public void UpdateCameraAngle(float cameraAngle)
         {
-            if (Math.Abs(cameraAngle - networkInputSync.cameraAngle) > TOLERANCE)
+            if (Math.Abs(cameraAngle - syncedCameraAngle) > TOLERANCE)
             {
                 photonView.RPC("UpdateCameraAngleRPC", RpcTarget.AllBufferedViaServer, cameraAngle);
             }
@@ -35,12 +43,12 @@ namespace DoubTech.Multiplayer.Input
         [PunRPC]
         protected void UpdateCameraAngleRPC(float cameraAngle)
         {
-            networkInputSync.cameraAngle = cameraAngle;
+            syncedCameraAngle = cameraAngle;
         }
 
         public void UpdateJump(bool inputJump)
         {
-            if (inputJump != networkInputSync.inputJump)
+            if (inputJump != syncedJump)
             {
                 photonView.RPC("UpdateJumpRPC", RpcTarget.AllBufferedViaServer, inputJump);
             }
@@ -49,13 +57,13 @@ namespace DoubTech.Multiplayer.Input
         [PunRPC]
         protected void UpdateJumpRPC(bool inputJump)
         {
-            networkInputSync.inputJump = inputJump;
+            syncedJump = inputJump;
             networkInputSync.onJump?.Invoke();
         }
 
         public void UpdateAnalogMove(bool inputAnalogMovement)
         {
-            if (inputAnalogMovement != networkInputSync.inputAnalogMovement)
+            if (inputAnalogMovement != syncedAnalogMovement)
             {
                 photonView.RPC("UpdateAnalogMoveRPC", RpcTarget.AllBufferedViaServer, inputAnalogMovement);
             }
@@ -64,12 +72,12 @@ namespace DoubTech.Multiplayer.Input
         [PunRPC]
         protected void UpdateAnalogMoveRPC(bool inputAnalogMovement)
         {
-            networkInputSync.inputAnalogMovement = inputAnalogMovement;
+            syncedAnalogMovement = inputAnalogMovement;
         }
 
         public void UpdateMove(Vector2 inputMove)
         {
-            if (inputMove != networkInputSync.inputMove)
+            if (inputMove != syncedMove)
             {
                 photonView.RPC("UpdateMoveRPC", RpcTarget.AllBufferedViaServer, inputMove);
             }
@@ -78,12 +86,12 @@ namespace DoubTech.Multiplayer.Input
         [PunRPC]
         protected void UpdateMoveRPC(Vector2 inputMove)
         {
-            networkInputSync.inputMove = inputMove;
+            syncedMove = inputMove;
         }
 
         public void UpdateSprint(bool inputSprint)
         {
-            if (inputSprint != networkInputSync.inputSprint)
+            if (inputSprint != syncedSprint)
             {
                 photonView.RPC("UpdateSprintRPC", RpcTarget.AllBufferedViaServer, inputSprint);
             }
@@ -92,12 +100,12 @@ namespace DoubTech.Multiplayer.Input
         [PunRPC]
         protected void UpdateSprintRPC(bool inputSprint)
         {
-            networkInputSync.inputSprint = inputSprint;
+            syncedSprint = inputSprint;
         }
 
         public void UpdateLook(Vector2 inputLook)
         {
-            if (inputLook != networkInputSync.inputLook)
+            if (inputLook != syncedLook)
             {
                 photonView.RPC("UpdateLookRPC", RpcTarget.AllBufferedViaServer, inputLook);
             }
@@ -106,7 +114,7 @@ namespace DoubTech.Multiplayer.Input
         [PunRPC]
         protected void UpdateLookRPC(Vector2 inputLook)
         {
-            networkInputSync.inputLook = inputLook;
+            syncedLook = inputLook;
         }
 
 
@@ -181,6 +189,56 @@ namespace DoubTech.Multiplayer.Input
             set
             {
                 if (animSyncIsGrounded != value) photonView.RPC("SetAnimSyncIsGroundedRPC", RpcTarget.AllBufferedViaServer, value);
+            }
+        }
+
+        public float CameraAngle
+        {
+            get => syncedCameraAngle;
+            set
+            {
+                if(Math.Abs(syncedCameraAngle - value) > TOLERANCE) UpdateCameraAngle(value);
+            }
+        }
+
+        public bool Jump
+        {
+            get => syncedJump;
+            set
+            {
+                if(syncedJump != value) UpdateJump(value);
+            }
+        }
+        public bool AnalogMovement
+        {
+            get => syncedAnalogMovement;
+            set
+            {
+                if(syncedAnalogMovement != value) UpdateAnalogMove(value);
+            }
+        }
+        public Vector2 Move
+        {
+            get => syncedMove;
+            set
+            {
+                if(syncedMove != value) UpdateMove(value);
+            }
+        }
+        public bool Sprint
+        {
+            get => syncedSprint;
+            set
+            {
+                if(syncedSprint != value) UpdateSprint(value);
+            }
+        }
+        public Vector2 Look
+        {
+            get => syncedLook;
+            set
+            {
+                if(syncedLook != value) UpdateLook(value);
             }
         }
     }
