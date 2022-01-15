@@ -49,14 +49,13 @@ namespace DoubTech.Multiplayer
         public virtual void OnStartLocalPlayer()
         {
             name = $"Player {playerInfo.PlayerId} - {playerInfo.PlayerName}";
-            Debug.Log($"Staring local player: {name}");
             AssignCamera("FPSVirtualCamera", fpsFollowTarget);
             AssignCamera("TPSVirtualCamera", tpsFollowTarget);
         }
 
         public virtual void OnStartRemotePlayer()
         {
-            
+            name = $"Player {playerInfo.PlayerId} - {playerInfo.PlayerName}";
         }
 
         public void DisableUnownedComponents()
@@ -103,7 +102,15 @@ namespace DoubTech.Multiplayer
     {
         string PlayerName { get; set; }
         uint PlayerId { get; }
+        
+        /// <summary>
+        /// Is the current instance owned by the local player
+        /// </summary>
         bool IsLocalPlayer { get; }
+        
+        /// <summary>
+        /// Is the current instance of the player running on the server/host
+        /// </summary>
         bool IsServer { get; }
     }
 }

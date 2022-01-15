@@ -82,38 +82,32 @@ namespace DoubTech.Multiplayer.Input
             {
                 if (inputLook != _input.look)
                 {
-                    inputLook = _input.look;
                     playerInputSync.UpdateLook(_input.look);
                 }
 
                 if (inputSprint != _input.sprint)
                 {
-                    inputSprint = _input.sprint;
-                    playerInputSync.UpdateSprint(inputSprint);
+                    playerInputSync.UpdateSprint(_input.sprint);
                 }
 
                 if (inputJump != _input.jump)
                 {
-                    inputJump = _input.jump;
-                    playerInputSync.UpdateJump(inputJump);
+                    playerInputSync.UpdateJump(_input.jump);
                 }
 
                 if (inputMove != _input.move)
                 {
-                    inputMove = _input.move;
-                    playerInputSync.UpdateMove(inputMove);
+                    playerInputSync.UpdateMove(_input.move);
                 }
 
                 if (inputAnalogMovement != _input.analogMovement)
                 {
-                    inputAnalogMovement = _input.analogMovement;
-                    playerInputSync.UpdateAnalogMove(inputAnalogMovement);
+                    playerInputSync.UpdateAnalogMove(_input.analogMovement);
                 }
 
                 if (cameraAngle != _mainCamera.transform.eulerAngles.y)
                 {
-                    cameraAngle = _mainCamera.transform.eulerAngles.y;
-                    playerInputSync.UpdateCameraAngle(cameraAngle);
+                    playerInputSync.UpdateCameraAngle(_mainCamera.transform.eulerAngles.y);
                 }
             }
         }

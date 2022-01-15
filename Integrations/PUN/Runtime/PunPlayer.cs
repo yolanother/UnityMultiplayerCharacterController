@@ -44,13 +44,19 @@ namespace DoubTech.Networking.Pun
 
         public string PlayerName
         {
-            get => PhotonNetwork.LocalPlayer.NickName;
-            set => PhotonNetwork.LocalPlayer.NickName = value;
+            get => photonView.Owner.NickName;
+            set
+            {
+                if (photonView.IsMine)
+                {
+                    PhotonNetwork.LocalPlayer.NickName = value;
+                }
+            }
         }
 
-        public uint PlayerId => (uint) PhotonNetwork.LocalPlayer.ActorNumber;
+        public uint PlayerId => (uint) photonView.OwnerActorNr;
         public bool IsLocalPlayer => photonView.IsMine;
-        public bool IsServer => photonView.IsMine && PhotonNetwork.IsMasterClient;
+        public bool IsServer => photonView.IsMine;
     }
 }
 #endif

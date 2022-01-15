@@ -143,6 +143,10 @@ namespace DoubTech.Multiplayer.Input
         {
             if (playerInfo.IsServer)
             {
+                if (!playerInfo.IsLocalPlayer)
+                {
+                    Debug.Log("Updating movement by " + playerInfo.PlayerId);
+                }
                 JumpAndGravity();
                 GroundedCheck();
                 Move();
