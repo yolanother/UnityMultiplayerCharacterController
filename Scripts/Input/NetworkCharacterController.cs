@@ -92,15 +92,7 @@ namespace DoubTech.Multiplayer.Input
         private int _animIDJump;
         private int _animIDFreeFall;
         private int _animIDMotionSpeed;
-
-        // Anim Sync
-        public float animSyncSpeed;
-        public bool animSyncIsGrounded;
-        public bool animSyncJump;
-        public bool animSyncFreeFall;
-        public float animSyncMotionSpeed;
-
-
+        
         private Animator _animator;
         private UnityEngine.CharacterController _controller;
         private NetworkInputSync _input;
@@ -110,6 +102,7 @@ namespace DoubTech.Multiplayer.Input
 
         private bool _hasAnimator;
         private IPlayerInfoProvider playerInfo;
+        private IPlayerAnimSync playerAnimSync;
 
 
         private void Awake()
@@ -125,6 +118,7 @@ namespace DoubTech.Multiplayer.Input
         {
             _controller = GetComponent<UnityEngine.CharacterController>();
             playerInfo = GetComponent<IPlayerInfoProvider>();
+            playerAnimSync = GetComponent<IPlayerAnimSync>();
 
             AssignAnimationIDs();
 
@@ -162,12 +156,11 @@ namespace DoubTech.Multiplayer.Input
             // update animator if using character
             if (_hasAnimator)
             {
-                Debug.Log(animSyncMotionSpeed);
-                _animator.SetBool(_animIDJump, animSyncJump);
-                _animator.SetBool(_animIDFreeFall, animSyncFreeFall);
-                _animator.SetFloat(_animIDSpeed, animSyncSpeed);
-                _animator.SetFloat(_animIDMotionSpeed, animSyncMotionSpeed);
-                _animator.SetBool(_animIDGrounded, animSyncIsGrounded);
+                _animator.SetBool(_animIDJump, playerAnimSync.AnimSyncJump);
+                _animator.SetBool(_animIDFreeFall, playerAnimSync.AnimSyncFreeFall);
+                _animator.SetFloat(_animIDSpeed, playerAnimSync.AnimSyncSpeed);
+                _animator.SetFloat(_animIDMotionSpeed, playerAnimSync.AnimSyncMotionSpeed);
+                _animator.SetBool(_animIDGrounded, playerAnimSync.AnimSyncIsGrounded);
             }
         }
 
@@ -193,7 +186,7 @@ namespace DoubTech.Multiplayer.Input
             Grounded = Physics.CheckSphere(spherePosition, GroundedRadius, GroundLayers,
                 QueryTriggerInteraction.Ignore);
 
-            animSyncIsGrounded = Grounded;
+            playerAnimSync.AnimSyncIsGrounded = Grounded;
         }
 
         private void CameraRotation()
@@ -277,8 +270,8 @@ namespace DoubTech.Multiplayer.Input
             _controller.Move(targetDirection.normalized * (_speed * Time.deltaTime) +
                              new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
 
-            animSyncSpeed = _animationBlend;
-            animSyncMotionSpeed = inputMagnitude;
+            playerAnimSync.AnimSyncSpeed = _animationBlend;
+            playerAnimSync.AnimSyncMotionSpeed = inputMagnitude;
         }
 
         private void JumpAndGravity()
@@ -288,8 +281,8 @@ namespace DoubTech.Multiplayer.Input
                 // reset the fall timeout timer
                 _fallTimeoutDelta = FallTimeout;
 
-                animSyncJump = false;
-                animSyncFreeFall = false;
+                playerAnimSync.AnimSyncJump = false;
+                playerAnimSync.AnimSyncFreeFall = false;
 
                 // stop our velocity dropping infinitely when grounded
                 if (_verticalVelocity < 0.0f)
@@ -303,7 +296,7 @@ namespace DoubTech.Multiplayer.Input
                     // the square root of H * -2 * G = how much velocity needed to reach desired height
                     _verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity);
 
-                    animSyncJump = true;
+                    playerAnimSync.AnimSyncJump = true;
                 }
 
                 // jump timeout
@@ -327,7 +320,7 @@ namespace DoubTech.Multiplayer.Input
                     // update animator if using character
                     if (_hasAnimator)
                     {
-                        animSyncFreeFall = true;
+                        playerAnimSync.AnimSyncFreeFall = true;
                     }
                 }
 
@@ -362,5 +355,14 @@ namespace DoubTech.Multiplayer.Input
                 new Vector3(transform.position.x, transform.position.y - GroundedOffset,
                     transform.position.z), GroundedRadius);
         }
+    }
+
+    public interface IPlayerAnimSync
+    {
+        bool AnimSyncJump { get; set; }
+        bool AnimSyncFreeFall { get; set; }
+        float AnimSyncSpeed { get; set; }
+        float AnimSyncMotionSpeed { get; set; }
+        bool AnimSyncIsGrounded { get; set; }
     }
 }
