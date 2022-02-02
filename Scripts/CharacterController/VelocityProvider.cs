@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace CharacterController
+namespace DoubTech.Multiplayer
 {
     public abstract class VelocityProvider : MonoBehaviour
     {
