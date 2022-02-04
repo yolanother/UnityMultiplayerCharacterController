@@ -1,0 +1,17 @@
+{
+    "name": "DoubTech.MCC.Reactor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:a525cbcc229dac5489e0e0f634176bc8",
+        "GUID:e44915612c358914c939c5e8976e1095"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

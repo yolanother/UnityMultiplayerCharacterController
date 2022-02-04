@@ -26,7 +26,6 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 1.375, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8308183395116220444}
   m_RootOrder: 1
@@ -58,7 +57,6 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8308183395116220444}
   m_RootOrder: 0
@@ -117,7 +115,6 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 1.375, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8308183395116220444}
   m_RootOrder: 2
@@ -147,6 +144,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8308183395116220444}
   - component: {fileID: 8648961237545376428}
+  - component: {fileID: 7704742983210049180}
   - component: {fileID: 1506215702182768726}
   - component: {fileID: 3734443716166331787}
   - component: {fileID: 6636688553512210335}
@@ -168,7 +166,6 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5497351929939073658}
   - {fileID: 3959037211486594042}
@@ -194,6 +191,18 @@ CharacterController:
   m_SkinWidth: 0.02
   m_MinMoveDistance: 0
   m_Center: {x: 0, y: 0.93, z: 0}
+--- !u!114 &7704742983210049180
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8648961237545376422}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db33b65384ec4e244ad78a18bba44808, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &1506215702182768726
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -262,12 +271,6 @@ MonoBehaviour:
   onSprintEnded:
     m_PersistentCalls:
       m_Calls: []
-  inputLook: {x: 0, y: 0}
-  inputSprint: 0
-  inputMove: {x: 0, y: 0}
-  inputAnalogMovement: 0
-  inputJump: 0
-  cameraAngle: 0
 --- !u!114 &8210373177846479898
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -301,8 +304,5 @@ MonoBehaviour:
   BottomClamp: -30
   CameraAngleOverride: 0
   LockCameraPosition: 0
-  animSyncSpeed: 0
-  animSyncIsGrounded: 0
-  animSyncJump: 0
-  animSyncFreeFall: 0
-  animSyncMotionSpeed: 0
+  hasHeadTracking: 0
+  maxHeadRotation: 45
