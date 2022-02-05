@@ -1,6 +1,5 @@
 ﻿using System;
 using DoubTech.Networking;
-using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Events;
 
