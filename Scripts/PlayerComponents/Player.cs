@@ -27,16 +27,29 @@ namespace DoubTech.MCC
 
         private void OnEnable()
         {
+            
             if (IsFPS) onSwitchedToFPS.Invoke();
             else onSwitchedToTPS.Invoke();
-            CinemachineCore.Instance.GetActiveBrain(0).m_CameraActivatedEvent
-                .AddListener(OnCameraActivated);
+            var activeBrain = CinemachineCore.Instance.GetActiveBrain(0);
+            if(activeBrain)
+            {
+                activeBrain.m_CameraActivatedEvent.AddListener(OnCameraActivated);
+            }
+            else
+            {
+                enabled = false;
+                Debug.LogError("Cannot create player, no cinemachine brains found. Do you have a camera rig in your scene?");
+            }
         }
 
         private void OnDisable()
         {
-            CinemachineCore.Instance.GetActiveBrain(0).m_CameraActivatedEvent
-                .RemoveListener(OnCameraActivated);
+            var activeBrain = CinemachineCore.Instance.GetActiveBrain(0);
+            if (activeBrain)
+            {
+                CinemachineCore.Instance.GetActiveBrain(0).m_CameraActivatedEvent
+                    .RemoveListener(OnCameraActivated);
+            }
         }
 
         private void OnCameraActivated(ICinemachineCamera oldCamera, ICinemachineCamera newCamera)
