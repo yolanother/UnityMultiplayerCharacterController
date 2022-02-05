@@ -1,15 +1,13 @@
-﻿using UnityEngine;
+﻿using DoubTech.Multiplayer;
+using UnityEngine;
 
 /* Note: animations are called via the controller for both the character and capsule using animator null checks
  */
 
-namespace DoubTech.Multiplayer.Input
+namespace DoubTech.MCC.Input
 {
-    [RequireComponent(typeof(UnityEngine.CharacterController))]
-    public class NetworkCharacterController : MonoBehaviour
+    public class NetworkCharacterController : BaseNetworkCharacterController
     {
-        [SerializeField] private NetworkInputSync playerInput;
-
         [Header("Player")] [Tooltip("Move speed of the character in m/s")]
         public float MoveSpeed = 2.0f;
 
@@ -50,32 +48,9 @@ namespace DoubTech.Multiplayer.Input
 
         [Tooltip("What layers the character uses as ground")]
         public LayerMask GroundLayers;
-
-        [Header("Cinemachine")]
-        [Tooltip(
-            "The follow target set in the Cinemachine Virtual Camera that the camera will follow")]
-        public GameObject FPSCameraTarget;
-        public GameObject TPSCameraTarget;
-
-        [Tooltip("How far in degrees can you move the camera up")]
-        public float TopClamp = 70.0f;
-
-        [Tooltip("How far in degrees can you move the camera down")]
-        public float BottomClamp = -30.0f;
-
-        [Tooltip(
-            "Additional degress to override the camera. Useful for fine tuning camera position when locked")]
-        public float CameraAngleOverride = 0.0f;
-
-        [Tooltip("For locking the camera position on all axis")]
-        public bool LockCameraPosition = false;
         
         [SerializeField] private bool hasHeadTracking;
         [SerializeField] private float maxHeadRotation = 45;
-
-        // cinemachine
-        private float _cinemachineTargetYaw;
-        private float _cinemachineTargetPitch;
 
         // player
         private float _speed;
@@ -90,22 +65,19 @@ namespace DoubTech.Multiplayer.Input
         private float _fallTimeoutDelta;
 
         // animation IDs
-        private int _animIDSpeed;
-        private int _animIDGrounded;
-        private int _animIDJump;
-        private int _animIDFreeFall;
-        private int _animIDMotionSpeed;
+        private int _animIDSpeed = Animator.StringToHash("Speed");
+        private int _animIDGrounded = Animator.StringToHash("Grounded");
+        private int _animIDJump = Animator.StringToHash("Jump");
+        private int _animIDFreeFall = Animator.StringToHash("FreeFall");
+        private int _animIDMotionSpeed = Animator.StringToHash("MotionSpeed");
         
         private Animator _animator;
-        private UnityEngine.CharacterController _controller;
+        private ICharacterController _controller;
         private GameObject _mainCamera;
-
-        private const float _threshold = 0.01f;
 
         private bool _hasAnimator;
         private IPlayerInfoProvider playerInfo;
         private IPlayerAnimSync playerAnimSync;
-        private IPlayerInputSync playerInputSync;
 
 
         private void Awake()
@@ -119,20 +91,17 @@ namespace DoubTech.Multiplayer.Input
 
         private void Start()
         {
-            _controller = GetComponent<UnityEngine.CharacterController>();
-            playerInfo = GetComponent<IPlayerInfoProvider>();
-            playerAnimSync = GetComponent<IPlayerAnimSync>();
-
-            AssignAnimationIDs();
+            _controller = GetComponentInParent<ICharacterController>();
+            playerInfo = GetComponentInParent<IPlayerInfoProvider>();
+            playerAnimSync = GetComponentInParent<IPlayerAnimSync>();
 
             // reset our timeouts on start
             _jumpTimeoutDelta = JumpTimeout;
             _fallTimeoutDelta = FallTimeout;
         }
 
-        private void OnEnable()
+        protected override void OnEnable()
         {
-            playerInputSync = GetComponent<IPlayerInputSync>();
             ResetAnimator();
         }
 
@@ -171,48 +140,15 @@ namespace DoubTech.Multiplayer.Input
             }
         }
 
-        private void LateUpdate()
-        {
-            CameraRotation();
-        }
-
-        private void AssignAnimationIDs()
-        {
-            _animIDSpeed = Animator.StringToHash("Speed");
-            _animIDGrounded = Animator.StringToHash("Grounded");
-            _animIDJump = Animator.StringToHash("Jump");
-            _animIDFreeFall = Animator.StringToHash("FreeFall");
-            _animIDMotionSpeed = Animator.StringToHash("MotionSpeed");
-        }
-
         private void GroundedCheck()
         {
             // set sphere position, with offset
-            Vector3 spherePosition = new Vector3(transform.position.x,
-                transform.position.y - GroundedOffset, transform.position.z);
+            Vector3 spherePosition = new Vector3(_controller.Position.x,
+                _controller.Position.y - GroundedOffset, _controller.Position.z);
             Grounded = Physics.CheckSphere(spherePosition, GroundedRadius, GroundLayers,
                 QueryTriggerInteraction.Ignore);
 
             playerAnimSync.AnimSyncIsGrounded = Grounded;
-        }
-
-        private void CameraRotation()
-        {
-            // if there is an input and camera position is not fixed
-            if (playerInputSync.Look.sqrMagnitude >= _threshold && !LockCameraPosition)
-            {
-                _cinemachineTargetYaw += playerInputSync.Look.x * Time.deltaTime;
-                _cinemachineTargetPitch += playerInputSync.Look.y * Time.deltaTime;
-            }
-
-            // clamp our rotations so our values are limited 360 degrees
-            _cinemachineTargetYaw =
-                ClampAngle(_cinemachineTargetYaw, float.MinValue, float.MaxValue);
-            _cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, BottomClamp, TopClamp);
-
-            // Cinemachine will follow this target
-            FPSCameraTarget.transform.rotation = TPSCameraTarget.transform.rotation = Quaternion.Euler(
-                _cinemachineTargetPitch + CameraAngleOverride, _cinemachineTargetYaw, 0.0f);
         }
 
         private void Move()
@@ -228,7 +164,7 @@ namespace DoubTech.Multiplayer.Input
 
             // a reference to the players current horizontal velocity
             float currentHorizontalSpeed =
-                new Vector3(_controller.velocity.x, 0.0f, _controller.velocity.z).magnitude;
+                new Vector3(_controller.Velocity.x, 0.0f, _controller.Velocity.z).magnitude;
 
             float speedOffset = 0.1f;
             float inputMagnitude = playerInputSync.AnalogMovement ? playerInputSync.Move.magnitude : 1f;
@@ -266,7 +202,7 @@ namespace DoubTech.Multiplayer.Input
                     ref _rotationVelocity, RotationSmoothTime);
 
                 // rotate to face input direction relative to camera position
-                transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
+                _controller.Rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
             }
 
             Vector3 targetDirection =
@@ -341,13 +277,6 @@ namespace DoubTech.Multiplayer.Input
             }
         }
 
-        private static float ClampAngle(float lfAngle, float lfMin, float lfMax)
-        {
-            if (lfAngle < -360f) lfAngle += 360f;
-            if (lfAngle > 360f) lfAngle -= 360f;
-            return Mathf.Clamp(lfAngle, lfMin, lfMax);
-        }
-
         private void OnDrawGizmosSelected()
         {
             Color transparentGreen = new Color(0.0f, 1.0f, 0.0f, 0.35f);
@@ -358,9 +287,17 @@ namespace DoubTech.Multiplayer.Input
 
             // when selected, draw a gizmo in the position of, and matching radius of, the grounded collider
             Gizmos.DrawSphere(
-                new Vector3(transform.position.x, transform.position.y - GroundedOffset,
-                    transform.position.z), GroundedRadius);
+                new Vector3(_controller.Position.x, _controller.Position.y - GroundedOffset,
+                    _controller.Position.z), GroundedRadius);
         }
+    }
+
+    public interface ICharacterController
+    {
+        Vector3 Position { get; set; }
+        Quaternion Rotation { get; set; }
+        Vector3 Velocity { get; set; }
+        void Move(Vector3 target);
     }
 
     public interface IPlayerAnimSync

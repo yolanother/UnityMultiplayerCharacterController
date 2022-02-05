@@ -2,7 +2,7 @@ using Cinemachine;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace DoubTech.Multiplayer
+namespace DoubTech.MCC
 {
     public class Player : MonoBehaviour, INetworkPlayer
     {
@@ -31,7 +31,6 @@ namespace DoubTech.Multiplayer
             else onSwitchedToTPS.Invoke();
             CinemachineCore.Instance.GetActiveBrain(0).m_CameraActivatedEvent
                 .AddListener(OnCameraActivated);
-            DisableUnownedComponents();
         }
 
         private void OnDisable()
@@ -56,6 +55,7 @@ namespace DoubTech.Multiplayer
         public virtual void OnStartRemotePlayer()
         {
             name = $"Player {playerInfo.PlayerId} - {playerInfo.PlayerName}";
+            DisableUnownedComponents();
         }
 
         public void DisableUnownedComponents()

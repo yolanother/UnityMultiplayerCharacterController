@@ -7,7 +7,7 @@ using UnityEngine.Events;
 /* Note: animations are called via the controller for both the character and capsule using animator null checks
  */
 
-namespace DoubTech.Multiplayer.Input
+namespace DoubTech.MCC.Input
 {
     public class NetworkInputSync : MonoBehaviour
     {
@@ -61,8 +61,8 @@ namespace DoubTech.Multiplayer.Input
                 _mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
             }
 
-            playerInfo = GetComponent<IPlayerInfoProvider>();
-            inputSync = GetComponent<IPlayerInputSync>();
+            playerInfo = GetComponentInParent<IPlayerInfoProvider>();
+            inputSync = GetComponentInParent<IPlayerInputSync>();
         }
 
         private void OnEnable()
