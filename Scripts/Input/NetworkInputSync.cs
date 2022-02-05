@@ -52,53 +52,49 @@ namespace DoubTech.MCC.Input
         private IPlayerInputSync inputSync;
         private double TOLERANCE = .0001f;
 
-        private void Awake()
+        private void OnEnable()
         {
             // get a reference to our main camera
             if (_mainCamera == null)
             {
                 _mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
             }
-
+            _input = FindObjectOfType<NetworkMultiplayerInput>();
             playerInfo = GetComponentInParent<IPlayerInfoProvider>();
             inputSync = GetComponentInParent<IPlayerInputSync>();
         }
 
-        private void OnEnable()
-        {
-            _input = FindObjectOfType<NetworkMultiplayerInput>();
-        }
-
         private void Update()
         {
-            if (playerInfo.IsLocalPlayer)
+            if (!playerInfo.IsLocalPlayer) return;
+            if (null == inputSync) return;
+            if (null == _input) return;
+            
+            if (inputSync.Look != _input.look)
             {
-                if (inputSync.Look != _input.look)
-                {
-                    inputSync.Look = _input.look;
-                }
-
-                if (inputSync.Sprint != _input.sprint)
-                {
-                    inputSync.Sprint = _input.sprint;
-                }
-
-                if (inputSync.Jump != _input.jump)
-                {
-                    inputSync.Jump = _input.jump;
-                }
-
-                if (inputSync.Move != _input.move)
-                {
-                    inputSync.Move = _input.move;
-                }
-
-                if (inputSync.AnalogMovement != _input.analogMovement)
-                {
-                    inputSync.AnalogMovement = _input.analogMovement;
-                }
-                inputSync.CameraAngle = _mainCamera.transform.eulerAngles.y;
+                inputSync.Look = _input.look;
             }
+
+            if (inputSync.Sprint != _input.sprint)
+            {
+                inputSync.Sprint = _input.sprint;
+            }
+
+            if (inputSync.Jump != _input.jump)
+            {
+                inputSync.Jump = _input.jump;
+            }
+
+            if (inputSync.Move != _input.move)
+            {
+                inputSync.Move = _input.move;
+            }
+
+            if (inputSync.AnalogMovement != _input.analogMovement)
+            {
+                inputSync.AnalogMovement = _input.analogMovement;
+            }
+            inputSync.CameraAngle = _mainCamera.transform.eulerAngles.y;
         }
 
         private void LateUpdate()
@@ -108,6 +104,8 @@ namespace DoubTech.MCC.Input
 
         private void CameraRotation()
         {
+            if (null == inputSync) return;
+            
             // if there is an input and camera position is not fixed
             if (inputSync.Look.sqrMagnitude >= _threshold && !LockCameraPosition)
             {

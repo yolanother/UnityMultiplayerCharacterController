@@ -41,6 +41,8 @@ namespace DoubTech.MCC.Input
         
         private void CameraRotation()
         {
+            if (null == playerInputSync) return;
+            
             // if there is an input and camera position is not fixed
             if (playerInputSync.Look.sqrMagnitude >= _threshold && !LockCameraPosition)
             {

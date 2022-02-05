@@ -33,6 +33,14 @@ namespace DoubTech.MCC
             
             if (IsFPS) onSwitchedToFPS.Invoke();
             else onSwitchedToTPS.Invoke();
+            
+            if (CinemachineCore.Instance.BrainCount == 0)
+            {
+                enabled = false;
+                Debug.LogError("Cannot create player, no active Cinemachine brains found. Do you have a camera rig in your scene?");
+                return;
+            }
+            
             var activeBrain = CinemachineCore.Instance.GetActiveBrain(0);
             if(activeBrain)
             {
@@ -41,12 +49,14 @@ namespace DoubTech.MCC
             else
             {
                 enabled = false;
-                Debug.LogError("Cannot create player, no cinemachine brains found. Do you have a camera rig in your scene?");
+                Debug.LogError("Cannot create player, no Cinemachine brains found. Do you have a camera rig in your scene?");
             }
         }
 
         private void OnDisable()
         {
+            if (CinemachineCore.Instance.BrainCount == 0) return;
+            
             var activeBrain = CinemachineCore.Instance.GetActiveBrain(0);
             if (activeBrain)
             {

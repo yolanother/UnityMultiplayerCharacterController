@@ -68,7 +68,7 @@ namespace DoubTech.MCC.Integrations.Reactor
         }
 
         public uint PlayerId => entity.Entity.Id;
-        public bool IsLocalPlayer => entity.Entity.PlayerController != null;
+        public bool IsLocalPlayer => entity && entity.Entity?.PlayerController != null;
         public bool IsServer => IsLocalPlayer;
 
         public Vector3 Position
