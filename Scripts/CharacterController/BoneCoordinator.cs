@@ -2,10 +2,11 @@
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace DoubTech.Multiplayer
+namespace DoubTech.MCC.Utilities
 {
     public class BoneCoordinator : MonoBehaviour
     {
+        [SerializeField] private Transform animatorParent;
         [SerializeField] private UnityEvent<Transform> onHeadSet;
         private Animator animator;
 
@@ -29,7 +30,8 @@ namespace DoubTech.Multiplayer
         {
             if (!animator)
             {
-                Animator = GetComponentInChildren<Animator>();
+                if (animatorParent) Animator = animatorParent.GetComponentInChildren<Animator>();
+                else Animator = GetComponentInChildren<Animator>();
             }
         }
     }

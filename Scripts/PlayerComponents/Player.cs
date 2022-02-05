@@ -12,6 +12,9 @@ namespace DoubTech.MCC
         [SerializeField] private Behaviour[] localPlayerBehaviours;
         [SerializeField] private Behaviour[] remotePlayerBehaviours;
 
+        [SerializeField] private GameObject[] localPlayerGameObjects;
+        [SerializeField] private GameObject[] remotePlayerGameObjects;
+
         [SerializeField] public UnityEvent onSwitchedToFPS = new UnityEvent();
         [SerializeField] public UnityEvent onSwitchedToTPS = new UnityEvent();
 
@@ -63,27 +66,35 @@ namespace DoubTech.MCC
             name = $"Player {playerInfo.PlayerId} - {playerInfo.PlayerName}";
             AssignCamera("FPSVirtualCamera", fpsFollowTarget);
             AssignCamera("TPSVirtualCamera", tpsFollowTarget);
+            HandleOwnableComponents(true);
         }
 
         public virtual void OnStartRemotePlayer()
         {
             name = $"Player {playerInfo.PlayerId} - {playerInfo.PlayerName}";
-            DisableUnownedComponents();
+            HandleOwnableComponents(false);
         }
 
-        public void DisableUnownedComponents()
+        public void HandleOwnableComponents(bool isOwned)
         {
-            if (!playerInfo.IsLocalPlayer)
+            foreach (var component in localPlayerBehaviours)
             {
-                foreach (var component in localPlayerBehaviours)
-                {
-                    component.enabled = false;
-                }
+                component.enabled = isOwned;
+            }
 
-                foreach (var component in remotePlayerBehaviours)
-                {
-                    component.enabled = true;
-                }
+            foreach (var component in remotePlayerBehaviours)
+            {
+                component.enabled = !isOwned;
+            }
+
+            foreach (var localPlayerGameObject in localPlayerGameObjects)
+            {
+                localPlayerGameObject.SetActive(isOwned);
+            }
+
+            foreach (var localPlayerGameObject in remotePlayerGameObjects)
+            {
+                localPlayerGameObject.SetActive(!isOwned);
             }
         }
 
