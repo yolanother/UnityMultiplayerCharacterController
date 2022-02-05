@@ -254,7 +254,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 24, y: 24}
+  m_SizeDelta: {x: 16, y: 16}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1842132557623902254
 CanvasRenderer:
@@ -905,6 +905,81 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3965089749149222654, guid: 8e98c7a475478d644bb234ca0e0b72b7,
+        type: 3}
+      propertyPath: onCursorLocked.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3965089749149222654, guid: 8e98c7a475478d644bb234ca0e0b72b7,
+        type: 3}
+      propertyPath: onCursorUnlocked.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3965089749149222654, guid: 8e98c7a475478d644bb234ca0e0b72b7,
+        type: 3}
+      propertyPath: onCursorLocked.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 3965089749149222654, guid: 8e98c7a475478d644bb234ca0e0b72b7,
+        type: 3}
+      propertyPath: onCursorLocked.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 449868569809870409}
+    - target: {fileID: 3965089749149222654, guid: 8e98c7a475478d644bb234ca0e0b72b7,
+        type: 3}
+      propertyPath: onCursorUnlocked.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 3965089749149222654, guid: 8e98c7a475478d644bb234ca0e0b72b7,
+        type: 3}
+      propertyPath: onCursorUnlocked.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 449868569809870409}
+    - target: {fileID: 3965089749149222654, guid: 8e98c7a475478d644bb234ca0e0b72b7,
+        type: 3}
+      propertyPath: onCursorLocked.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3965089749149222654, guid: 8e98c7a475478d644bb234ca0e0b72b7,
+        type: 3}
+      propertyPath: onCursorLocked.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: SetActive
+      objectReference: {fileID: 0}
+    - target: {fileID: 3965089749149222654, guid: 8e98c7a475478d644bb234ca0e0b72b7,
+        type: 3}
+      propertyPath: onCursorUnlocked.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3965089749149222654, guid: 8e98c7a475478d644bb234ca0e0b72b7,
+        type: 3}
+      propertyPath: onCursorUnlocked.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: SetActive
+      objectReference: {fileID: 0}
+    - target: {fileID: 3965089749149222654, guid: 8e98c7a475478d644bb234ca0e0b72b7,
+        type: 3}
+      propertyPath: onCursorLocked.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: UnityEngine.GameObject, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 3965089749149222654, guid: 8e98c7a475478d644bb234ca0e0b72b7,
+        type: 3}
+      propertyPath: onCursorLocked.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_BoolArgument
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3965089749149222654, guid: 8e98c7a475478d644bb234ca0e0b72b7,
+        type: 3}
+      propertyPath: onCursorUnlocked.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: UnityEngine.GameObject, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 3965089749149222654, guid: 8e98c7a475478d644bb234ca0e0b72b7,
+        type: 3}
+      propertyPath: onCursorLocked.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 3965089749149222654, guid: 8e98c7a475478d644bb234ca0e0b72b7,
+        type: 3}
+      propertyPath: onCursorUnlocked.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 3965089749149222655, guid: 8e98c7a475478d644bb234ca0e0b72b7,
         type: 3}
