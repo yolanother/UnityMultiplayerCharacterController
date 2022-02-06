@@ -34,27 +34,27 @@ namespace DoubTech.MCC.Utilities
         {
             if (cameraUnlocks.Count == 0)
             {
+                Cursor.visible = false;
+                Cursor.lockState = CursorLockMode.Locked;
+                detectionCanvas.gameObject.SetActive(false);
                 if (!locked)
                 {
                     locked = true;
                     onCursorLocked.Invoke();
-                    Cursor.visible = false;
-                    //Cursor.lockState = CursorLockMode.Locked;
-                    detectionCanvas.gameObject.SetActive(false);
                 }
             }
         }
 
         public void Unlock(string lockName)
         {
+            cameraUnlocks.Add(lockName);
+            detectionCanvas.gameObject.SetActive(true);
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
             if (locked)
             {
                 locked = false;
                 onCursorUnlocked.Invoke();
-                detectionCanvas.gameObject.SetActive(true);
-                cameraUnlocks.Add(lockName);
-                Cursor.visible = true;
-                Cursor.lockState = CursorLockMode.None;
             }
         }
     }
