@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using DoubTech.MCC.IK;
 using UnityEngine;
 
 namespace DoubTech.MCC.Weapons
@@ -7,18 +8,18 @@ namespace DoubTech.MCC.Weapons
     public class WeaponInstance : MonoBehaviour
     {
         [SerializeField] private WeaponAnimationLayer[] animationLayers;
-        private Animator animator;
+        private IAnimatorProvider animator;
 
         private void OnEnable()
         {
-            animator = GetComponentInParent<Animator>();
+            animator = GetComponentInParent<IAnimatorProvider>();
             Equip();
         }
 
         public void Equip()
         {
-            if (!animator) return;
-            
+            if (!animator?.Animator) return;
+
             StopAllCoroutines();
             foreach (var layer in animationLayers)
             {
@@ -41,15 +42,15 @@ namespace DoubTech.MCC.Weapons
         {
             byte layerValue = (byte) layer.layers;
             bool done = true;
-            
+
             for (int i = 1; layerValue > 0; i++)
             {
                 if ((layerValue & 0x01) == 1)
                 {
-                    var weight = animator.GetLayerWeight(i);
+                    var weight = animator.Animator.GetLayerWeight(i);
                     weight += Time.deltaTime / layer.transitionSpeed;
                     done &= weight >= 1;
-                    animator.SetLayerWeight(i, Mathf.Clamp01(weight));
+                    animator.Animator.SetLayerWeight(i, Mathf.Clamp01(weight));
                 }
                 layerValue = (byte) (layerValue >> 1);
             }

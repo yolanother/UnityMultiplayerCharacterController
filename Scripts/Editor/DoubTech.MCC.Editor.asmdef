@@ -1,0 +1,19 @@
+{
+    "name": "DoubTech.MCC.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:a525cbcc229dac5489e0e0f634176bc8",
+        "GUID:7f7d1af65c2641843945d409d28f2e20"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

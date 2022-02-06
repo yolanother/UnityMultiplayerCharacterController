@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: c28383641639df147b6c4be20e854754
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - m_ViewDataDictionary: {instanceID: 0}
+  - characterRigPrefab: {fileID: 5156971172187493524, guid: e586d6c86ff01b140b3305f9d600acae,
+      type: 3}
+  - armatureRoot: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

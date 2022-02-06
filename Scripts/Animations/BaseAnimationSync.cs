@@ -1,4 +1,5 @@
 using System;
+using DoubTech.MCC.IK;
 using DoubTech.MCC.Input;
 using UnityEngine;
 
@@ -6,48 +7,48 @@ namespace MessyJammersADF.Com.Doubtech.Unity.Mirrorcharactercontroller.Animation
 {
     public class BaseAnimationSync : MonoBehaviour, IPlayerAnimSync
     {
-        [SerializeField] private Animator animator;
         [SerializeField] private Transform animatorParent;
-        
+
         private int _animIDSpeed = Animator.StringToHash("Speed");
         private int _animIDGrounded = Animator.StringToHash("Grounded");
         private int _animIDJump = Animator.StringToHash("Jump");
         private int _animIDFreeFall = Animator.StringToHash("FreeFall");
         private int _animIDMotionSpeed = Animator.StringToHash("MotionSpeed");
 
+        private IAnimatorProvider animator;
+
         private void OnEnable()
         {
-            if (!animator)
+            if (null == animator)
             {
-                if(animatorParent) animator = animatorParent.GetComponentInChildren<Animator>();
-                else animator = GetComponentInChildren<Animator>();
+                animator = animatorParent.GetComponentInChildren<IAnimatorProvider>();
             }
         }
 
         public virtual bool AnimSyncJump
         {
-            get => animator.GetBool(_animIDJump);
-            set => animator.SetBool(_animIDJump, value);
+            get => animator.Animator.GetBool(_animIDJump);
+            set => animator.Animator.SetBool(_animIDJump, value);
         }
         public virtual bool AnimSyncFreeFall
         {
-            get => animator.GetBool(_animIDFreeFall);
-            set => animator.SetBool(_animIDFreeFall, value);
+            get => animator.Animator.GetBool(_animIDFreeFall);
+            set => animator.Animator.SetBool(_animIDFreeFall, value);
         }
         public virtual float AnimSyncSpeed
         {
-            get => animator.GetFloat(_animIDSpeed);
-            set => animator.SetFloat(_animIDSpeed, value);
+            get => animator.Animator.GetFloat(_animIDSpeed);
+            set => animator.Animator.SetFloat(_animIDSpeed, value);
         }
         public virtual float AnimSyncMotionSpeed
         {
-            get => animator.GetFloat(_animIDMotionSpeed);
-            set => animator.SetFloat(_animIDMotionSpeed, value);
+            get => animator.Animator.GetFloat(_animIDMotionSpeed);
+            set => animator.Animator.SetFloat(_animIDMotionSpeed, value);
         }
         public virtual bool AnimSyncIsGrounded
         {
-            get => animator.GetBool(_animIDGrounded);
-            set => animator.SetBool(_animIDGrounded, value);
+            get => animator.Animator.GetBool(_animIDGrounded);
+            set => animator.Animator.SetBool(_animIDGrounded, value);
         }
     }
 }

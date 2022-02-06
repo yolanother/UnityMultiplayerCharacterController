@@ -2,6 +2,7 @@
 using UnityEditor;
 #endif
 using System;
+using DoubTech.MCC.IK;
 using UnityEngine;
 
 namespace DoubTech.MCC.Weapons
@@ -11,7 +12,7 @@ namespace DoubTech.MCC.Weapons
         [Header("Active Weapon")]
         [SerializeField] private int activeLeftWeapon = -1;
         [SerializeField] private int activeRightWeapon = -1;
-        
+
         [Header("Instances")]
         [SerializeField] private WeaponInstance[] rightHandInstances;
         [SerializeField] private WeaponInstance[] leftHandInstances;
@@ -37,13 +38,20 @@ namespace DoubTech.MCC.Weapons
 
         private void OnEnable()
         {
+            armatureRoot.OnAnimatorChanged += OnAnimatonChanged;
+            OnAnimatonChanged(armatureRoot.Animator);
+        }
+
+        private void OnAnimatonChanged(Animator animator)
+        {
             Reposition(true);
-            for(int i = 0; i < leftHandInstances.Length; i++)
+            for (int i = 0; i < leftHandInstances.Length; i++)
             {
                 var instance = leftHandInstances[i];
                 instance.gameObject.SetActive(i == activeLeftWeapon);
             }
-            for(int i = 0; i < rightHandInstances.Length; i++)
+
+            for (int i = 0; i < rightHandInstances.Length; i++)
             {
                 var instance = rightHandInstances[i];
                 instance.gameObject.SetActive(i == activeRightWeapon);
@@ -70,13 +78,13 @@ namespace DoubTech.MCC.Weapons
             }
         }
     }
-    
+
     #if UNITY_EDITOR
     [CustomEditor(typeof(WeaponInstances))]
     public class WeaponInstancesEditor : Editor
     {
         [SerializeField] private ModelArmatures armatures;
-        
+
         public override void OnInspectorGUI()
         {
             base.OnInspectorGUI();

@@ -1,18 +1,19 @@
 using System;
 using System.Collections.Generic;
+using DoubTech.MCC.IK;
 using UnityEditor;
 using UnityEngine;
 
 namespace DoubTech.MCC.Weapons
 {
-    public class ModelArmatures : MonoBehaviour
+    public class ModelArmatures : MonoBehaviour, IAnimatorProvider
     {
         [SerializeField] internal List<Armature> armatures = new List<Armature>();
         [SerializeField] private Armature activeArmature;
         [SerializeField] private GameObject prefabInstance;
 
-        private Animator animator;
-        
+        private IAnimatorProvider animator;
+
         private Transform leftHandSlot;
         private Transform rightHandSlot;
 
@@ -50,30 +51,41 @@ namespace DoubTech.MCC.Weapons
 
                 if (null != activeArmature)
                 {
-                    animator = value.GetComponentInChildren<Animator>();
-                    leftHandBone = animator.GetBoneTransform(HumanBodyBones.LeftHand);
-                    rightHandBone = animator.GetBoneTransform(HumanBodyBones.RightHand);
+                    if (null != animator) animator.OnAnimatorChanged -= OnAnimatorChanged;
+                    animator = value.GetComponentInChildren<IAnimatorProvider>();
+                    animator.OnAnimatorChanged += OnAnimatorChanged;
+                    leftHandBone = animator.Animator.GetBoneTransform(HumanBodyBones.LeftHand);
+                    rightHandBone = animator.Animator.GetBoneTransform(HumanBodyBones.RightHand);
 
-                    leftHandSlot = leftHandBone.Find("LeftHandSlot");
-                    if (!leftHandSlot)
+                    if (leftHandBone)
                     {
-                        var slotgo = new GameObject("LeftHandSlot");
-                        leftHandSlot = slotgo.transform;
-                        leftHandSlot.transform.parent = leftHandBone;
-                        leftHandSlot.transform.localPosition = activeArmature.leftHand.position;
-                        leftHandSlot.transform.localEulerAngles = activeArmature.leftHand.rotation;
-                        leftHandSlot.transform.localScale = activeArmature.leftHand.scale;
+                        leftHandSlot = leftHandBone.Find("LeftHandSlot");
+                        if (!leftHandSlot)
+                        {
+                            var slotgo = new GameObject("LeftHandSlot");
+                            leftHandSlot = slotgo.transform;
+                            leftHandSlot.transform.parent = leftHandBone;
+                            leftHandSlot.transform.localPosition = activeArmature.leftHand.position;
+                            leftHandSlot.transform.localEulerAngles =
+                                activeArmature.leftHand.rotation;
+                            leftHandSlot.transform.localScale = activeArmature.leftHand.scale;
+                        }
                     }
 
-                    rightHandSlot = rightHandBone.Find("RightHandSlot");
-                    if (!rightHandSlot)
+                    if (rightHandBone)
                     {
-                        var slotgo = new GameObject("RightHandSlot");
-                        rightHandSlot = slotgo.transform;
-                        rightHandSlot.transform.parent = rightHandBone;
-                        rightHandSlot.transform.localPosition = activeArmature.rightHand.position;
-                        rightHandSlot.transform.localEulerAngles = activeArmature.rightHand.rotation;
-                        rightHandSlot.transform.localScale = activeArmature.rightHand.scale;
+                        rightHandSlot = rightHandBone.Find("RightHandSlot");
+                        if (!rightHandSlot)
+                        {
+                            var slotgo = new GameObject("RightHandSlot");
+                            rightHandSlot = slotgo.transform;
+                            rightHandSlot.transform.parent = rightHandBone;
+                            rightHandSlot.transform.localPosition =
+                                activeArmature.rightHand.position;
+                            rightHandSlot.transform.localEulerAngles =
+                                activeArmature.rightHand.rotation;
+                            rightHandSlot.transform.localScale = activeArmature.rightHand.scale;
+                        }
                     }
                 }
                 else
@@ -82,6 +94,9 @@ namespace DoubTech.MCC.Weapons
                 }
             }
         }
+
+        public Animator Animator => animator.Animator;
+        public event Action<Animator> OnAnimatorChanged;
     }
 
     [Serializable]
@@ -99,7 +114,7 @@ namespace DoubTech.MCC.Weapons
         public Vector3 rotation;
         public Vector3 scale = Vector3.one;
     }
-    
+
     #if UNITY_EDITOR
     [CustomEditor(typeof(ModelArmatures))]
     public class ModelArmaturesEditor : Editor
@@ -116,7 +131,7 @@ namespace DoubTech.MCC.Weapons
                     activeArmature.leftHand.position = mae.LeftHandSlot.transform.localPosition;
                     activeArmature.leftHand.rotation = mae.LeftHandSlot.transform.localEulerAngles;
                     activeArmature.leftHand.scale = mae.LeftHandSlot.transform.localScale;
-                    
+
                     activeArmature.rightHand.position = mae.RightHandSlot.transform.localPosition;
                     activeArmature.rightHand.rotation = mae.RightHandSlot.transform.localEulerAngles;
                     activeArmature.rightHand.scale = mae.RightHandSlot.transform.localScale;

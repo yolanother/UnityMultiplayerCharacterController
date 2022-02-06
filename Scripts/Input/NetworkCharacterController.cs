@@ -1,4 +1,5 @@
-﻿using DoubTech.Multiplayer;
+﻿using DoubTech.MCC.IK;
+using DoubTech.Multiplayer;
 using UnityEngine;
 
 /* Note: animations are called via the controller for both the character and capsule using animator null checks
@@ -48,7 +49,7 @@ namespace DoubTech.MCC.Input
 
         [Tooltip("What layers the character uses as ground")]
         public LayerMask GroundLayers;
-        
+
         [SerializeField] private bool hasHeadTracking;
         [SerializeField] private float maxHeadRotation = 45;
 
@@ -70,7 +71,7 @@ namespace DoubTech.MCC.Input
         private int _animIDJump = Animator.StringToHash("Jump");
         private int _animIDFreeFall = Animator.StringToHash("FreeFall");
         private int _animIDMotionSpeed = Animator.StringToHash("MotionSpeed");
-        
+
         private Animator _animator;
         private ICharacterController _controller;
 
@@ -97,7 +98,7 @@ namespace DoubTech.MCC.Input
 
         public void ResetAnimator()
         {
-            _animator = GetComponentInChildren<Animator>();
+            _animator = GetComponentInChildren<IAnimatorProvider>()?.Animator;
             _hasAnimator = _animator;
         }
 
@@ -281,7 +282,7 @@ namespace DoubTech.MCC.Input
                 Gizmos.DrawSphere(
                 new Vector3(_controller.Position.x, _controller.Position.y - GroundedOffset,
                     _controller.Position.z), GroundedRadius);
-                
+
             }
         }
     }
