@@ -6,8 +6,13 @@ using UnityEngine.InputSystem;
 
 namespace DoubTech.Networking
 {
-	public class NetworkMultiplayerInput : MonoBehaviour
+	public class InputSystemInput : MonoBehaviour
 	{
+		[Header("Input Configuration")]
+		[SerializeField] public float sensitivity = 1;
+		[SerializeField] public bool invertY = false;
+	
+	
 		[Header("Character Input Values")]
 		public Vector2 move;
 		public Vector2 look;
@@ -54,13 +59,9 @@ namespace DoubTech.Networking
 			
 			if (cursorInputForLook)
 			{
-				var delta = value.Get<Vector2>();
-				delta *= 0.5f; // Account for scaling applied directly in Windows code by old input system.
-				delta *= 0.1f; // Account for sensitivity setting on old Mouse X and Y axes.
-				//LookInput(delta);
-				
-				LookInput(Mouse.current.delta.ReadValue() * 0.125f);
-				
+				var delta = value.Get<Vector2>() * sensitivity;
+				if (invertY) delta.y *= -1;
+				LookInput(delta);
 			}
 		}
 

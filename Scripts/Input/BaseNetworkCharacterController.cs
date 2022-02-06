@@ -32,9 +32,6 @@ namespace DoubTech.MCC.Input
         [SerializeField] private float _cinemachineTargetPitch;
 
         [SerializeField] private float inputThreshold = 0.001f;
-        [SerializeField] private float sensitivity = 1;
-        [SerializeField] private bool invertY = false;
-        [SerializeField] private bool invertX = false;
         
         protected IPlayerInputSync playerInputSync;
         private GameObject _mainCamera;
@@ -61,8 +58,8 @@ namespace DoubTech.MCC.Input
             // if there is an input and camera position is not fixed
             if (playerInputSync.Look.sqrMagnitude >= inputThreshold && !LockCameraPosition)
             {
-                _cinemachineTargetYaw += playerInputSync.Look.x * Time.deltaTime * sensitivity * (invertX ? -1 : 1);
-                _cinemachineTargetPitch += playerInputSync.Look.y * Time.deltaTime * sensitivity * (invertY ? 1 : -1);
+                _cinemachineTargetYaw += playerInputSync.Look.x * Time.deltaTime;
+                _cinemachineTargetPitch += playerInputSync.Look.y * Time.deltaTime;
             }
 
             // clamp our rotations so our values are limited 360 degrees

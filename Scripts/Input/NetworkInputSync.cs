@@ -10,7 +10,7 @@ namespace DoubTech.MCC.Input
 {
     public class NetworkInputSync : MonoBehaviour
     {
-        [SerializeField] private NetworkMultiplayerInput _input;
+        [SerializeField] private InputSystemInput _input;
         [SerializeField] private Camera _mainCamera;
 
         private IPlayerInfoProvider playerInfo;
@@ -24,7 +24,7 @@ namespace DoubTech.MCC.Input
             {
                 _mainCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
             }
-            _input = FindObjectOfType<NetworkMultiplayerInput>();
+            _input = FindObjectOfType<InputSystemInput>();
             playerInfo = GetComponentInParent<IPlayerInfoProvider>();
             inputSync = GetComponentInParent<IPlayerInputSync>();
         }

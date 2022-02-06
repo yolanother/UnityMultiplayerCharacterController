@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Cinemachine;
+using DoubTech.Networking;
 using UnityEngine;
 
 namespace DoubTech.MCC.CharacterController
@@ -11,6 +12,14 @@ namespace DoubTech.MCC.CharacterController
         [SerializeField] private CinemachineVirtualCamera tpsCamera;
         [SerializeField] private CinemachineVirtualCamera tpsAimCamera;
         [SerializeField] private CinemachineVirtualCamera fpsCamera;
+        [SerializeField] private CinemachineVirtualCamera fpsAimCamera;
+
+        [Header("Input System")]
+        [SerializeField] private InputSystemInput input;
+
+        [Header("Camera State Properties")]
+        [SerializeField] private float aimSensitivityMultiplier = .25f;
+        
 
         [Header("Priorities")]
         [SerializeField] private int activePriority = 20;
@@ -22,11 +31,14 @@ namespace DoubTech.MCC.CharacterController
 
         private List<CinemachineVirtualCamera> cameras;
 
+        private float normalSensitivity;
+
         private void Awake()
         {
+            normalSensitivity = input.sensitivity;
             cameras = new List<CinemachineVirtualCamera>()
             {
-                tpsCamera, tpsAimCamera, fpsCamera
+                tpsCamera, tpsAimCamera, fpsCamera, fpsAimCamera
             };
         }
 
@@ -57,8 +69,16 @@ namespace DoubTech.MCC.CharacterController
 
         private void UpdateCamera()
         {
-            if(!isAim) ActivateCamera(isFps ? fpsCamera : tpsCamera);
-            else ActivateCamera(isFps ? fpsCamera : tpsAimCamera);
+            if (isAim)
+            {
+                input.sensitivity = normalSensitivity * aimSensitivityMultiplier;
+                ActivateCamera(isFps ? fpsAimCamera : tpsAimCamera);
+            }
+            else
+            {
+                input.sensitivity = normalSensitivity;
+                ActivateCamera(isFps ? fpsCamera : tpsCamera);
+            }
         }
 
         public void ActivateCamera(CinemachineVirtualCamera camera)
