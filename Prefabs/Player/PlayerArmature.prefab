@@ -106,7 +106,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   trackPosition: 1
-  trackRotation: 1
+  trackRotation: 0
   targetTransform: {fileID: 0}
 --- !u!114 &7076081953619285467
 MonoBehaviour:

@@ -35,14 +35,22 @@ namespace DoubTech.Networking
 #if ENABLE_INPUT_SYSTEM
 		public void OnMove(InputValue value)
 		{
-			if (!InputEnabled) return;
+			if (!InputEnabled)
+			{
+				MoveInput(Vector2.zero);
+				return;
+			}
 			
 			MoveInput(value.Get<Vector2>());
 		}
 
 		public void OnLook(InputValue value)
 		{
-			if (!InputEnabled) return;
+			if (!InputEnabled)
+			{
+				LookInput(Vector2.zero);
+				return;
+			}
 			
 			if (cursorInputForLook)
 			{
@@ -52,23 +60,17 @@ namespace DoubTech.Networking
 
 		public void OnJump(InputValue value)
 		{
-			if (!InputEnabled) return;
-
-			JumpInput(value.isPressed);
+			JumpInput(InputEnabled && value.isPressed);
 		}
 
 		public void OnSprint(InputValue value)
 		{
-			if (!InputEnabled) return;
-			
-			SprintInput(value.isPressed);
+			SprintInput(InputEnabled && value.isPressed);
 		}
 
         public void OnChangeCamera(InputValue value)
         {
-	        if (!InputEnabled) return;
-	        
-            if(value.isPressed) ChangeCamera();
+	        if(InputEnabled && value.isPressed) ChangeCamera();
         }
 #else
 	// old input sys if we do decide to have it (most likely wont)...
