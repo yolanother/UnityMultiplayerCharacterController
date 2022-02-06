@@ -39,7 +39,7 @@ namespace DoubTech.MCC.Utilities
                     locked = true;
                     onCursorLocked.Invoke();
                     Cursor.visible = false;
-                    Cursor.lockState = CursorLockMode.Locked;
+                    //Cursor.lockState = CursorLockMode.Locked;
                     detectionCanvas.gameObject.SetActive(false);
                 }
             }

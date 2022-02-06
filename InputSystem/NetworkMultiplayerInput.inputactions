@@ -52,7 +52,7 @@
                 },
                 {
                     "name": "Aim",
-                    "type": "Button",
+                    "type": "PassThrough",
                     "id": "1ddeaedc-b274-4265-bb32-50fdd16eb291",
                     "expectedControlType": "Button",
                     "processors": "",
@@ -61,8 +61,35 @@
                 },
                 {
                     "name": "Menu",
-                    "type": "Button",
+                    "type": "PassThrough",
                     "id": "ca41b2dd-4569-4c67-99f9-8b1d5f7696e7",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Primary",
+                    "type": "Button",
+                    "id": "975a39be-a5cc-4774-aca0-0219653d1a1f",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Secondary",
+                    "type": "Button",
+                    "id": "36cdb355-e6f7-4946-a906-123961dd5228",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Tertiary",
+                    "type": "Button",
+                    "id": "b3e8b07e-ca46-443a-a8d5-41075f86ce92",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -298,6 +325,39 @@
                     "processors": "",
                     "groups": "",
                     "action": "Aim",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4832a655-c0ea-402a-9470-458316d9b3ec",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Primary",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d1c3bfdd-753e-42ee-a700-b6030f8e3c51",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Secondary",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "52920c4f-9528-48c1-959f-62a97a68c2da",
+                    "path": "<Mouse>/middleButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Tertiary",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

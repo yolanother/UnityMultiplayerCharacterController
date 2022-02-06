@@ -22,19 +22,29 @@ namespace DoubTech.Networking
 
 #if !UNITY_IOS || !UNITY_ANDROID
 		[Header("Mouse Cursor Settings")]
-		public bool cursorLocked = true;
 		public bool cursorInputForLook = true;
 #endif
+
+		public bool inputEnabled = true;
+		public bool InputEnabled
+		{
+			get => inputEnabled;
+			set => inputEnabled = value;
+		}
 
 #if ENABLE_INPUT_SYSTEM
 		public void OnMove(InputValue value)
 		{
+			if (!InputEnabled) return;
+			
 			MoveInput(value.Get<Vector2>());
 		}
 
 		public void OnLook(InputValue value)
 		{
-			if(cursorInputForLook)
+			if (!InputEnabled) return;
+			
+			if (cursorInputForLook)
 			{
 				LookInput(value.Get<Vector2>());
 			}
@@ -42,17 +52,22 @@ namespace DoubTech.Networking
 
 		public void OnJump(InputValue value)
 		{
-            Debug.Log($"Jump state is now: {value.isPressed}");
+			if (!InputEnabled) return;
+
 			JumpInput(value.isPressed);
 		}
 
 		public void OnSprint(InputValue value)
 		{
+			if (!InputEnabled) return;
+			
 			SprintInput(value.isPressed);
 		}
 
         public void OnChangeCamera(InputValue value)
         {
+	        if (!InputEnabled) return;
+	        
             if(value.isPressed) ChangeCamera();
         }
 #else
