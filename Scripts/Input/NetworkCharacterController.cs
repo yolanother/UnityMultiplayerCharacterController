@@ -288,9 +288,12 @@ namespace DoubTech.MCC.Input
             else Gizmos.color = transparentRed;
 
             // when selected, draw a gizmo in the position of, and matching radius of, the grounded collider
-            Gizmos.DrawSphere(
+            if(null != _controller) {
+                Gizmos.DrawSphere(
                 new Vector3(_controller.Position.x, _controller.Position.y - GroundedOffset,
                     _controller.Position.z), GroundedRadius);
+                
+            }
         }
     }
 

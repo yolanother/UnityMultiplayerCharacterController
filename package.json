@@ -1,6 +1,6 @@
 {
   "name": "com.doubtech.unity.mirrorcharactercontroller",
-  "displayName": "DoubTech - Mirror Character Controller",
+  "displayName": "DoubTech - Multiplayer Character Controller",
   "version": "0.0.1",
   "unity": "2021.2",
   "description": "A simple character controller built for driving FPS/TPS characters over Mirror.",
