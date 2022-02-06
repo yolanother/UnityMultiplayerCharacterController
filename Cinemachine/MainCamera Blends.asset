@@ -17,7 +17,7 @@ MonoBehaviour:
     m_To: TPSCamera
     m_Blend:
       m_Style: 1
-      m_Time: 2
+      m_Time: 0.5
       m_CustomCurve:
         serializedVersion: 2
         m_Curve: []
@@ -28,7 +28,29 @@ MonoBehaviour:
     m_To: FPSCamera
     m_Blend:
       m_Style: 1
-      m_Time: 2
+      m_Time: 0.5
+      m_CustomCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 0
+  - m_From: TPSCamera
+    m_To: TPSAimCamera
+    m_Blend:
+      m_Style: 1
+      m_Time: 0.1
+      m_CustomCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 0
+  - m_From: TPSAimCamera
+    m_To: TPSCamera
+    m_Blend:
+      m_Style: 1
+      m_Time: 0.25
       m_CustomCurve:
         serializedVersion: 2
         m_Curve: []
