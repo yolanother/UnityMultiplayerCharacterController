@@ -20,9 +20,8 @@ namespace DoubTech.MCC
 
         private IPlayerInfoProvider playerInfo;
 
-        public bool IsFPS => CinemachineCore.Instance?.BrainCount > 0 && (
-            CinemachineCore.Instance.GetActiveBrain(0)?.ActiveVirtualCamera
-            ?.VirtualCameraGameObject.CompareTag("FPSVirtualCamera") ?? false);
+        public bool IsFPS => Brain?.ActiveVirtualCamera
+            ?.VirtualCameraGameObject.CompareTag("FPSVirtualCamera") ?? false;
 
         private IPlayerInfoProvider PlayerInfo
         {
@@ -37,28 +36,44 @@ namespace DoubTech.MCC
             }
         }
 
+        private CinemachineBrain brain;
+        private CinemachineBrain Brain
+        {
+            get
+            {
+                if (!brain)
+                {
+                    if (CinemachineCore.Instance.BrainCount == 0)
+                    {
+                        brain = FindObjectOfType<CinemachineBrain>();
+
+                        if (!brain)
+                        {
+                            enabled = false;
+                            Debug.LogError(
+                                "Cannot create player, no active Cinemachine brains found. Do you have a camera rig in your scene?");
+                        }
+                    }
+                    else
+                    {
+                        brain = CinemachineCore.Instance.GetActiveBrain(0);
+                    }
+                }
+
+                return brain;
+            }
+        }
+
         private void OnEnable()
         {
             
             if (IsFPS) onSwitchedToFPS.Invoke();
             else onSwitchedToTPS.Invoke();
             
-            if (CinemachineCore.Instance.BrainCount == 0)
+            var brain = Brain;
+            if (brain)
             {
-                enabled = false;
-                Debug.LogError("Cannot create player, no active Cinemachine brains found. Do you have a camera rig in your scene?");
-                return;
-            }
-            
-            var activeBrain = CinemachineCore.Instance.GetActiveBrain(0);
-            if(activeBrain)
-            {
-                activeBrain.m_CameraActivatedEvent.AddListener(OnCameraActivated);
-            }
-            else
-            {
-                enabled = false;
-                Debug.LogError("Cannot create player, no Cinemachine brains found. Do you have a camera rig in your scene?");
+                brain.m_CameraActivatedEvent.AddListener(OnCameraActivated);
             }
         }
 

@@ -1,3 +1,4 @@
+#if REACTOR
 using System.Collections.Generic;
 using KS.Reactor;
 using KS.Reactor.Client.Unity;
@@ -85,3 +86,4 @@ namespace DoubTech.MCC.Integrations.Reactor.Connections
         }
     }
 }
+#endif

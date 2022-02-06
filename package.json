@@ -14,7 +14,7 @@
     "url": "https://unityassets.doubtech.com"
   },
   "dependencies": {
-    "com.unity.cinemachine": "",
-    "com.unity.inputsystem": ""
+    "com.unity.cinemachine": "2.0.0+",
+    "com.unity.inputsystem": "1.0.0+"
   }
 }

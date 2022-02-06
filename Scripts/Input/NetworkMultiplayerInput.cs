@@ -54,7 +54,13 @@ namespace DoubTech.Networking
 			
 			if (cursorInputForLook)
 			{
-				LookInput(value.Get<Vector2>());
+				var delta = value.Get<Vector2>();
+				delta *= 0.5f; // Account for scaling applied directly in Windows code by old input system.
+				delta *= 0.1f; // Account for sensitivity setting on old Mouse X and Y axes.
+				//LookInput(delta);
+				
+				LookInput(Mouse.current.delta.ReadValue() * 0.125f);
+				
 			}
 		}
 
