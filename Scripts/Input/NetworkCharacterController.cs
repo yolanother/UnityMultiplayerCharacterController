@@ -73,21 +73,10 @@ namespace DoubTech.MCC.Input
         
         private Animator _animator;
         private ICharacterController _controller;
-        private GameObject _mainCamera;
 
         private bool _hasAnimator;
         private IPlayerInfoProvider playerInfo;
         private IPlayerAnimSync playerAnimSync;
-
-
-        private void Awake()
-        {
-            // get a reference to our main camera
-            if (_mainCamera == null)
-            {
-                _mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
-            }
-        }
 
         private void Start()
         {

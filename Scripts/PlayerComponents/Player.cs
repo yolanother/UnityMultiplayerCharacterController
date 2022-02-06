@@ -105,7 +105,7 @@ namespace DoubTech.MCC
 
         public virtual void OnStartRemotePlayer()
         {
-            name = $"Player {playerInfo.PlayerId} - {playerInfo.PlayerName}";
+            name = $"Player {PlayerInfo.PlayerId} - {PlayerInfo.PlayerName}";
             HandleOwnableComponents(false);
         }
 

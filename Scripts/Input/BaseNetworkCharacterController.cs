@@ -37,6 +37,17 @@ namespace DoubTech.MCC.Input
         [SerializeField] private bool invertX = false;
         
         protected IPlayerInputSync playerInputSync;
+        private GameObject _mainCamera;
+
+
+        protected virtual void Awake()
+        {
+            // get a reference to our main camera
+            if (_mainCamera == null)
+            {
+                _mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
+            }
+        }
 
         protected virtual void OnEnable()
         {
