@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Cinemachine;
+using DoubTech.MCC.Input;
 using DoubTech.Networking;
 using UnityEngine;
 

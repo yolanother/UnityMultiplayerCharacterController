@@ -4,7 +4,7 @@ using UnityEngine.Events;
 using UnityEngine.InputSystem;
 #endif
 
-namespace DoubTech.Networking
+namespace DoubTech.MCC.Input
 {
 	public class InputSystemInput : MonoBehaviour
 	{
@@ -95,7 +95,6 @@ namespace DoubTech.Networking
 
 		public void LookInput(Vector2 newLookDirection)
 		{
-			Debug.Log(newLookDirection);
 			look = newLookDirection;
 		}
 
