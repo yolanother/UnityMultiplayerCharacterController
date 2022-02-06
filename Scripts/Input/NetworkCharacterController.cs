@@ -102,6 +102,7 @@ namespace DoubTech.MCC.Input
 
         protected override void OnEnable()
         {
+            base.OnEnable();
             ResetAnimator();
         }
 
@@ -111,8 +112,9 @@ namespace DoubTech.MCC.Input
             _hasAnimator = _animator;
         }
 
-        private void Update()
+        protected override void Update()
         {
+            base.Update();
             if (playerInfo.IsServer)
             {
                 if (!playerInfo.IsLocalPlayer)

@@ -20,12 +20,21 @@ namespace DoubTech.MCC
 
         private IPlayerInfoProvider playerInfo;
 
-        public bool IsFPS => CinemachineCore.Instance?.GetActiveBrain(0)?.ActiveVirtualCamera
-            ?.VirtualCameraGameObject?.CompareTag("FPSVirtualCamera") ?? false;
+        public bool IsFPS => CinemachineCore.Instance?.BrainCount > 0 && (
+            CinemachineCore.Instance.GetActiveBrain(0)?.ActiveVirtualCamera
+            ?.VirtualCameraGameObject.CompareTag("FPSVirtualCamera") ?? false);
 
-        private void Awake()
+        private IPlayerInfoProvider PlayerInfo
         {
-            playerInfo = GetComponent<IPlayerInfoProvider>();
+            get
+            {
+                if (null == playerInfo)
+                {
+                    playerInfo = GetComponent<IPlayerInfoProvider>();
+                }
+
+                return playerInfo;
+            }
         }
 
         private void OnEnable()
@@ -73,7 +82,7 @@ namespace DoubTech.MCC
         
         public virtual void OnStartLocalPlayer()
         {
-            name = $"Player {playerInfo.PlayerId} - {playerInfo.PlayerName}";
+            name = $"Player {PlayerInfo.PlayerId} - {PlayerInfo.PlayerName}";
             AssignCamera("FPSVirtualCamera", fpsFollowTarget);
             AssignCamera("TPSVirtualCamera", tpsFollowTarget);
             HandleOwnableComponents(true);

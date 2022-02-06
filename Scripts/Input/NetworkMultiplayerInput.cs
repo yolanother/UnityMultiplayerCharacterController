@@ -88,6 +88,7 @@ namespace DoubTech.Networking
 
 		public void LookInput(Vector2 newLookDirection)
 		{
+			Debug.Log(newLookDirection);
 			look = newLookDirection;
 		}
 

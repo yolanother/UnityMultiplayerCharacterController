@@ -27,10 +27,10 @@ namespace DoubTech.MCC.Input
         public GameObject TPSCameraTarget;
         
         // cinemachine
-        private float _cinemachineTargetYaw;
-        private float _cinemachineTargetPitch;
+        [SerializeField] private float _cinemachineTargetYaw;
+        [SerializeField] private float _cinemachineTargetPitch;
 
-        private const float _threshold = 0.01f;
+        [SerializeField] private float inputThreshold = 0.001f;
         
         protected IPlayerInputSync playerInputSync;
 
@@ -44,7 +44,7 @@ namespace DoubTech.MCC.Input
             if (null == playerInputSync) return;
             
             // if there is an input and camera position is not fixed
-            if (playerInputSync.Look.sqrMagnitude >= _threshold && !LockCameraPosition)
+            if (playerInputSync.Look.sqrMagnitude >= inputThreshold && !LockCameraPosition)
             {
                 _cinemachineTargetYaw += playerInputSync.Look.x * Time.deltaTime;
                 _cinemachineTargetPitch += playerInputSync.Look.y * Time.deltaTime;
@@ -67,7 +67,7 @@ namespace DoubTech.MCC.Input
             return Mathf.Clamp(lfAngle, lfMin, lfMax);
         }
 
-        protected virtual void LateUpdate()
+        protected virtual void Update()
         {
             CameraRotation();
         }
