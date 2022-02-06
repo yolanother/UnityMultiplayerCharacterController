@@ -18,7 +18,7 @@ namespace DoubTech.MCC.Weapons
         {
             get
             {
-                if (lastFrame != Time.frameCount)
+                if (lastFrame != Time.frameCount && camera)
                 {
                     lastFrame = Time.frameCount;
                     Vector2 screenCenter = new Vector2(Screen.width / 2f, Screen.height / 2f);
