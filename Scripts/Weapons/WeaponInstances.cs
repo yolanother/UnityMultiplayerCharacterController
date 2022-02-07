@@ -2,6 +2,7 @@
 using UnityEditor;
 #endif
 using System;
+using DoubTech.MCC.CharacterSelection;
 using DoubTech.MCC.IK;
 using UnityEngine;
 
@@ -18,7 +19,7 @@ namespace DoubTech.MCC.Weapons
         [SerializeField] private WeaponInstance[] leftHandInstances;
 
         [Header("Armature")]
-        [SerializeField] public ModelArmatures armatureRoot;
+        [SerializeField] public ArmatureSet armatureRoot;
         [SerializeField] public Transform leftHandInstanceRoot;
         [SerializeField] public Transform rightHandInstanceRoot;
 
@@ -60,8 +61,6 @@ namespace DoubTech.MCC.Weapons
 
         public void Reposition(bool reparent)
         {
-            armatureRoot.ActivePrefabInstance = armatureRoot.transform.GetChild(0).gameObject;
-
             Reposition(leftHandInstanceRoot, armatureRoot.LeftHandSlot, reparent);
             Reposition(rightHandInstanceRoot, armatureRoot.RightHandSlot, reparent);
         }

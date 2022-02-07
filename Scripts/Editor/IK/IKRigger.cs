@@ -8,9 +8,7 @@ namespace DoubTech.MCC.IK
     public class IKRigger : EditorWindow
     {
         [SerializeField] private GameObject characterRigPrefab;
-
         [SerializeField] private Animator armatureRoot;
-        [SerializeField] private Transform aimTarget;
 
         [MenuItem("Tools/DoubTech/MCC/IKRigger")]
         static void Init()
@@ -35,10 +33,7 @@ namespace DoubTech.MCC.IK
             characterRigPrefab =
                 EditorGUILayout.ObjectField("Rig Prefab", characterRigPrefab, typeof(GameObject)) as
                     GameObject;
-            aimTarget =
-                EditorGUILayout.ObjectField("Aim Target", aimTarget, typeof(Transform)) as
-                    Transform;
-
+            
             if (!armatureRoot)
             {
                 GUILayout.Label("Select a game object with an animator to get started.");
@@ -48,17 +43,38 @@ namespace DoubTech.MCC.IK
             if (GUILayout.Button("Rig"))
             {
                 var rig = armatureRoot.transform.Find(characterRigPrefab.name)?.gameObject;
-                if (!rig) rig = Instantiate(characterRigPrefab, armatureRoot.transform);
+                if (!rig) rig = (GameObject) PrefabUtility.InstantiatePrefab(characterRigPrefab);
+                rig.transform.parent = armatureRoot.transform;
+                rig.transform.localPosition = Vector3.zero;
+
                 rig.name = characterRigPrefab.name;
 
+                var aimTarget = armatureRoot.transform.Find("AimTarget");
+                if (!aimTarget)
+                {
+                    aimTarget = new GameObject("AimTarget").transform;
+                    aimTarget.parent = armatureRoot.transform;
+                }
+
+                var ikTarget = aimTarget.GetComponent<IKTarget>();
+                if (!ikTarget) ikTarget = aimTarget.gameObject.AddComponent<IKTarget>();
+                
                 var rigBuilder = armatureRoot.GetComponent<RigBuilder>();
                 if (!rigBuilder)
                 {
-                    armatureRoot.gameObject.AddComponent<RigBuilder>();
-                    var layer = new RigLayer(rig.GetComponent<Rig>());
-                    rigBuilder.layers.Add(layer);
-                    EditorUtility.SetDirty(rigBuilder);
+                    rigBuilder = armatureRoot.gameObject.AddComponent<RigBuilder>();
                 }
+                
+                var layer = new RigLayer(rig.GetComponent<Rig>());
+                if (rigBuilder.layers.Count == 1)
+                {
+                    rigBuilder.layers[0] = layer;
+                }
+                else
+                {
+                    rigBuilder.layers.Add(layer);
+                }
+                EditorUtility.SetDirty(rigBuilder);
 
                 EditorUtility.SetDirty(rig);
 
@@ -72,13 +88,16 @@ namespace DoubTech.MCC.IK
                         multiaim.data.constrainedObject = bone;
                         if (multiaim.data.sourceObjects.Count > 0)
                         {
-                            multiaim.data.sourceObjects.SetTransform(0, aimTarget);
+                            var array = new WeightedTransformArray();
+                            array.Add(new WeightedTransform(aimTarget, 1));
+                            multiaim.data.sourceObjects = array;
                         }
 
                         EditorUtility.SetDirty(multiaim);
                     }
                 }
             }
+            
         }
     }
 }

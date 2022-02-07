@@ -1,65 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &378901215
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 378901216}
-  m_Layer: 0
-  m_Name: RightHandSlot
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &378901216
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 378901215}
-  m_LocalRotation: {x: -0.020361599, y: -0.96887815, z: 0.15970777, w: 0.18802655}
-  m_LocalPosition: {x: 0.0156, y: -0.0773, z: -0.0123}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 1927286979170099431}
-  m_RootOrder: 5
-  m_LocalEulerAnglesHint: {x: 17.567, y: -157.108, z: 5.992}
---- !u!1 &385333275
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 385333276}
-  m_Layer: 0
-  m_Name: LeftHandSlot
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &385333276
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 385333275}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 1330145167532085559}
-  m_RootOrder: 5
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &8473609101404649883
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -71,7 +11,7 @@ PrefabInstance:
         type: 3}
       propertyPath: armatureRoot
       value: 
-      objectReference: {fileID: 1625690815}
+      objectReference: {fileID: 0}
     - target: {fileID: 3235064513128351632, guid: f21a05e1505bb7a41bd70902c6ce3483,
         type: 3}
       propertyPath: m_Data.m_SourceObjects.m_Item0.transform
@@ -177,39 +117,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fdcf1484866701e4a8aa3936ca9e702f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &4166615673456174048 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5497351929939073659, guid: f21a05e1505bb7a41bd70902c6ce3483,
-    type: 3}
-  m_PrefabInstance: {fileID: 8473609101404649883}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &4166615673456174049 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5497351929939073658, guid: f21a05e1505bb7a41bd70902c6ce3483,
-    type: 3}
-  m_PrefabInstance: {fileID: 8473609101404649883}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &5783902450722688645 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2728269016973702942, guid: f21a05e1505bb7a41bd70902c6ce3483,
-    type: 3}
-  m_PrefabInstance: {fileID: 8473609101404649883}
-  m_PrefabAsset: {fileID: 0}
---- !u!95 &1004145325429739077 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 8680475317273786334, guid: f21a05e1505bb7a41bd70902c6ce3483,
-    type: 3}
-  m_PrefabInstance: {fileID: 8473609101404649883}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &1330145167532085559 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 7488872028528601260, guid: f21a05e1505bb7a41bd70902c6ce3483,
-    type: 3}
-  m_PrefabInstance: {fileID: 8473609101404649883}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &1927286979170099431 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 8009467077508651388, guid: f21a05e1505bb7a41bd70902c6ce3483,
     type: 3}
   m_PrefabInstance: {fileID: 8473609101404649883}
   m_PrefabAsset: {fileID: 0}
@@ -298,38 +208,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3316004da6930dd459dc145191a57be7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animator: {fileID: 1004145325429739077}
   animatorParent: {fileID: 4166615673456174049}
---- !u!114 &1625690815
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4166615673456174048}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f0a79351a8f92b8439a862f1a96efc6c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  armatures:
-  - prefab: {fileID: 5783902450722688645}
-    leftHand:
-      position: {x: 0, y: 0, z: 0}
-      rotation: {x: -0, y: 0, z: 0}
-      scale: {x: 1, y: 1, z: 1}
-    rightHand:
-      position: {x: 0.0156, y: -0.0773, z: -0.0123}
-      rotation: {x: 17.56681, y: 202.8919, z: 5.9915743}
-      scale: {x: 1, y: 1, z: 1}
-  activeArmature:
-    prefab: {fileID: 5783902450722688645}
-    leftHand:
-      position: {x: 0, y: 0, z: 0}
-      rotation: {x: -0, y: 0, z: 0}
-      scale: {x: 1, y: 1, z: 1}
-    rightHand:
-      position: {x: 0.0156, y: -0.0773, z: -0.0123}
-      rotation: {x: 17.56681, y: 202.8919, z: 5.9915743}
-      scale: {x: 1, y: 1, z: 1}
-  prefabInstance: {fileID: 5783902450722688645}

@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using DoubTech.MCC.IK;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace DoubTech.MCC.Weapons
 {
     public class ModelArmatures : MonoBehaviour, IAnimatorProvider
     {
-        [SerializeField] internal List<Armature> armatures = new List<Armature>();
-        [SerializeField] private Armature activeArmature;
+        [SerializeField] internal List<ArmatureConfig> armatures = new List<ArmatureConfig>();
+        [FormerlySerializedAs("activeArmature")] [SerializeField] private ArmatureConfig activeArmatureConfig;
         [SerializeField] private GameObject prefabInstance;
 
         private IAnimatorProvider animator;
@@ -39,7 +40,7 @@ namespace DoubTech.MCC.Weapons
             }
         }
 
-        public Armature ActiveArmature => activeArmature;
+        public ArmatureConfig ActiveArmatureConfig => activeArmatureConfig;
 
         public GameObject ActivePrefabInstance
         {
@@ -47,9 +48,9 @@ namespace DoubTech.MCC.Weapons
             set
             {
                 prefabInstance = value;
-                activeArmature = armatures.Find(a => a.prefab == value || a.prefab.name == value.name);
+                activeArmatureConfig = armatures.Find(a => a.prefab == value || a.prefab.name == value.name);
 
-                if (null != activeArmature)
+                if (null != activeArmatureConfig)
                 {
                     if (null != animator) animator.OnAnimatorChanged -= OnAnimatorChanged;
                     animator = value.GetComponentInChildren<IAnimatorProvider>();
@@ -65,10 +66,10 @@ namespace DoubTech.MCC.Weapons
                             var slotgo = new GameObject("LeftHandSlot");
                             leftHandSlot = slotgo.transform;
                             leftHandSlot.transform.parent = leftHandBone;
-                            leftHandSlot.transform.localPosition = activeArmature.leftHand.position;
+                            leftHandSlot.transform.localPosition = activeArmatureConfig.leftHand.position;
                             leftHandSlot.transform.localEulerAngles =
-                                activeArmature.leftHand.rotation;
-                            leftHandSlot.transform.localScale = activeArmature.leftHand.scale;
+                                activeArmatureConfig.leftHand.rotation;
+                            leftHandSlot.transform.localScale = activeArmatureConfig.leftHand.scale;
                         }
                     }
 
@@ -81,10 +82,10 @@ namespace DoubTech.MCC.Weapons
                             rightHandSlot = slotgo.transform;
                             rightHandSlot.transform.parent = rightHandBone;
                             rightHandSlot.transform.localPosition =
-                                activeArmature.rightHand.position;
+                                activeArmatureConfig.rightHand.position;
                             rightHandSlot.transform.localEulerAngles =
-                                activeArmature.rightHand.rotation;
-                            rightHandSlot.transform.localScale = activeArmature.rightHand.scale;
+                                activeArmatureConfig.rightHand.rotation;
+                            rightHandSlot.transform.localScale = activeArmatureConfig.rightHand.scale;
                         }
                     }
                 }
@@ -100,7 +101,7 @@ namespace DoubTech.MCC.Weapons
     }
 
     [Serializable]
-    public class Armature
+    public class ArmatureConfig
     {
         public GameObject prefab;
         public SlotAdjustment leftHand;
@@ -125,7 +126,7 @@ namespace DoubTech.MCC.Weapons
 
             if (target is ModelArmatures mae)
             {
-                var activeArmature = mae.armatures.Find(a => a.prefab == mae.ActiveArmature.prefab || a.prefab.name == mae.ActiveArmature.prefab.name);
+                var activeArmature = mae.armatures.Find(a => a.prefab == mae.ActiveArmatureConfig.prefab || a.prefab.name == mae.ActiveArmatureConfig.prefab.name);
                 if (null != activeArmature && (mae.LeftHandSlot || mae.RightHandSlot) && GUILayout.Button("Copy Current Transforms"))
                 {
                     activeArmature.leftHand.position = mae.LeftHandSlot.transform.localPosition;

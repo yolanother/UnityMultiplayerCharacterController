@@ -241,6 +241,22 @@ MonoBehaviour:
   inactivePriority: 10
   isFps: 1
   isAim: 0
+  onFpsModeChanged:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 11400000, guid: abb10453b24e93942b89ae2c3f91a286, type: 2}
+        m_TargetAssemblyTypeName: DoubTech.ScriptableEvents.GameEvent`1[[System.Boolean,
+          mscorlib
+        m_MethodName: Invoke
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &511266956584020341
 GameObject:
   m_ObjectHideFlags: 0
@@ -316,7 +332,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Damping: {x: 0.1, y: 0.1, z: 0.3}
-  ShoulderOffset: {x: 0, y: 0.44, z: 0.1}
+  ShoulderOffset: {x: 0, y: 0.44, z: 0.28}
   VerticalArmLength: 0
   CameraSide: 0.6
   CameraDistance: 0
@@ -475,7 +491,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Damping: {x: 0.1, y: 0.1, z: 0.3}
-  ShoulderOffset: {x: 0, y: 0.44, z: 0.1}
+  ShoulderOffset: {x: 0, y: 0.36, z: 0.32}
   VerticalArmLength: 0
   CameraSide: 0.6
   CameraDistance: 0

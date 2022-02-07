@@ -1,9 +1,8 @@
-using System;
 using System.Collections.Generic;
 using Cinemachine;
 using DoubTech.MCC.Input;
-using DoubTech.Networking;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace DoubTech.MCC.CharacterController
 {
@@ -30,6 +29,9 @@ namespace DoubTech.MCC.CharacterController
         [SerializeField] private bool isFps;
         [SerializeField] private bool isAim;
 
+        [Header("Events")]
+        [SerializeField] private UnityEvent<bool> onFpsModeChanged = new UnityEvent<bool>();
+
         private List<CinemachineVirtualCamera> cameras;
 
         private float normalSensitivity;
@@ -50,6 +52,7 @@ namespace DoubTech.MCC.CharacterController
             {
                 isFps = value;
                 UpdateCamera();
+                onFpsModeChanged.Invoke(isFps);
             }
         }
 

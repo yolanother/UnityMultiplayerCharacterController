@@ -597,6 +597,7 @@ MonoBehaviour:
     m_Bits: 119
   camera: {fileID: 0}
   maxDistance: 1000
+  aimChildrenParentTransform: {fileID: 5497351929939073658}
 --- !u!114 &3142668697937907855
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1,4 +1,5 @@
 using System;
+using DoubTech.MCC.IK;
 using UnityEngine;
 
 namespace DoubTech.MCC.Weapons
@@ -9,6 +10,8 @@ namespace DoubTech.MCC.Weapons
         [SerializeField] private LayerMask aimMask;
         [SerializeField] private Camera camera;
         [SerializeField] private int maxDistance = 1000;
+
+        [SerializeField] private Transform aimChildrenParentTransform;
         
         private Ray screenRay;
 
@@ -45,6 +48,12 @@ namespace DoubTech.MCC.Weapons
         private void Awake()
         {
             if (!camera) camera = Camera.main;
+
+            var targetBindings = aimChildrenParentTransform.GetComponentsInChildren<IKTarget>(true);
+            foreach (var binding in targetBindings)
+            {
+                binding.transform.parent = transform;
+            }
         }
 
         public Vector3 AimCollision
