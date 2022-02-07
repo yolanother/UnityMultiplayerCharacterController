@@ -10,6 +10,7 @@ namespace DoubTech.MCC.IK
         [SerializeField] private GameObject characterRigPrefab;
 
         [SerializeField] private Animator armatureRoot;
+        [SerializeField] private Transform aimTarget;
 
         [MenuItem("Tools/DoubTech/MCC/IKRigger")]
         static void Init()
@@ -34,6 +35,9 @@ namespace DoubTech.MCC.IK
             characterRigPrefab =
                 EditorGUILayout.ObjectField("Rig Prefab", characterRigPrefab, typeof(GameObject)) as
                     GameObject;
+            aimTarget =
+                EditorGUILayout.ObjectField("Aim Target", aimTarget, typeof(Transform)) as
+                    Transform;
 
             if (!armatureRoot)
             {
@@ -43,14 +47,20 @@ namespace DoubTech.MCC.IK
 
             if (GUILayout.Button("Rig"))
             {
-                var rig = Instantiate(characterRigPrefab, armatureRoot.transform);
+                var rig = armatureRoot.transform.Find(characterRigPrefab.name)?.gameObject;
+                if (!rig) rig = Instantiate(characterRigPrefab, armatureRoot.transform);
                 rig.name = characterRigPrefab.name;
 
                 var rigBuilder = armatureRoot.GetComponent<RigBuilder>();
-                if (!rigBuilder) armatureRoot.gameObject.AddComponent<RigBuilder>();
-                var layer = new RigLayer(rig.GetComponent<Rig>());
-                rigBuilder.layers.Add(layer);
-                EditorUtility.SetDirty(rigBuilder);
+                if (!rigBuilder)
+                {
+                    armatureRoot.gameObject.AddComponent<RigBuilder>();
+                    var layer = new RigLayer(rig.GetComponent<Rig>());
+                    rigBuilder.layers.Add(layer);
+                    EditorUtility.SetDirty(rigBuilder);
+                }
+
+                EditorUtility.SetDirty(rig);
 
                 var boneAssignments = rig.GetComponentsInChildren<BoneAssignment>();
                 foreach (var boneAssignment in boneAssignments)
@@ -60,6 +70,12 @@ namespace DoubTech.MCC.IK
                     if (multiaim)
                     {
                         multiaim.data.constrainedObject = bone;
+                        if (multiaim.data.sourceObjects.Count > 0)
+                        {
+                            multiaim.data.sourceObjects.SetTransform(0, aimTarget);
+                        }
+
+                        EditorUtility.SetDirty(multiaim);
                     }
                 }
             }
