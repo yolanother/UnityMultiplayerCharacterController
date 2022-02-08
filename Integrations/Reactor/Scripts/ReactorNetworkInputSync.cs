@@ -46,7 +46,17 @@ namespace DoubTech.MCC.Integrations.Reactor
             get => Properties[propertyStart + 6].Vector2;
             set => Properties[propertyStart + 6].Vector2 = value;
         }
-        
+
+        public bool Aim
+        {
+            get;
+            set;
+        }
+        public bool Crouch { get; set; }
+        public bool FirePrimary { get; set; }
+        public bool FireSecondary { get; set; }
+        public bool Use { get; set; }
+
         public bool AnimSyncJump 
         {
             get => Properties[propertyStart + 7].Bool;

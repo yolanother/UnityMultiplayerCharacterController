@@ -55,6 +55,26 @@ namespace DoubTech.MCC.Input
                 inputSync.Move = _input.move;
             }
 
+            if (inputSync.Aim != _input.aim)
+            {
+                inputSync.Aim = _input.aim;
+            }
+
+            if (inputSync.Crouch != _input.crouch)
+            {
+                inputSync.Crouch = _input.crouch;
+            }
+
+            if (inputSync.FirePrimary != _input.firePrimary)
+            {
+                inputSync.FirePrimary = _input.firePrimary;
+            }
+
+            if (inputSync.FireSecondary != _input.fireSecondary)
+            {
+                inputSync.FireSecondary = _input.fireSecondary;
+            }
+
             if (inputSync.AnalogMovement != _input.analogMovement)
             {
                 inputSync.AnalogMovement = _input.analogMovement;
@@ -78,5 +98,10 @@ namespace DoubTech.MCC.Input
         Vector2 Move { get; set; }
         bool Sprint { get; set; }
         Vector2 Look { get; set; }
+        public bool Aim { get; set; }
+        public bool Crouch { get; set; }
+        public bool FirePrimary { get; set; }
+        public bool FireSecondary { get; set; }
+        public bool Use { get; set; }
     }
 }

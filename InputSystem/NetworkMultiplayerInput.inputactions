@@ -69,7 +69,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Primary",
+                    "name": "FirePrimary",
                     "type": "Button",
                     "id": "975a39be-a5cc-4774-aca0-0219653d1a1f",
                     "expectedControlType": "Button",
@@ -78,7 +78,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Secondary",
+                    "name": "FireSecondary",
                     "type": "Button",
                     "id": "36cdb355-e6f7-4946-a906-123961dd5228",
                     "expectedControlType": "Button",
@@ -90,6 +90,15 @@
                     "name": "Tertiary",
                     "type": "Button",
                     "id": "b3e8b07e-ca46-443a-a8d5-41075f86ce92",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Crouch",
+                    "type": "Button",
+                    "id": "bb265196-63bf-4d38-afe0-4bf18a465d4f",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -335,7 +344,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Primary",
+                    "action": "FirePrimary",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -346,7 +355,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Secondary",
+                    "action": "FireSecondary",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -358,6 +367,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "Tertiary",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f2a37198-57cc-4754-b036-77fc37ae3ac1",
+                    "path": "<Keyboard>/ctrl",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Crouch",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -18,6 +18,10 @@ namespace DoubTech.MCC.Input
 		public Vector2 look;
 		public bool jump;
 		public bool sprint;
+		public bool aim;
+		public bool crouch;
+		public bool firePrimary;
+		public bool fireSecondary;
 
 		[Header("Movement Settings")]
 		public bool analogMovement;
@@ -73,6 +77,26 @@ namespace DoubTech.MCC.Input
 		public void OnSprint(InputValue value)
 		{
 			SprintInput(InputEnabled && value.isPressed);
+		}
+
+		public void OnAim(InputValue value)
+		{
+			aim = (InputEnabled && value.isPressed);
+		}
+
+		public void OnCrouch(InputValue value)
+		{
+			crouch = (InputEnabled && value.isPressed);
+		}
+
+		public void OnFirePrimary(InputValue value)
+		{
+			firePrimary = (InputEnabled && value.isPressed);
+		}
+
+		public void OnFireSecondary(InputValue value)
+		{
+			fireSecondary = (InputEnabled && value.isPressed);
 		}
 
         public void OnChangeCamera(InputValue value)
