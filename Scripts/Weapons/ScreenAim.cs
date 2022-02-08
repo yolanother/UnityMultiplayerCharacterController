@@ -52,7 +52,7 @@ namespace DoubTech.MCC.Weapons
             var targetBindings = aimChildrenParentTransform.GetComponentsInChildren<IKTarget>(true);
             foreach (var binding in targetBindings)
             {
-                binding.transform.parent = transform;
+                binding.target = transform;
             }
         }
 
