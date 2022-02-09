@@ -3,7 +3,6 @@ using UnityEditor;
 #endif
 using System;
 using DoubTech.MCC.CharacterSelection;
-using DoubTech.MCC.IK;
 using UnityEngine;
 
 namespace DoubTech.MCC.Weapons
@@ -13,6 +12,7 @@ namespace DoubTech.MCC.Weapons
         [Header("Active Weapon")]
         [SerializeField] private int activeLeftWeapon = -1;
         [SerializeField] private int activeRightWeapon = -1;
+        [SerializeField] private Transform activeMuzzleTransform;
 
         [Header("Instances")]
         [SerializeField] private WeaponInstance[] rightHandInstances;
@@ -22,6 +22,9 @@ namespace DoubTech.MCC.Weapons
         [SerializeField] public ArmatureSet armatureRoot;
         [SerializeField] public Transform leftHandInstanceRoot;
         [SerializeField] public Transform rightHandInstanceRoot;
+
+        public WeaponInstance LeftWeapon => activeLeftWeapon >= 0 && activeLeftWeapon < leftHandInstances.Length ? leftHandInstances[activeLeftWeapon] : null;
+        public WeaponInstance RightWeapon => activeRightWeapon >= 0 && activeRightWeapon < rightHandInstances.Length ? rightHandInstances[activeRightWeapon] : null;
 
         private void Awake()
         {
@@ -75,6 +78,24 @@ namespace DoubTech.MCC.Weapons
             {
                 instanceRootTransform.parent = parent;
             }
+        }
+
+        private void LateUpdate()
+        {
+            if (activeMuzzleTransform && RightWeapon)
+            {
+                activeMuzzleTransform.position = RightWeapon.MuzzleTransform.position;
+            }
+        }
+
+        public void FirePrimary()
+        {
+            RightWeapon.FirePrimary();
+        }
+
+        public void FireSecondary()
+        {
+            RightWeapon.FireSecondary();
         }
     }
 

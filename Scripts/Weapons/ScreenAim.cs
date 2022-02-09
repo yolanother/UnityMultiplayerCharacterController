@@ -16,6 +16,8 @@ namespace DoubTech.MCC.Weapons
         private Ray screenRay;
 
         private int lastFrame;
+
+        public Transform AimSource => aimSource ? aimSource : transform;
         
         public Ray ScreenRay
         {

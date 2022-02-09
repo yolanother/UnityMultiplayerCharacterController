@@ -70,7 +70,7 @@
                 },
                 {
                     "name": "FirePrimary",
-                    "type": "Button",
+                    "type": "PassThrough",
                     "id": "975a39be-a5cc-4774-aca0-0219653d1a1f",
                     "expectedControlType": "Button",
                     "processors": "",
@@ -79,7 +79,7 @@
                 },
                 {
                     "name": "FireSecondary",
-                    "type": "Button",
+                    "type": "PassThrough",
                     "id": "36cdb355-e6f7-4946-a906-123961dd5228",
                     "expectedControlType": "Button",
                     "processors": "",
@@ -88,7 +88,7 @@
                 },
                 {
                     "name": "Tertiary",
-                    "type": "Button",
+                    "type": "PassThrough",
                     "id": "b3e8b07e-ca46-443a-a8d5-41075f86ce92",
                     "expectedControlType": "Button",
                     "processors": "",
@@ -97,7 +97,7 @@
                 },
                 {
                     "name": "Crouch",
-                    "type": "Button",
+                    "type": "PassThrough",
                     "id": "bb265196-63bf-4d38-afe0-4bf18a465d4f",
                     "expectedControlType": "Button",
                     "processors": "",
@@ -351,7 +351,7 @@
                 {
                     "name": "",
                     "id": "d1c3bfdd-753e-42ee-a700-b6030f8e3c51",
-                    "path": "<Mouse>/rightButton",
+                    "path": "<Mouse>/middleButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "",

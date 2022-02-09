@@ -2,13 +2,34 @@ using System;
 using System.Collections;
 using DoubTech.MCC.IK;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace DoubTech.MCC.Weapons
 {
     public class WeaponInstance : MonoBehaviour
     {
+        [Header("Firing")]
+        [SerializeField] private Transform muzzleTransform;
+
+        [Header("IK")]
+        [SerializeField] private Transform leftHandIkTarget;
+        [SerializeField] private Transform rightHandIkTarget;
+
+        [Header("Equip Events")]
+        [SerializeField] private UnityEvent OnWeaponEquipStarted = new UnityEvent();
+        [SerializeField] private UnityEvent OnWeaponEquipped = new UnityEvent();
+        
+        [SerializeField] private UnityEvent OnWeaponUnequipStarted = new UnityEvent();
+        [SerializeField] private UnityEvent OnWeaponUnequipped = new UnityEvent();
+        
+        [Header("Fire Events")]
+        [SerializeField] private UnityEvent OnWeaponPrimaryFired = new UnityEvent();
+        [SerializeField] private UnityEvent OnWeaponSecondaryFired = new UnityEvent();
+        
         [SerializeField] private WeaponAnimationLayer[] animationLayers;
         private IAnimatorProvider animator;
+
+        public Transform MuzzleTransform => muzzleTransform;
 
         private void OnEnable()
         {
@@ -16,15 +37,33 @@ namespace DoubTech.MCC.Weapons
             Equip();
         }
 
+        public void FirePrimary()
+        {
+            OnWeaponPrimaryFired.Invoke();
+        }
+
+        public void FireSecondary()
+        {
+            OnWeaponSecondaryFired.Invoke();
+        }
+
         public void Equip()
         {
             if (!animator?.Animator) return;
+            OnWeaponEquipStarted.Invoke();
 
             StopAllCoroutines();
             foreach (var layer in animationLayers)
             {
                 StartCoroutine(LerpLayer(layer));
             }
+            OnWeaponEquipped.Invoke();
+        }
+
+        public void Unequip()
+        {
+            OnWeaponUnequipStarted.Invoke();
+            OnWeaponUnequipped.Invoke();
         }
 
         private void OnDisable()
