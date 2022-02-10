@@ -5,7 +5,7 @@ namespace DoubTech.MCC.Weapons
 {
     public class ScreenAimTransform : MonoBehaviour
     {
-        [SerializeField] private ScreenAim aim;
+        [SerializeField] private AimIKManager aim;
         [SerializeField] private float updateRate = .1f;
 
         private float lastUpdate;

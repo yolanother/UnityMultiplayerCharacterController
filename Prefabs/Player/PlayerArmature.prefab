@@ -75,6 +75,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01c87ae7d8e51f446adc9f1825834d17, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  muzzleTransform: {fileID: 0}
+  leftHandIkTarget: {fileID: 0}
+  rightHandIkTarget: {fileID: 0}
+  OnWeaponEquipStarted:
+    m_PersistentCalls:
+      m_Calls: []
+  OnWeaponEquipped:
+    m_PersistentCalls:
+      m_Calls: []
+  OnWeaponUnequipStarted:
+    m_PersistentCalls:
+      m_Calls: []
+  OnWeaponUnequipped:
+    m_PersistentCalls:
+      m_Calls: []
+  OnWeaponPrimaryFired:
+    m_PersistentCalls:
+      m_Calls: []
+  OnWeaponSecondaryFired:
+    m_PersistentCalls:
+      m_Calls: []
   animationLayers:
   - layers: 1
     weight: 1
@@ -156,12 +177,29 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   activeLeftWeapon: -1
   activeRightWeapon: 0
+  activeMuzzleTransform: {fileID: 0}
   rightHandInstances:
-  - {fileID: 7908722568915631934}
+  - {fileID: 0}
+  - {fileID: 0}
   leftHandInstances: []
   armatureRoot: {fileID: 0}
   leftHandInstanceRoot: {fileID: 4091619854951434669}
   rightHandInstanceRoot: {fileID: 3922471853454442911}
+  onWeaponChanged:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 346101603373075076}
+        m_TargetAssemblyTypeName: DoubTech.MCC.IK.IKAttachmentManager, DoubTech.Multiplayer
+        m_MethodName: Attach
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &5497351929939073659
 GameObject:
   m_ObjectHideFlags: 0
@@ -171,6 +209,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5497351929939073658}
+  - component: {fileID: 346101603373075076}
   m_Layer: 13
   m_Name: Model
   m_TagString: Untagged
@@ -192,6 +231,24 @@ Transform:
   m_Father: {fileID: 8308183395116220444}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &346101603373075076
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5497351929939073659}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e84c02bb2a694782928ec82d1ba53cda, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  leftHandAttachmentPoint: {fileID: 0}
+  rightHandAttachmentPoint: {fileID: 0}
+  leftHandControl: {fileID: 0}
+  leftHandHintControl: {fileID: 0}
+  rightHandControl: {fileID: 0}
+  rightHandHintControl: {fileID: 0}
 --- !u!1 &5946851726946043041
 GameObject:
   m_ObjectHideFlags: 0

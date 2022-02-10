@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
@@ -49,15 +50,6 @@ namespace DoubTech.MCC.IK
 
                 rig.name = characterRigPrefab.name;
 
-                var aimTarget = armatureRoot.transform.Find("AimTarget");
-                if (!aimTarget)
-                {
-                    aimTarget = new GameObject("AimTarget").transform;
-                    aimTarget.parent = armatureRoot.transform;
-                }
-
-                var ikTarget = aimTarget.GetComponent<IKTarget>();
-                if (!ikTarget) ikTarget = aimTarget.gameObject.AddComponent<IKTarget>();
                 
                 var rigBuilder = armatureRoot.GetComponent<RigBuilder>();
                 if (!rigBuilder)
@@ -78,6 +70,7 @@ namespace DoubTech.MCC.IK
 
                 EditorUtility.SetDirty(rig);
 
+                IKTarget aimTarget = armatureRoot.GetComponentsInChildren<IKTarget>().FirstOrDefault(a => a.IKTargetType == IKTargetType.Aim);
                 var boneAssignments = rig.GetComponentsInChildren<BoneAssignment>();
                 foreach (var boneAssignment in boneAssignments)
                 {
@@ -89,11 +82,20 @@ namespace DoubTech.MCC.IK
                         if (multiaim.data.sourceObjects.Count > 0)
                         {
                             var array = new WeightedTransformArray();
-                            array.Add(new WeightedTransform(aimTarget, 1));
+                            array.Add(new WeightedTransform(aimTarget.transform, 1));
                             multiaim.data.sourceObjects = array;
                         }
 
                         EditorUtility.SetDirty(multiaim);
+                    }
+
+                    var twoBone = boneAssignment.GetComponent<TwoBoneIKConstraint>();
+                    if (twoBone)
+                    {
+                        twoBone.data.tip = bone;
+                        twoBone.data.mid = bone.parent;
+                        twoBone.data.root = bone.parent.parent;
+                        EditorUtility.SetDirty(twoBone);
                     }
                 }
             }

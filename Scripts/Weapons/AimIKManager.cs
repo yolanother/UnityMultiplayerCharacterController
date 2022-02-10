@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace DoubTech.MCC.Weapons
 {
-    public class ScreenAim : MonoBehaviour
+    public class AimIKManager : MonoBehaviour
     {
         [SerializeField] private Transform aimSource;
         [SerializeField] private LayerMask aimMask;
@@ -54,7 +54,10 @@ namespace DoubTech.MCC.Weapons
             var targetBindings = aimChildrenParentTransform.GetComponentsInChildren<IKTarget>(true);
             foreach (var binding in targetBindings)
             {
-                binding.target = transform;
+                if (binding.IKTargetType == IKTargetType.Aim)
+                {
+                    binding.target = transform;
+                }
             }
         }
 

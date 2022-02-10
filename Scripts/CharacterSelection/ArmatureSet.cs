@@ -1,6 +1,7 @@
 using System;
 using DoubTech.MCC.IK;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace DoubTech.MCC.CharacterSelection
 {
@@ -19,6 +20,10 @@ namespace DoubTech.MCC.CharacterSelection
 
         [Header("Armatures")]
         [SerializeField] private Armature[] armatures;
+
+        [Header("Events")]
+        [SerializeField] private UnityEvent onArmatureChanged = new UnityEvent();
+        
         private Animator animator;
         private Transform leftHandBone;
         private Transform rightHandBone;
@@ -75,6 +80,7 @@ namespace DoubTech.MCC.CharacterSelection
             UpdateSlot(backBone, "Back Slot", ref backSlot);
             animator.runtimeAnimatorController = animatorController;
             OnAnimatorChanged?.Invoke(animator);
+            onArmatureChanged.Invoke();
         }
 
         private void UpdateSlot(Transform bone, string slotName, ref Transform slot)
