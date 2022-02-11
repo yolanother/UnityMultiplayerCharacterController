@@ -17,6 +17,8 @@ namespace DoubTech.MCC.Events
 
         public bool OnValidateEvent()
         {
+            if (null == providerInfo) return false;
+            
             return localPlayer && providerInfo.IsLocalPlayer
                 || !localPlayer && !providerInfo.IsLocalPlayer;
         }
