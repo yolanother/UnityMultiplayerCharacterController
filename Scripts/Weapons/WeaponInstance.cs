@@ -23,8 +23,8 @@ namespace DoubTech.MCC.Weapons
         [SerializeField] private UnityEvent OnWeaponUnequipped = new UnityEvent();
         
         [Header("Fire Events")]
-        [SerializeField] private UnityEvent OnWeaponPrimaryFired = new UnityEvent();
-        [SerializeField] private UnityEvent OnWeaponSecondaryFired = new UnityEvent();
+        [SerializeField] private UnityEvent<Transform> OnWeaponPrimaryFired = new UnityEvent<Transform>();
+        [SerializeField] private UnityEvent<Transform> OnWeaponSecondaryFired = new UnityEvent<Transform>();
         
         [SerializeField] private WeaponAnimationLayer[] animationLayers;
         private IAnimatorProvider animator;
@@ -39,12 +39,12 @@ namespace DoubTech.MCC.Weapons
 
         public void FirePrimary()
         {
-            OnWeaponPrimaryFired.Invoke();
+            OnWeaponPrimaryFired.Invoke(transform);
         }
 
         public void FireSecondary()
         {
-            OnWeaponSecondaryFired.Invoke();
+            OnWeaponSecondaryFired.Invoke(transform);
         }
 
         public void Equip()
