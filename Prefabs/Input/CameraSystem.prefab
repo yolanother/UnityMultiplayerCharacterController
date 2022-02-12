@@ -332,7 +332,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Damping: {x: 0.1, y: 0.1, z: 0.3}
-  ShoulderOffset: {x: 0, y: 0.44, z: 0.28}
+  ShoulderOffset: {x: 0, y: 0.15, z: 0.28}
   VerticalArmLength: 0
   CameraSide: 0.6
   CameraDistance: 0
@@ -491,7 +491,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Damping: {x: 0.1, y: 0.1, z: 0.3}
-  ShoulderOffset: {x: 0, y: 0.36, z: 0.32}
+  ShoulderOffset: {x: 0, y: 0.15, z: 0.32}
   VerticalArmLength: 0
   CameraSide: 0.6
   CameraDistance: 0
@@ -1259,6 +1259,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2815781256228285042}
     m_Modifications:
+    - target: {fileID: 3959952679400726039, guid: 8e98c7a475478d644bb234ca0e0b72b7,
+        type: 3}
+      propertyPath: m_Layer
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3965089747727740525, guid: 8e98c7a475478d644bb234ca0e0b72b7,
+        type: 3}
+      propertyPath: m_Layer
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 3965089749149222625, guid: 8e98c7a475478d644bb234ca0e0b72b7,
         type: 3}
       propertyPath: m_RootOrder
@@ -1464,6 +1474,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: CursorLockManager
       objectReference: {fileID: 0}
+    - target: {fileID: 3965089749149222655, guid: 8e98c7a475478d644bb234ca0e0b72b7,
+        type: 3}
+      propertyPath: m_Layer
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3965089749354865587, guid: 8e98c7a475478d644bb234ca0e0b72b7,
+        type: 3}
+      propertyPath: m_Layer
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 3965089749354865587, guid: 8e98c7a475478d644bb234ca0e0b72b7,
         type: 3}
       propertyPath: m_IsActive
@@ -1473,6 +1493,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_BlockingMask.m_Bits
       value: 503
+      objectReference: {fileID: 0}
+    - target: {fileID: 3965089749358990193, guid: 8e98c7a475478d644bb234ca0e0b72b7,
+        type: 3}
+      propertyPath: m_Layer
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 8155007943364661157, guid: 8e98c7a475478d644bb234ca0e0b72b7,
         type: 3}

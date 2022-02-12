@@ -281,7 +281,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6e1ee6fda1ef15429dfcedb2407f734, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lockOnEnable: 1
+  lockOnEnable: 0
   detectionCanvas: {fileID: 3965089749354865586}
   onCursorLocked:
     m_PersistentCalls:
