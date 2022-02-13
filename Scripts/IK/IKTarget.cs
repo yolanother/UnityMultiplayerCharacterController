@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -14,7 +15,45 @@ namespace DoubTech.MCC.IK
 
         [SerializeField] private UnityEvent<float> onChangeTargetWeight;
 
+        [SerializeField] private bool reparentToTaggedTransform;
+        [SerializeField] private string targetTag;
+        private Transform targetTagTransform;
+
         public IKTargetType IKTargetType => ikTargetType;
+
+        public bool ReparentToTaggedTransform
+        {
+            get => reparentToTaggedTransform;
+            set
+            {
+                reparentToTaggedTransform = value;
+                if (reparentToTaggedTransform && !string.IsNullOrEmpty(targetTag))
+                {
+                    if (!targetTagTransform)
+                    {
+                        targetTagTransform = GameObject.FindWithTag(targetTag)?.transform;
+                    }
+
+                    StopAllCoroutines();
+                    StartCoroutine(UpdateParent());
+                }
+            }
+        }
+
+        private IEnumerator UpdateParent()
+        {
+            yield return new WaitForSeconds(1);
+            if (targetTagTransform)
+            {
+                transform.parent = targetTagTransform;
+                transform.localPosition = Vector3.zero;
+                transform.localEulerAngles = Vector3.zero;
+            }
+            else
+            {
+                reparentToTaggedTransform = false;
+            }
+        }
 
         public float TargetWeight
         {
@@ -28,11 +67,14 @@ namespace DoubTech.MCC.IK
 
         private void LateUpdate()
         {
+            if (reparentToTaggedTransform) return;
+            
             if (target)
             {
                 var lerp = lerpSpeed > 0 ? lerpSpeed * Time.deltaTime : 1;
-                transform.position = Vector3.Lerp(transform.position, target.position, lerp);
-                transform.rotation = Quaternion.Slerp(transform.rotation, target.rotation, lerp);
+                var smoothLerpfactor = Mathf.SmoothStep(0, 1, lerp);
+                transform.position = Vector3.Lerp(transform.position, target.position, smoothLerpfactor);
+                transform.rotation = Quaternion.Slerp(transform.rotation, target.rotation, smoothLerpfactor);
             }
         }
     }

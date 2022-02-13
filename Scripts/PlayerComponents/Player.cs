@@ -15,6 +15,9 @@ namespace DoubTech.MCC
         [SerializeField] private GameObject[] localPlayerGameObjects;
         [SerializeField] private GameObject[] remotePlayerGameObjects;
 
+        [SerializeField] private UnityEvent onAssignedLocalPlayer = new UnityEvent();
+        [SerializeField] private UnityEvent onAssignedRemotePlayer = new UnityEvent();
+
         [SerializeField] public UnityEvent onSwitchedToFPS = new UnityEvent();
         [SerializeField] public UnityEvent onSwitchedToTPS = new UnityEvent();
 
@@ -101,12 +104,14 @@ namespace DoubTech.MCC
             AssignCamera("FPSVirtualCamera", fpsFollowTarget);
             AssignCamera("TPSVirtualCamera", tpsFollowTarget);
             HandleOwnableComponents(true);
+            onAssignedLocalPlayer.Invoke();
         }
 
         public virtual void OnStartRemotePlayer()
         {
             name = $"Player {PlayerInfo.PlayerId} - {PlayerInfo.PlayerName}";
             HandleOwnableComponents(false);
+            onAssignedRemotePlayer.Invoke();
         }
 
         public void HandleOwnableComponents(bool isOwned)

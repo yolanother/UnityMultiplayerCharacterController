@@ -10,13 +10,9 @@ namespace DoubTech.MCC.Weapons
 
         private float lastUpdate;
         
-        private void Update()
+        private void LateUpdate()
         {
-            if (Time.time - lastUpdate > updateRate)
-            {
-                transform.position = aim.AimCollision;
-                lastUpdate = Time.time;
-            }
+            transform.position = aim.AimTarget;
         }
 
         private void OnDrawGizmos()

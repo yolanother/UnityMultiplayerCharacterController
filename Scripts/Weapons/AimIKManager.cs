@@ -78,7 +78,7 @@ namespace DoubTech.MCC.Weapons
         {
             get
             {
-                return ScreenRay.GetPoint(10000);
+                return ScreenRay.GetPoint(maxDistance);
             }
         }
     }

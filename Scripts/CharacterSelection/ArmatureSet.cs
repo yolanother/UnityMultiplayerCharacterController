@@ -2,13 +2,16 @@ using System;
 using DoubTech.MCC.IK;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Serialization;
 
 namespace DoubTech.MCC.CharacterSelection
 {
     public class ArmatureSet : MonoBehaviour, IAnimatorProvider
     {
+        [FormerlySerializedAs("animatorController")]
         [Header("AnimatorController")]
-        [SerializeField] private RuntimeAnimatorController animatorController;
+        [SerializeField] private RuntimeAnimatorController thirdPersonAnimatorController;
+        [SerializeField] private RuntimeAnimatorController firstPersonAnimatorController;
         
         [Header("Armatures Selection")]
         [SerializeField] private int selectedArmature;
@@ -20,6 +23,7 @@ namespace DoubTech.MCC.CharacterSelection
 
         [Header("Armatures")]
         [SerializeField] private Armature[] armatures;
+        [SerializeField] private bool moveFpsToCamera = true;
 
         [Header("Events")]
         [SerializeField] private UnityEvent onArmatureChanged = new UnityEvent();
@@ -34,6 +38,7 @@ namespace DoubTech.MCC.CharacterSelection
         private Transform leftHandSlot;
         private Transform headSlot;
         private Transform backSlot;
+        private Transform fpsCameraAttachment;
 
         public Transform LeftHandBone => leftHandBone;
         public Transform RightHandBone => rightHandBone;
@@ -61,9 +66,44 @@ namespace DoubTech.MCC.CharacterSelection
                 {
                     var armature = armatures[selectedArmature];
                     armature.FPSMode = value;
-                    animator = armature.GetComponentInChildren<Animator>(false);
-                    animator.applyRootMotion = false;
-                    HandleAnimatorChange(animator);
+                    Reassign();
+                }
+            }
+        }
+
+        public void Reassign()
+        {
+            var armature = armatures[selectedArmature];
+            if (fpsMode)
+            {
+                animator = armature.firstPerson.GetComponentInChildren<Animator>(false);
+            }
+            else
+            {
+                animator = armature.thirdPerson.GetComponentInChildren<Animator>(false);
+            }
+
+            animator.applyRootMotion = false;
+            HandleAnimatorChange(animator);
+
+            if (moveFpsToCamera && fpsMode && !fpsCameraAttachment)
+            {
+                fpsCameraAttachment = GameObject.FindWithTag("FPSCameraAttachPoint")?.transform;
+            }
+                    
+            if (fpsCameraAttachment && moveFpsToCamera)
+            {
+                if (fpsMode)
+                {
+                    animator.transform.parent = fpsCameraAttachment.transform;
+                    animator.transform.localPosition = Vector3.zero;
+                    animator.transform.localEulerAngles = Vector3.zero;
+                }
+                else
+                {
+                    armature.firstPerson.transform.parent = armature.thirdPerson.transform.parent;
+                    animator.transform.localPosition = Vector3.zero;
+                    animator.transform.localEulerAngles = Vector3.zero;
                 }
             }
         }
@@ -78,7 +118,8 @@ namespace DoubTech.MCC.CharacterSelection
             UpdateSlot(rightHandBone, "Right Hand Slot", ref rightHandSlot);
             UpdateSlot(headBone, "Head Slot", ref headSlot);
             UpdateSlot(backBone, "Back Slot", ref backSlot);
-            animator.runtimeAnimatorController = animatorController;
+            if (fpsMode) animator.runtimeAnimatorController = firstPersonAnimatorController;
+            else animator.runtimeAnimatorController = thirdPersonAnimatorController;
             OnAnimatorChanged?.Invoke(animator);
             onArmatureChanged.Invoke();
         }
@@ -104,7 +145,6 @@ namespace DoubTech.MCC.CharacterSelection
         {
             SelectedArmatureIndex = selectedArmature;
             SelectedMaterialIndex = selectedMaterial;
-            FPSMode = fpsMode;
         }
 
         private void OnEnable()

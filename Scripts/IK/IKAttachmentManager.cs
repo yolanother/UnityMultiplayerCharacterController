@@ -13,7 +13,20 @@ namespace DoubTech.MCC.IK
         [SerializeField] private IKTarget leftHandHintControl;
         [SerializeField] private IKTarget rightHandControl;
         [SerializeField] private IKTarget rightHandHintControl;
+        [SerializeField] private IKTarget aimTarget;
         private IKTargetType currentTargetTypes;
+        
+        [SerializeField] public bool attachAimToMainCameraTarget;
+
+        public bool AttachAimToMainCameraTarget
+        {
+            get => attachAimToMainCameraTarget;
+            set
+            {
+                attachAimToMainCameraTarget = value;
+                Attach();
+            }
+        }
 
         public void Detach()
         {
@@ -61,6 +74,9 @@ namespace DoubTech.MCC.IK
                         break;
                     case IKTargetType.RightHandIKHint:
                         rightHandHintControl = controlPoint;
+                        break;
+                    case IKTargetType.Aim:
+                        aimTarget = controlPoint;
                         break;
                 }
             }
@@ -117,6 +133,11 @@ namespace DoubTech.MCC.IK
                     rightHandHintControl.TargetWeight = rightHandAttachmentPoint.TargetHintTransformWeight;
                     rightHandHintControl.lerpSpeed = rightHandAttachmentPoint.TargetHintTransformLerp;
                 }
+            }
+
+            if (null != aimTarget)
+            {
+                aimTarget.ReparentToTaggedTransform = attachAimToMainCameraTarget;
             }
         }
     }
