@@ -34,24 +34,17 @@ namespace DoubTech.MCC.IK
                         targetTagTransform = GameObject.FindWithTag(targetTag)?.transform;
                     }
 
-                    StopAllCoroutines();
-                    StartCoroutine(UpdateParent());
+                    if (targetTagTransform)
+                    {
+                        transform.parent = targetTagTransform;
+                        transform.localPosition = Vector3.zero;
+                        transform.localEulerAngles = Vector3.zero;
+                    }
+                    else
+                    {
+                        reparentToTaggedTransform = false;
+                    }
                 }
-            }
-        }
-
-        private IEnumerator UpdateParent()
-        {
-            yield return new WaitForSeconds(1);
-            if (targetTagTransform)
-            {
-                transform.parent = targetTagTransform;
-                transform.localPosition = Vector3.zero;
-                transform.localEulerAngles = Vector3.zero;
-            }
-            else
-            {
-                reparentToTaggedTransform = false;
             }
         }
 
