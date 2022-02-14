@@ -36,7 +36,7 @@ namespace DoubTech.MCC.Utilities
             {
                 Cursor.visible = false;
                 Cursor.lockState = CursorLockMode.Locked;
-                detectionCanvas.gameObject.SetActive(false);
+                if(detectionCanvas) detectionCanvas.gameObject.SetActive(false);
                 if (!locked)
                 {
                     locked = true;
@@ -48,7 +48,7 @@ namespace DoubTech.MCC.Utilities
         public void Unlock(string lockName)
         {
             cameraUnlocks.Add(lockName);
-            detectionCanvas.gameObject.SetActive(true);
+            if(detectionCanvas) detectionCanvas.gameObject.SetActive(true);
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
             if (locked)
