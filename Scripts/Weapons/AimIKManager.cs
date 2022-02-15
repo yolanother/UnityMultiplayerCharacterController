@@ -18,6 +18,8 @@ namespace DoubTech.MCC.Weapons
         private int lastFrame;
 
         public Transform AimSource => aimSource ? aimSource : transform;
+
+        public Camera Camera => camera;
         
         public Ray ScreenRay
         {
@@ -79,6 +81,16 @@ namespace DoubTech.MCC.Weapons
             get
             {
                 return ScreenRay.GetPoint(maxDistance);
+            }
+        }
+
+        public Vector3 CameraAimSource
+        {
+            get
+            {
+                var sourcePos = camera.transform.position;
+                var distance = Vector3.Distance(AimSource.position, camera.transform.position);
+                return (AimTarget - sourcePos).normalized * distance;
             }
         }
     }

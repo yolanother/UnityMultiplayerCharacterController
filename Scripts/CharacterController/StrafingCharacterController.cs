@@ -1,13 +1,12 @@
 ﻿using DoubTech.MCC.IK;
-using DoubTech.Multiplayer;
+using DoubTech.MCC.Input;
+using DoubTech.MCC.Utilities;
 using UnityEngine;
+using UnityEngine.Events;
 
-/* Note: animations are called via the controller for both the character and capsule using animator null checks
- */
-
-namespace DoubTech.MCC.Input
+namespace DoubTech.MCC
 {
-    public class NetworkCharacterController : BaseNetworkCharacterController
+    public class StrafingCharacterController : BaseNetworkCharacterController
     {
         [Header("Player")] [Tooltip("Move speed of the character in m/s")]
         public float MoveSpeed = 2.0f;
@@ -61,6 +60,8 @@ namespace DoubTech.MCC.Input
         private float _verticalVelocity;
         private float _terminalVelocity = 53.0f;
 
+        private float lastrotation;
+
         // timeout deltatime
         private float _jumpTimeoutDelta;
         private float _fallTimeoutDelta;
@@ -112,13 +113,7 @@ namespace DoubTech.MCC.Input
 
         private void GroundedCheck()
         {
-            // set sphere position, with offset
-            Vector3 spherePosition = new Vector3(_controller.Position.x,
-                _controller.Position.y - GroundedOffset, _controller.Position.z);
-            Grounded = Physics.CheckSphere(spherePosition, GroundedRadius, GroundLayers,
-                QueryTriggerInteraction.Ignore);
-
-            player.Grounded = Grounded;
+            player.Grounded = _controller.Grounded;
         }
 
         private void Move()
@@ -164,16 +159,16 @@ namespace DoubTech.MCC.Input
 
             // note: Vector2's != operator uses approximation so is not floating point error prone, and is cheaper than magnitude
             // if there is a move input rotate player when the player is moving
-            if (!hasHeadTracking || playerInputSync.Move != Vector2.zero || Mathf.Abs(playerInputSync.CameraAngle - transform.eulerAngles.y) > maxHeadRotation)
-            {
+            ///if (!hasHeadTracking || playerInputSync.Move != Vector2.zero || Mathf.Abs(playerInputSync.CameraAngle - transform.eulerAngles.y) > maxHeadRotation)
+            //{
                 _targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg +
                                   playerInputSync.CameraAngle;
-                float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, _targetRotation,
+                float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, playerInputSync.CameraAngle,
                     ref _rotationVelocity, RotationSmoothTime);
 
                 // rotate to face input direction relative to camera position
                 _controller.Rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
-            }
+            //}
 
             Vector3 targetDirection =
                 Quaternion.Euler(0.0f, _targetRotation, 0.0f) * Vector3.forward;
@@ -182,7 +177,21 @@ namespace DoubTech.MCC.Input
             _controller.Move(targetDirection.normalized * (_speed * Time.deltaTime) +
                              new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
 
-            player.Speed = _animationBlend;
+            if (_animationBlend <= MoveSpeed)
+            {
+                player.Speed = Mathf.Clamp01(_animationBlend / MoveSpeed * 1.02f - .01f);
+            }
+            else
+            {
+                player.Speed = Mathf.Clamp((_animationBlend - MoveSpeed) / (SprintSpeed - MoveSpeed) + 1, 1, 2);
+            }
+
+            var horizontal = player.Horizontal + inputDirection.x.Remap(-.7f, .7f, -1, 1) * Time.deltaTime;
+            var vertical = player.Vertical + inputDirection.z.Remap(-.7f, .7f, -1, 1) * Time.deltaTime;
+            player.Horizontal = Mathf.Clamp01(horizontal);
+            player.Vertical = Mathf.Clamp01(vertical);
+            player.Turn = Mathf.Clamp(rotation - lastrotation, -1, 1);
+            lastrotation = rotation;
         }
 
         private void JumpAndGravity()
@@ -264,12 +273,15 @@ namespace DoubTech.MCC.Input
         }
     }
 
-    public interface ICharacterController
+    public interface IAnimationController
     {
-        Vector3 Position { get; set; }
-        Quaternion Rotation { get; set; }
-        Vector3 Velocity { get; }
-        bool Grounded { get; }
-        void Move(Vector3 target);
+        float Speed { get; set; }
+        float Horizontal { get; set; }
+        float Vertical { get; set; }
+        float Turn { get; set; }
+        bool Jump { get; set; }
+        bool Grounded { get; set; }
+        bool FreeFall { get; set; }
+        bool Crouch { get; set; }
     }
 }

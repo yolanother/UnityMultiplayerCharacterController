@@ -1,7 +1,7 @@
 using DoubTech.MCC.Input;
 using UnityEngine;
 
-namespace DoubTech.MCC.CharacterController
+namespace DoubTech.MCC
 {
     [RequireComponent(typeof(UnityEngine.CharacterController))]
     public class UnityCharacterController : MonoBehaviour, ICharacterController
@@ -28,6 +28,9 @@ namespace DoubTech.MCC.CharacterController
             get => controller.velocity;
             set { }
         }
+
+        public bool Grounded => controller.isGrounded;
+
         public void Move(Vector3 motion)
         {
             controller.Move(motion);

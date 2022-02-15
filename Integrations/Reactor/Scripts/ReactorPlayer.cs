@@ -98,6 +98,8 @@ namespace DoubTech.MCC.Integrations.Reactor
             }
         }
 
+        public bool Grounded => entity.Entity?.PlayerController?.CharacterController?.IsGrounded ?? true;
+
         public void Move(Vector3 target)
         {
             entity.Room.CallRPC(RPC_MOVE, target);
