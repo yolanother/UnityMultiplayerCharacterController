@@ -32,7 +32,7 @@ namespace DoubTech.MCC
             {
                 if (null == playerInfo)
                 {
-                    playerInfo = GetComponent<IPlayerInfoProvider>();
+                    playerInfo = GetComponentInParent<IPlayerInfoProvider>();
                 }
 
                 return playerInfo;

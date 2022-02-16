@@ -1,7 +1,6 @@
 using System;
 using DoubTech.MCC;
 using DoubTech.MCC.IK;
-using DoubTech.MCC.Input;
 using UnityEngine;
 
 namespace MessyJammersADF.Com.Doubtech.Unity.Mirrorcharactercontroller.Animations
@@ -10,55 +9,105 @@ namespace MessyJammersADF.Com.Doubtech.Unity.Mirrorcharactercontroller.Animation
     {
         [SerializeField] private Transform animatorParent;
 
-        private IAnimatorProvider animator;
+        private IAnimatorProvider animProvider;
+        
+        private bool currentAction;
+        private bool currentLoop;
+        
+        private AnimatorOverrideController overrideController;
+
+        private string CurrentActionName => currentAction ? "Action 1" : "Action 2";
+
+        private AnimationClip Action
+        {
+            get => overrideController[CurrentActionName];
+            set
+            {
+                currentAction = !currentAction;
+                overrideController[CurrentActionName] = value;
+            }
+        }
+        
+        public void PlayAction(AnimationClip clip)
+        {
+            Action = clip;
+            animProvider.Animator.CrossFade(CurrentActionName, .2f);
+        }
 
         private void OnEnable()
         {
-            if (null == animator)
+            if (null == animProvider)
             {
-                animator = animatorParent.GetComponentInChildren<IAnimatorProvider>();
+                if (animatorParent)
+                {
+                    animProvider = animatorParent.GetComponentInChildren<IAnimatorProvider>();
+                }
+                else
+                {
+                    animProvider = GetComponentInChildren<IAnimatorProvider>();
+                }
+            }
+            
+            if(null != animProvider) animProvider.OnAnimatorChanged += OnAnimatorChanged;
+            if(animProvider?.Animator) OnAnimatorChanged(animProvider.Animator);
+        }
+
+        private void OnDisable()
+        {
+            if (null != animProvider) animProvider.OnAnimatorChanged -= OnAnimatorChanged;
+        }
+
+        private void OnAnimatorChanged(Animator animator)
+        {
+            if (animator.runtimeAnimatorController is AnimatorOverrideController oc)
+            {
+                overrideController = oc;
+            }
+            else
+            {
+                overrideController = new AnimatorOverrideController(animator.runtimeAnimatorController);
             }
         }
 
         public float Speed
         {
-            get => animator.Animator.MCCSpeed();
-            set => animator.Animator.MCCSpeed(value);
+            get => animProvider.Animator.MCCSpeed();
+            set => animProvider.Animator.MCCSpeed(value);
         }
         public float Horizontal
         {
-            get => animator.Animator.MCCHorizontal();
-            set => animator.Animator.MCCHorizontal(value);
+            get => animProvider.Animator.MCCHorizontal();
+            set => animProvider.Animator.MCCHorizontal(value);
         }
         public float Vertical
         {
-            get => animator.Animator.MCCVertical();
-            set => animator.Animator.MCCVertical(value);
+            get => animProvider.Animator.MCCVertical();
+            set => animProvider.Animator.MCCVertical(value);
         }
         public float Turn
         {
-            get => animator.Animator.MCCTurn();
-            set => animator.Animator.MCCTurn(value);
+            get => animProvider.Animator.MCCTurn();
+            set => animProvider.Animator.MCCTurn(value);
         }
         public bool Jump
         {
-            get => animator.Animator.MCCJump();
-            set => animator.Animator.MCCJump(value);
+            get => animProvider.Animator.MCCJump();
+            set => animProvider.Animator.MCCJump(value);
         }
         public bool Grounded
         {
-            get => animator.Animator.MCCGrounded();
-            set => animator.Animator.MCCGrounded(value);
+            get => animProvider.Animator.MCCGrounded();
+            set => animProvider.Animator.MCCGrounded(value);
         }
         public bool FreeFall
         {
-            get => animator.Animator.MCCFreeFall();
-            set => animator.Animator.MCCFreeFall(value);
+            get => animProvider.Animator.MCCFreeFall();
+            set => animProvider.Animator.MCCFreeFall(value);
         }
         public bool Crouch
         {
-            get => animator.Animator.MCCCrouch();
-            set => animator.Animator.MCCCrouch(value);
+            get => animProvider.Animator.MCCCrouch();
+            set => animProvider.Animator.MCCCrouch(value);
         }
     }
 

@@ -283,5 +283,7 @@ namespace DoubTech.MCC
         bool Grounded { get; set; }
         bool FreeFall { get; set; }
         bool Crouch { get; set; }
+
+        public void PlayAction(AnimationClip clip);
     }
 }
