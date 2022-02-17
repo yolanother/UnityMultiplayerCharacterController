@@ -16,8 +16,10 @@ namespace MessyJammersADF.Com.Doubtech.Unity.Mirrorcharactercontroller.Animation
         
         private AnimatorOverrideController overrideController;
 
-        private string CurrentActionName => currentAction ? "Action 1" : "Action 2";
-        private string CurrentLoopName => currentLoop ? "Loop 1" : "Loop 2";
+        private string CurrentActionTrigger => currentAction ? "Action 1" : "Action 2";
+        private string CurrentActionName => currentAction ? "[Base Layer] Action 1" : "[Base Layer] Action 2";
+        private string CurrentLoopTrigger => currentAction ? "Loop 1" : "Loop 2";
+        private string CurrentLoopName => currentLoop ? "[Base Layer] Loop 1" : "[Base Layer] Loop 2";
 
         private AnimationClip Action
         {
@@ -41,13 +43,13 @@ namespace MessyJammersADF.Com.Doubtech.Unity.Mirrorcharactercontroller.Animation
         public void PlayLoopingAction(AnimationClip clip)
         {
             Action = clip;
-            animProvider.Animator.CrossFade(CurrentLoopName, .1f);
+            animProvider.Animator.SetTrigger(CurrentLoopTrigger);
         }
         
         public void PlayAction(AnimationClip clip)
         {
             Action = clip;
-            animProvider.Animator.CrossFade(CurrentActionName, .1f);
+            animProvider.Animator.SetTrigger(CurrentActionTrigger);
         }
 
         public void PlayTrigger(int trigger)

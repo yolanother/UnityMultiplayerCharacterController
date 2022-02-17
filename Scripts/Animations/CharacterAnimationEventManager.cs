@@ -22,12 +22,16 @@ namespace DoubTech.MCC
 
         public virtual void OnDied()
         {
+            if (null == deathAnimations || deathAnimations.Length == 0) return;
+            
             animController.PlayAction(deathAnimations.Random());
             onDeathAnimation.Invoke();
         }
 
         public virtual void OnHit()
         {
+            if (null == hitAnimations || hitAnimations.Length == 0) return;
+            
             animController.PlayAction(hitAnimations.Random());
             onHitAnimation.Invoke();
         }
