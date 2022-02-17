@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
+using DoubTech.MCC.CharacterSelection;
 using DoubTech.MCC.IK;
 using UnityEngine;
+using UnityEngine.Animations.Rigging;
 using UnityEngine.Events;
 
 namespace DoubTech.MCC.Weapons
@@ -31,10 +33,12 @@ namespace DoubTech.MCC.Weapons
 
         public Transform MuzzleTransform => muzzleTransform;
 
+        private bool equipping = true;
+
         private void OnEnable()
         {
             animator = GetComponentInParent<IAnimatorProvider>();
-            Equip();
+            equipping = true;
         }
 
         public void FirePrimary()
@@ -47,9 +51,15 @@ namespace DoubTech.MCC.Weapons
             OnWeaponSecondaryFired.Invoke(transform);
         }
 
+        private void Update()
+        {
+            if(equipping) Equip();
+        }
+
         public void Equip()
         {
             if (!animator?.Animator) return;
+            equipping = false;
             OnWeaponEquipStarted.Invoke();
 
             StopAllCoroutines();
@@ -75,6 +85,16 @@ namespace DoubTech.MCC.Weapons
         {
             bool lerpComplete = false;
             while (!UpdateLerpLayer(layer)) yield return null;
+
+            var rigBuilder = animator.Animator.GetComponentInChildren<RigBuilder>();
+            if (rigBuilder)
+            {
+                rigBuilder.enabled = false;
+            }
+
+            yield return new WaitForSeconds(1);
+
+            rigBuilder.enabled = true;
         }
 
         private bool UpdateLerpLayer(WeaponAnimationLayer layer)
