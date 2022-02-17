@@ -285,5 +285,8 @@ namespace DoubTech.MCC
         bool Crouch { get; set; }
 
         public void PlayAction(AnimationClip clip);
+        public void PlayLoopingAction(AnimationClip clip);
+        void PlayTrigger(int hash);
+        void PlayTrigger(string trigger);
     }
 }

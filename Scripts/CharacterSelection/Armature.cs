@@ -11,7 +11,8 @@ namespace DoubTech.MCC.CharacterSelection
         [SerializeField] public MaterialSet firstPerson;
 
         private bool fpsMode;
-        
+        private bool initialized;
+
         public int SelectedMaterial
         {
             get => fpsMode ? firstPerson.SelectedMaterial : thirdPerson.SelectedMaterial;
@@ -32,13 +33,19 @@ namespace DoubTech.MCC.CharacterSelection
                 thirdPerson.gameObject.SetActive(!fpsMode);
                 firstPerson.FPSMode = value;
                 thirdPerson.FPSMode = value;
-                if(enabled) ResetRigBuilder();
+                if(initialized) ResetRigBuilder();
             }
         }
 
         private void OnEnable()
         {
             ResetRigBuilder();
+            initialized = true;
+        }
+
+        private void OnDisable()
+        {
+            initialized = false;
         }
 
         public MaterialSet ActiveMaterialSet => fpsMode ? firstPerson : thirdPerson;

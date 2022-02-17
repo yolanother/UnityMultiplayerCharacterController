@@ -17,6 +17,7 @@ namespace MessyJammersADF.Com.Doubtech.Unity.Mirrorcharactercontroller.Animation
         private AnimatorOverrideController overrideController;
 
         private string CurrentActionName => currentAction ? "Action 1" : "Action 2";
+        private string CurrentLoopName => currentLoop ? "Loop 1" : "Loop 2";
 
         private AnimationClip Action
         {
@@ -27,11 +28,36 @@ namespace MessyJammersADF.Com.Doubtech.Unity.Mirrorcharactercontroller.Animation
                 overrideController[CurrentActionName] = value;
             }
         }
+        private AnimationClip Loop
+        {
+            get => overrideController[CurrentLoopName];
+            set
+            {
+                currentAction = !currentAction;
+                overrideController[CurrentLoopName] = value;
+            }
+        }
+        
+        public void PlayLoopingAction(AnimationClip clip)
+        {
+            Action = clip;
+            animProvider.Animator.CrossFade(CurrentLoopName, .1f);
+        }
         
         public void PlayAction(AnimationClip clip)
         {
             Action = clip;
-            animProvider.Animator.CrossFade(CurrentActionName, .2f);
+            animProvider.Animator.CrossFade(CurrentActionName, .1f);
+        }
+
+        public void PlayTrigger(int trigger)
+        {
+            animProvider.Animator.SetTrigger(trigger);
+        }
+
+        public void PlayTrigger(string trigger)
+        {
+            animProvider.Animator.SetTrigger(trigger);
         }
 
         private void OnEnable()
