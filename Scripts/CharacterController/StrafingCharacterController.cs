@@ -283,10 +283,16 @@ namespace DoubTech.MCC
         bool Grounded { get; set; }
         bool FreeFall { get; set; }
         bool Crouch { get; set; }
+        AnimatorOverrideController OverrideController { get; set; }
 
         public void PlayAction(AnimationClip clip);
         public void PlayLoopingAction(AnimationClip clip);
         void PlayTrigger(int hash);
         void PlayTrigger(string trigger);
+        void OverrideWeights(int weight);
+        void OverrideWeightUpperBody(int weight);
+        void OverrideWeightLeftArm(int weight);
+        void OverrideWeightRightArm(int weight);
+        void OverrideWeightHead(int weight);
     }
 }

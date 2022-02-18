@@ -27,7 +27,7 @@ namespace MessyJammersADF.Com.Doubtech.Unity.Mirrorcharactercontroller.Animation
             set
             {
                 currentAction = !currentAction;
-                overrideController[CurrentActionName] = value;
+                if(overrideController) overrideController[CurrentActionName] = value;
             }
         }
         private AnimationClip Loop
@@ -36,13 +36,13 @@ namespace MessyJammersADF.Com.Doubtech.Unity.Mirrorcharactercontroller.Animation
             set
             {
                 currentAction = !currentAction;
-                overrideController[CurrentLoopName] = value;
+                if(overrideController) overrideController[CurrentLoopName] = value;
             }
         }
         
         public void PlayLoopingAction(AnimationClip clip)
         {
-            Action = clip;
+            Loop = clip;
             animProvider.Animator.SetTrigger(CurrentLoopTrigger);
         }
         
@@ -60,6 +60,40 @@ namespace MessyJammersADF.Com.Doubtech.Unity.Mirrorcharactercontroller.Animation
         public void PlayTrigger(string trigger)
         {
             animProvider.Animator.SetTrigger(trigger);
+        }
+
+        public AnimatorOverrideController OverrideController
+        {
+            get => animProvider.Animator.runtimeAnimatorController as AnimatorOverrideController;
+            set => animProvider.Animator.runtimeAnimatorController = value;
+        }
+
+        public void OverrideWeights(int weight)
+        {
+            OverrideWeightHead(0);
+            OverrideWeightLeftArm(0);
+            OverrideWeightRightArm(0);
+            OverrideWeightUpperBody(0);
+        }
+
+        public void OverrideWeightUpperBody(int weight)
+        {
+            animProvider.Animator.SetLayerWeight(1, weight);
+        }
+
+        public void OverrideWeightRightArm(int weight)
+        {
+            animProvider.Animator.SetLayerWeight(2, weight);
+        }
+
+        public void OverrideWeightLeftArm(int weight)
+        {
+            animProvider.Animator.SetLayerWeight(3, weight);
+        }
+
+        public void OverrideWeightHead(int weight)
+        {
+            animProvider.Animator.SetLayerWeight(4, weight);
         }
 
         private void OnEnable()

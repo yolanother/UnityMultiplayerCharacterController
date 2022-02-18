@@ -10,6 +10,9 @@ namespace DoubTech.MCC.Weapons
 {
     public class WeaponInstance : MonoBehaviour
     {
+        [Header("Config")]
+        [SerializeField] private WeaponConfiguration weaponConfiguration;
+        
         [Header("Firing")]
         [SerializeField] private Transform muzzleTransform;
 
@@ -27,11 +30,16 @@ namespace DoubTech.MCC.Weapons
         [Header("Fire Events")]
         [SerializeField] private UnityEvent<Transform> OnWeaponPrimaryFired = new UnityEvent<Transform>();
         [SerializeField] private UnityEvent<Transform> OnWeaponSecondaryFired = new UnityEvent<Transform>();
+        [SerializeField] private UnityEvent<Transform> OnWeaponPrimaryFiredWithNoAmmo = new UnityEvent<Transform>();
+        [SerializeField] private UnityEvent<Transform> OnWeaponSecondaryFiredWithNoAmmo = new UnityEvent<Transform>();
+        [SerializeField] private UnityEvent<Transform> OnWeaponReloading = new UnityEvent<Transform>();
+        [SerializeField] private UnityEvent<Transform> OnWeaponReloaded = new UnityEvent<Transform>();
         
         [SerializeField] private WeaponAnimationLayer[] animationLayers;
         private IAnimatorProvider animator;
 
         public Transform MuzzleTransform => muzzleTransform;
+        public WeaponConfiguration WeaponConfiguration => weaponConfiguration;
 
         private bool equipping = true;
 
@@ -39,6 +47,16 @@ namespace DoubTech.MCC.Weapons
         {
             animator = GetComponentInParent<IAnimatorProvider>();
             equipping = true;
+        }
+
+        public void FirePrimaryNoAmmo()
+        {
+            OnWeaponPrimaryFiredWithNoAmmo.Invoke(transform);
+        }
+
+        public void FireSecondaryNoAmmo()
+        {
+            OnWeaponSecondaryFiredWithNoAmmo.Invoke(transform);
         }
 
         public void FirePrimary()
@@ -49,6 +67,16 @@ namespace DoubTech.MCC.Weapons
         public void FireSecondary()
         {
             OnWeaponSecondaryFired.Invoke(transform);
+        }
+
+        public void Reloading()
+        {
+            OnWeaponReloading.Invoke(transform);
+        }
+        
+        public void Reloaded()
+        {
+            OnWeaponReloaded.Invoke(transform);
         }
 
         private void Update()

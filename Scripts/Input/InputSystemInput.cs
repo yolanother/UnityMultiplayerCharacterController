@@ -22,6 +22,20 @@ namespace DoubTech.MCC.Input
 		public bool crouch;
 		public bool firePrimary;
 		public bool fireSecondary;
+		public bool reloadPrimary;
+		public bool reloadSecondary;
+		public bool nextWeapon;
+		public bool previousWeapon;
+		public bool weapon0;
+		public bool weapon1;
+		public bool weapon2;
+		public bool weapon3;
+		public bool weapon4;
+		public bool weapon5;
+		public bool weapon6;
+		public bool weapon7;
+		public bool weapon8;
+		public bool weapon9;
 
 		[Header("Movement Settings")]
 		public bool analogMovement;
@@ -88,6 +102,16 @@ namespace DoubTech.MCC.Input
 		{
 			crouch = (InputEnabled && value.isPressed);
 		}
+		
+		public void OnReloadPrimary(InputValue value)
+		{
+			reloadPrimary = (InputEnabled && value.isPressed);
+		}
+		
+		public void OnReloadSecondary(InputValue value)
+		{
+			reloadSecondary = (InputEnabled && value.isPressed);
+		}
 
 		public void OnFirePrimary(InputValue value)
 		{
@@ -99,7 +123,67 @@ namespace DoubTech.MCC.Input
 			fireSecondary = (InputEnabled && value.isPressed);
 		}
 
-        public void OnChangeCamera(InputValue value)
+		public void OnNextWeapon(InputValue value)
+		{
+			nextWeapon = (InputEnabled && value.isPressed);
+		}
+
+		public void OnPreviousWeapon(InputValue value)
+		{
+			previousWeapon = (InputEnabled && value.isPressed);
+		}
+
+		public void OnWeapon1(InputValue value)
+		{
+			weapon1 = (InputEnabled && value.isPressed);
+		}
+
+		public void OnWeapon2(InputValue value)
+		{
+			weapon2 = (InputEnabled && value.isPressed);
+		}
+
+		public void OnWeapon3(InputValue value)
+		{
+			weapon3 = (InputEnabled && value.isPressed);
+		}
+
+		public void OnWeapon4(InputValue value)
+		{
+			weapon4 = (InputEnabled && value.isPressed);
+		}
+
+		public void OnWeapon5(InputValue value)
+		{
+			weapon5 = (InputEnabled && value.isPressed);
+		}
+
+		public void OnWeapon6(InputValue value)
+		{
+			weapon6 = (InputEnabled && value.isPressed);
+		}
+
+		public void OnWeapon7(InputValue value)
+		{
+			weapon7 = (InputEnabled && value.isPressed);
+		}
+
+		public void OnWeapon8(InputValue value)
+		{
+			weapon8 = (InputEnabled && value.isPressed);
+		}
+
+		public void OnWeapon9(InputValue value)
+		{
+			weapon9 = (InputEnabled && value.isPressed);
+		}
+
+		public void OnWeapon0(InputValue value)
+		{
+			weapon0 = (InputEnabled && value.isPressed);
+		}
+
+		public void OnChangeCamera(InputValue value)
         {
 	        if(InputEnabled && value.isPressed) ChangeCamera();
         }

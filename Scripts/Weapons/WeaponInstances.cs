@@ -25,7 +25,8 @@ namespace DoubTech.MCC.Weapons
         [SerializeField] public Transform rightHandInstanceRoot;
 
         [Header("Events")]
-        [SerializeField] private UnityEvent onWeaponChanged;
+        [SerializeField] private UnityEvent onWeaponChanged = new UnityEvent();
+        [SerializeField] public UnityEvent<WeaponConfiguration> onWeaponConfigChanged = new UnityEvent<WeaponConfiguration>();
 
         public WeaponInstance LeftWeapon => activeLeftWeapon >= 0 && activeLeftWeapon < leftHandInstances.Length ? leftHandInstances[activeLeftWeapon] : null;
         public WeaponInstance RightWeapon => activeRightWeapon >= 0 && activeRightWeapon < rightHandInstances.Length ? rightHandInstances[activeRightWeapon] : null;
@@ -64,6 +65,10 @@ namespace DoubTech.MCC.Weapons
                     }
 
                     onWeaponChanged.Invoke();
+                    if(activeRightWeapon >= 0 && activeRightWeapon < rightHandInstances.Length)
+                    {
+                        onWeaponConfigChanged.Invoke(rightHandInstances[activeRightWeapon].WeaponConfiguration);
+                    }
                 }
             }
         }
@@ -140,6 +145,16 @@ namespace DoubTech.MCC.Weapons
         public void FireSecondary()
         {
             RightWeapon.FireSecondary();
+        }
+
+        public void FirePrimaryNoAmmo()
+        {
+            RightWeapon.FirePrimaryNoAmmo();
+        }
+
+        public void FireSecondaryNoAmmo()
+        {
+            RightWeapon.FireSecondaryNoAmmo();
         }
     }
 

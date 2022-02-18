@@ -77,6 +77,37 @@ namespace DoubTech.MCC.Input
                 inputSync.AnalogMovement = _input.analogMovement;
             }
             inputSync.CameraAngle = _mainCamera.transform.eulerAngles.y;
+
+            if (inputSync.ReloadPrimary != _input.reloadPrimary)
+            {
+                inputSync.ReloadPrimary = _input.reloadPrimary;
+            }
+
+            if (inputSync.ReloadSecondary != _input.reloadSecondary)
+            {
+                inputSync.ReloadSecondary = _input.reloadSecondary;
+            }
+
+            if (inputSync.NextWeapon != _input.nextWeapon)
+            {
+                inputSync.NextWeapon = _input.nextWeapon;
+            }
+
+            if (inputSync.PreviousWeapon != _input.previousWeapon)
+            {
+                inputSync.PreviousWeapon = _input.previousWeapon;
+            }
+
+            if (inputSync.Weapon0 != _input.weapon0) inputSync.Weapon0 = _input.weapon0;
+            if (inputSync.Weapon1 != _input.weapon1) inputSync.Weapon1 = _input.weapon1;
+            if (inputSync.Weapon2 != _input.weapon2) inputSync.Weapon2 = _input.weapon2;
+            if (inputSync.Weapon3 != _input.weapon3) inputSync.Weapon3 = _input.weapon3;
+            if (inputSync.Weapon4 != _input.weapon4) inputSync.Weapon4 = _input.weapon4;
+            if (inputSync.Weapon5 != _input.weapon5) inputSync.Weapon5 = _input.weapon5;
+            if (inputSync.Weapon6 != _input.weapon6) inputSync.Weapon6 = _input.weapon6;
+            if (inputSync.Weapon7 != _input.weapon7) inputSync.Weapon7 = _input.weapon7;
+            if (inputSync.Weapon8 != _input.weapon8) inputSync.Weapon8 = _input.weapon8;
+            if (inputSync.Weapon9 != _input.weapon9) inputSync.Weapon9 = _input.weapon9;
         }
 
         private static float ClampAngle(float lfAngle, float lfMin, float lfMax)
@@ -99,6 +130,20 @@ namespace DoubTech.MCC.Input
         public bool Crouch { get; set; }
         public bool FirePrimary { get; set; }
         public bool FireSecondary { get; set; }
+        public bool ReloadPrimary { get; set; }
+        public bool ReloadSecondary { get; set; }
+        public bool NextWeapon { get; set; }
+        public bool PreviousWeapon { get; set; }
+        public bool Weapon0 { get; set; }
+        public bool Weapon1 { get; set; }
+        public bool Weapon2 { get; set; }
+        public bool Weapon3 { get; set; }
+        public bool Weapon4 { get; set; }
+        public bool Weapon5 { get; set; }
+        public bool Weapon6 { get; set; }
+        public bool Weapon7 { get; set; }
+        public bool Weapon8 { get; set; }
+        public bool Weapon9 { get; set; }
         public bool Use { get; set; }
     }
 }

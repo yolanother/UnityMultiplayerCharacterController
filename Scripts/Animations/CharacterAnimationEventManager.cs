@@ -13,7 +13,10 @@ namespace DoubTech.MCC
         [SerializeField] private UnityEvent onDeathAnimation = new UnityEvent();
         [SerializeField] private UnityEvent onHitAnimation = new UnityEvent();
         
-        private IAnimationController animController;
+        protected IAnimationController animController;
+
+        protected virtual AnimationClip[] DeathAnimations => deathAnimations;
+        protected virtual AnimationClip[] HitAnimations => hitAnimations;
 
         protected virtual void Awake()
         {
@@ -22,17 +25,19 @@ namespace DoubTech.MCC
 
         public virtual void OnDied()
         {
-            if (null == deathAnimations || deathAnimations.Length == 0) return;
-            
-            animController.PlayAction(deathAnimations.Random());
+            if (null == DeathAnimations || DeathAnimations.Length == 0) return;
+            var death = DeathAnimations.Random();
+            Debug.Log($"Playing death animation: {death.name}");
+            animController.OverrideWeights(0);
+            animController.PlayLoopingAction(death);
             onDeathAnimation.Invoke();
         }
 
         public virtual void OnHit()
         {
-            if (null == hitAnimations || hitAnimations.Length == 0) return;
+            if (null == HitAnimations || HitAnimations.Length == 0) return;
             
-            animController.PlayAction(hitAnimations.Random());
+            animController.PlayAction(HitAnimations.Random());
             onHitAnimation.Invoke();
         }
 
