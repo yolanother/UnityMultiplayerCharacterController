@@ -9,7 +9,7 @@ namespace ReactorScripts.Common.MCC.Animations
         [Header("Foot Transforms")]
         [SerializeField] private Transform leftFootTransform;
         [SerializeField] private Transform rightFootTransform;
-        
+
         [Header("Events")]
         [SerializeField] private TransformGameEvent onRightFoot;
         [SerializeField] private TransformGameEvent onLeftFoot;
@@ -33,12 +33,12 @@ namespace ReactorScripts.Common.MCC.Animations
         /// <summary>
         /// When on an object with an animator, this will be called by animator events.
         /// </summary>
-        protected virtual void OnLeftFootDown()
+        public virtual void OnLeftFootDown()
         {
             onLeftFoot?.Invoke(leftFootTransform ? leftFootTransform : transform);
         }
 
-        protected virtual void OnRightFootDown()
+        public virtual void OnRightFootDown()
         {
             onRightFoot?.Invoke(rightFootTransform ? rightFootTransform : transform);
         }
