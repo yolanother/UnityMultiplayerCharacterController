@@ -229,6 +229,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Talk",
+                    "type": "Button",
+                    "id": "7679cc96-19eb-4aab-8c88-c80d482354f6",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -658,6 +667,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "Weapon0",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "5950cafa-92b3-406d-9327-f37bee7a9c6a",
+                    "path": "<Keyboard>/t",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Talk",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
