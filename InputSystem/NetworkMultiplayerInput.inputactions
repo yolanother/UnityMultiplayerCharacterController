@@ -124,7 +124,7 @@
                 },
                 {
                     "name": "Weapon1",
-                    "type": "Button",
+                    "type": "PassThrough",
                     "id": "c539eae8-d25e-4b32-96d3-dfcab33e3dd8",
                     "expectedControlType": "Button",
                     "processors": "",
@@ -133,7 +133,7 @@
                 },
                 {
                     "name": "Weapon2",
-                    "type": "Button",
+                    "type": "PassThrough",
                     "id": "3ab96075-f75b-43d9-be52-4570a1fa0b8e",
                     "expectedControlType": "Button",
                     "processors": "",
@@ -142,7 +142,7 @@
                 },
                 {
                     "name": "Weapon3",
-                    "type": "Button",
+                    "type": "PassThrough",
                     "id": "7a0b071c-5461-44ef-85e0-251bc18e262b",
                     "expectedControlType": "Button",
                     "processors": "",
@@ -151,7 +151,7 @@
                 },
                 {
                     "name": "Weapon4",
-                    "type": "Button",
+                    "type": "PassThrough",
                     "id": "93661d13-b260-428c-9fe0-68774fdf142b",
                     "expectedControlType": "Button",
                     "processors": "",
@@ -160,7 +160,7 @@
                 },
                 {
                     "name": "Weapon5",
-                    "type": "Button",
+                    "type": "PassThrough",
                     "id": "281a8559-edb0-4564-98f8-4de2e00a93e7",
                     "expectedControlType": "Button",
                     "processors": "",
@@ -169,7 +169,7 @@
                 },
                 {
                     "name": "Weapon6",
-                    "type": "Button",
+                    "type": "PassThrough",
                     "id": "55b56d23-f3a3-40d1-a4b5-9677a81f3d14",
                     "expectedControlType": "Button",
                     "processors": "",
@@ -178,7 +178,7 @@
                 },
                 {
                     "name": "Weapon7",
-                    "type": "Button",
+                    "type": "PassThrough",
                     "id": "9af33242-f0b7-44d4-b593-22abca300d8d",
                     "expectedControlType": "Button",
                     "processors": "",
@@ -187,7 +187,7 @@
                 },
                 {
                     "name": "Weapon8",
-                    "type": "Button",
+                    "type": "PassThrough",
                     "id": "d67d96b5-d252-4a52-a256-e863aefa3425",
                     "expectedControlType": "Button",
                     "processors": "",
@@ -196,7 +196,7 @@
                 },
                 {
                     "name": "Weapon9",
-                    "type": "Button",
+                    "type": "PassThrough",
                     "id": "689c16e1-f609-43f0-b19f-c1ee47315e8d",
                     "expectedControlType": "Button",
                     "processors": "",
@@ -205,7 +205,7 @@
                 },
                 {
                     "name": "Weapon0",
-                    "type": "Button",
+                    "type": "PassThrough",
                     "id": "71efda79-586e-47ff-8639-75a2c8217a2a",
                     "expectedControlType": "Button",
                     "processors": "",
@@ -214,7 +214,7 @@
                 },
                 {
                     "name": "Next Weapon",
-                    "type": "Button",
+                    "type": "PassThrough",
                     "id": "cde69ac0-1599-4908-aebd-ac8c5adead8d",
                     "expectedControlType": "Button",
                     "processors": "",
@@ -223,7 +223,7 @@
                 },
                 {
                     "name": "Previous Weapon",
-                    "type": "Button",
+                    "type": "PassThrough",
                     "id": "1c193598-18cf-42e6-8401-9ccc5e6cf20f",
                     "expectedControlType": "Button",
                     "processors": "",
