@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -24,8 +25,15 @@ namespace DoubTech.MCC.Utilities
             if(lockOnEnable) Lock();
         }
 
+        private void OnDisable()
+        {
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+        }
+
         public void Lock(string lockName)
         {
+            Debug.Log("Locked by " + lockName);
             cameraUnlocks.Remove(lockName);
             Lock();
         }
@@ -47,6 +55,7 @@ namespace DoubTech.MCC.Utilities
 
         public void Unlock(string lockName)
         {
+            Debug.Log("Unlocked by " + lockName);
             cameraUnlocks.Add(lockName);
             if(detectionCanvas) detectionCanvas.gameObject.SetActive(true);
             Cursor.visible = true;
