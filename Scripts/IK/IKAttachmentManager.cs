@@ -15,8 +15,12 @@ namespace DoubTech.MCC.IK
         [SerializeField] private IKTarget rightHandHintControl;
         [SerializeField] private IKTarget aimTarget;
         private IKTargetType currentTargetTypes;
-        
+
         [SerializeField] public bool attachAimToMainCameraTarget;
+
+        public IKTarget LeftHandControl => leftHandControl;
+        public IKTarget LeftHandHintControl => leftHandHintControl;
+        public IKTarget RightHandControl => rightHandControl;
 
         public bool AttachAimToMainCameraTarget
         {
@@ -83,7 +87,7 @@ namespace DoubTech.MCC.IK
 
             leftHandAttachmentPoint = null;
             rightHandAttachmentPoint = null;
-            
+
             var attachmentPoints = transform.GetComponentsInChildren<IKAttachmentPoint>();
             foreach (var attachmentPoint in attachmentPoints)
             {
@@ -97,7 +101,7 @@ namespace DoubTech.MCC.IK
                         break;
                 }
             }
-            
+
             // Detach new ik bindings to attach to next target
             Detach();
 
