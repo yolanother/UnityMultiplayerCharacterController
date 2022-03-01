@@ -137,6 +137,36 @@ Transform:
   m_Father: {fileID: 460681911957168352}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1238298900686985
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1109322066613620791}
+  m_Layer: 0
+  m_Name: Pickup Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1109322066613620791
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1238298900686985}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 2815781256228285042}
+  m_RootOrder: 9
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &449868569809870409
 GameObject:
   m_ObjectHideFlags: 0
@@ -264,8 +294,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 460681911957168357}
-  m_LocalRotation: {x: -0.08717233, y: 0.89959055, z: -0.21045256, w: -0.3726226}
-  m_LocalPosition: {x: 0.7, y: 1.455, z: -2.35}
+  m_LocalRotation: {x: -0.19700903, y: -0.003914118, z: 0.001235053, w: -0.9803931}
+  m_LocalPosition: {x: 497.53775, y: 47.556644, z: 353.98886}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1780708943}
@@ -688,6 +718,7 @@ Transform:
   - {fileID: 8810167934212351137}
   - {fileID: 570481559029522776}
   - {fileID: 714518641}
+  - {fileID: 1109322066613620791}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1201,6 +1232,21 @@ MonoBehaviour:
   crouch: 0
   firePrimary: 0
   fireSecondary: 0
+  reloadPrimary: 0
+  reloadSecondary: 0
+  nextWeapon: 0
+  previousWeapon: 0
+  weapon0: 0
+  weapon1: 0
+  weapon2: 0
+  weapon3: 0
+  weapon4: 0
+  weapon5: 0
+  weapon6: 0
+  weapon7: 0
+  weapon8: 0
+  weapon9: 0
+  talk: 0
   analogMovement: 0
   onChangeCamera:
     m_PersistentCalls:
@@ -1213,6 +1259,24 @@ MonoBehaviour:
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onTalk:
+    m_PersistentCalls:
+      m_Calls: []
+  onUse:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1238298900686985}
+        m_TargetAssemblyTypeName: 
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 

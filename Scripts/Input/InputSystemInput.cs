@@ -41,8 +41,10 @@ namespace DoubTech.MCC.Input
 
         [Header("Movement Settings")] public bool analogMovement;
 
-        [Header("Events")] public UnityEvent onChangeCamera = new UnityEvent();
+        [Header("Events")]
+        public UnityEvent onChangeCamera = new UnityEvent();
         public UnityEvent<bool> onTalk = new UnityEvent<bool>();
+        public UnityEvent onUse = new UnityEvent();
 
 #if !UNITY_IOS || !UNITY_ANDROID
         [Header("Mouse Cursor Settings")] public bool cursorInputForLook = true;
@@ -187,6 +189,14 @@ namespace DoubTech.MCC.Input
         public void OnTalk(InputValue value)
         {
             onTalk.Invoke(value.isPressed);
+        }
+
+        public void OnUse(InputValue value)
+        {
+            if (value.isPressed)
+            {
+                onUse.Invoke();
+            }
         }
 
         public void OnChangeCamera(InputValue value)
