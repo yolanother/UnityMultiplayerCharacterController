@@ -32,28 +32,80 @@ namespace DoubTech.MCC.IK
             }
         }
 
+        public IKAttachmentPoint LeftHandAttachmentPoint
+        {
+            get => leftHandAttachmentPoint;
+            set
+            {
+                if (leftHandControl)
+                {
+                    leftHandControl.target = null;
+                    leftHandControl.TargetWeight = 0;
+                }
+                if (leftHandHintControl)
+                {
+                    leftHandHintControl.target = null;
+                    leftHandHintControl.TargetWeight = 0;
+                }
+                leftHandAttachmentPoint = value;
+                if (leftHandAttachmentPoint && leftHandAttachmentPoint.TargetTransform)
+                {
+                    if (leftHandControl)
+                    {
+                        leftHandControl.target = leftHandAttachmentPoint.TargetTransform;
+                        leftHandControl.TargetWeight = leftHandAttachmentPoint.TargetTransformWeight;
+                        leftHandControl.lerpSpeed = leftHandAttachmentPoint.TargetTransformLerp;
+                    }
+
+                    if (leftHandHintControl)
+                    {
+                        leftHandHintControl.target = leftHandAttachmentPoint.TargetHintTransform;
+                        leftHandHintControl.TargetWeight = leftHandAttachmentPoint.TargetHintTransformWeight;
+                        leftHandHintControl.lerpSpeed = leftHandAttachmentPoint.TargetHintTransformLerp;
+                    }
+                }
+            }
+        }
+        
+        public IKAttachmentPoint RightHandAttachmentPoint
+        {
+            get => rightHandAttachmentPoint;
+            set
+            {
+                if (rightHandControl)
+                {
+                    rightHandControl.target = null;
+                    rightHandControl.TargetWeight = 0;
+                }
+                if (rightHandHintControl)
+                {
+                    rightHandHintControl.target = null;
+                    rightHandHintControl.TargetWeight = 0;
+                }
+                rightHandAttachmentPoint = value;
+                if (rightHandAttachmentPoint && rightHandAttachmentPoint.TargetTransform)
+                {
+                    if (rightHandControl)
+                    {
+                        rightHandControl.target = rightHandAttachmentPoint.TargetTransform;
+                        rightHandControl.TargetWeight = rightHandAttachmentPoint.TargetTransformWeight;
+                        rightHandControl.lerpSpeed = rightHandAttachmentPoint.TargetTransformLerp;
+                    }
+
+                    if (leftHandHintControl)
+                    {
+                        rightHandHintControl.target = rightHandAttachmentPoint.TargetHintTransform;
+                        rightHandHintControl.TargetWeight = rightHandAttachmentPoint.TargetHintTransformWeight;
+                        rightHandHintControl.lerpSpeed = rightHandAttachmentPoint.TargetHintTransformLerp;
+                    }
+                }
+            }
+        }
+
         public void Detach()
         {
-            if (leftHandControl)
-            {
-                leftHandControl.target = null;
-                leftHandControl.TargetWeight = 0;
-            }
-            if (leftHandHintControl)
-            {
-                leftHandHintControl.target = null;
-                leftHandHintControl.TargetWeight = 0;
-            }
-            if (rightHandControl)
-            {
-                rightHandControl.target = null;
-                rightHandControl.TargetWeight = 0;
-            }
-            if (rightHandHintControl)
-            {
-                rightHandHintControl.target = null;
-                rightHandHintControl.TargetWeight = 0;
-            }
+            LeftHandAttachmentPoint = null;
+            RightHandAttachmentPoint = null;
         }
 
         public void Attach()
@@ -94,50 +146,14 @@ namespace DoubTech.MCC.IK
                 switch (attachmentPoint.AttachmentType)
                 {
                     case IKAttachmentType.LeftHand:
-                        leftHandAttachmentPoint = attachmentPoint;
+                        LeftHandAttachmentPoint = attachmentPoint;
                         break;
                     case IKAttachmentType.RightHand:
-                        rightHandAttachmentPoint = attachmentPoint;
+                        RightHandAttachmentPoint = attachmentPoint;
                         break;
                 }
             }
-
-            // Detach new ik bindings to attach to next target
-            Detach();
-
-            if (leftHandAttachmentPoint && leftHandAttachmentPoint.TargetTransform)
-            {
-                if (leftHandControl)
-                {
-                    leftHandControl.target = leftHandAttachmentPoint.TargetTransform;
-                    leftHandControl.TargetWeight = leftHandAttachmentPoint.TargetTransformWeight;
-                    leftHandControl.lerpSpeed = leftHandAttachmentPoint.TargetTransformLerp;
-                }
-
-                if (leftHandHintControl)
-                {
-                    leftHandHintControl.target = leftHandAttachmentPoint.TargetHintTransform;
-                    leftHandHintControl.TargetWeight = leftHandAttachmentPoint.TargetHintTransformWeight;
-                    leftHandHintControl.lerpSpeed = leftHandAttachmentPoint.TargetHintTransformLerp;
-                }
-            }
-
-            if (rightHandAttachmentPoint && rightHandAttachmentPoint.TargetTransform)
-            {
-                if (rightHandControl)
-                {
-                    rightHandControl.target = rightHandAttachmentPoint.TargetTransform;
-                    rightHandControl.TargetWeight = rightHandAttachmentPoint.TargetTransformWeight;
-                    rightHandControl.lerpSpeed = rightHandAttachmentPoint.TargetTransformLerp;
-                }
-
-                if (leftHandHintControl)
-                {
-                    rightHandHintControl.target = rightHandAttachmentPoint.TargetHintTransform;
-                    rightHandHintControl.TargetWeight = rightHandAttachmentPoint.TargetHintTransformWeight;
-                    rightHandHintControl.lerpSpeed = rightHandAttachmentPoint.TargetHintTransformLerp;
-                }
-            }
+            
 
             if (null != aimTarget)
             {

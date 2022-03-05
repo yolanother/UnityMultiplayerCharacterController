@@ -2,6 +2,7 @@
 using UnityEditor;
 #endif
 using System;
+using System.Collections;
 using DoubTech.MCC.CharacterSelection;
 using UnityEngine;
 using UnityEngine.Events;
@@ -28,9 +29,6 @@ namespace DoubTech.MCC.Weapons
         [SerializeField] private UnityEvent onWeaponChanged = new UnityEvent();
         [SerializeField] public UnityEvent<WeaponConfiguration> onWeaponConfigChanged = new UnityEvent<WeaponConfiguration>();
 
-        public WeaponInstance LeftWeapon => activeLeftWeapon >= 0 && activeLeftWeapon < leftHandInstances.Length ? leftHandInstances[activeLeftWeapon] : null;
-        public WeaponInstance RightWeapon => activeRightWeapon >= 0 && activeRightWeapon < rightHandInstances.Length ? rightHandInstances[activeRightWeapon] : null;
-
         public int LeftWeaponIndex
         {
             get => activeLeftWeapon;
@@ -49,41 +47,39 @@ namespace DoubTech.MCC.Weapons
                 }
             }
         }
+
+        public WeaponInstance RightWeapon => activeRightWeapon >= 0 && activeRightWeapon < rightHandInstances.Length ? rightHandInstances[activeRightWeapon] : null;
+        public WeaponInstance LeftWeapon => activeLeftWeapon >= 0 && activeLeftWeapon < leftHandInstances.Length ? leftHandInstances[activeLeftWeapon] : null;
         
         public int RightWeaponIndex
         {
             get => activeRightWeapon;
             set
             {
-                if (activeRightWeapon != value)
+                if (activeRightWeapon != value && value >= 0 && value < rightHandInstances.Length)
                 {
-                    activeRightWeapon = value;
-                    for (int i = 0; i < rightHandInstances.Length; i++)
-                    {
-                        var instance = rightHandInstances[i];
-                        instance.gameObject.SetActive(i == activeRightWeapon);
-                    }
-
-                    onWeaponChanged.Invoke();
-                    if(activeRightWeapon >= 0 && activeRightWeapon < rightHandInstances.Length)
-                    {
-                        onWeaponConfigChanged.Invoke(rightHandInstances[activeRightWeapon].WeaponConfiguration);
-                    }
+                    SetWeaponIndex(value);
                 }
             }
         }
-        
-        private void Awake()
+
+        private void SetWeaponIndex(int value)
         {
-            for(int i = 0; i < leftHandInstances.Length; i++)
+            var activeWeapon = RightWeapon;
+            if (activeWeapon && activeWeapon.IsEquipping) return;
+            if (activeWeapon && activeWeapon.IsEquipped)
             {
-                var instance = leftHandInstances[i];
-                instance.gameObject.SetActive(false);
+                rightHandInstances[activeRightWeapon].Unequip(() => SetWeaponIndex(value));
+                return;
             }
-            for(int i = 0; i < rightHandInstances.Length; i++)
+                    
+            activeRightWeapon = value;
+            onWeaponChanged.Invoke();
+            var weapon = RightWeapon;
+            if(null != weapon)
             {
-                var instance = rightHandInstances[i];
-                instance.gameObject.SetActive(false);
+                onWeaponConfigChanged.Invoke(weapon.WeaponConfiguration);
+                weapon.Equip();
             }
         }
 
@@ -92,6 +88,12 @@ namespace DoubTech.MCC.Weapons
             armatureRoot.OnAnimatorChanged += OnAnimationChanged;
             
             Reposition(true);
+            StartCoroutine(Init());
+        }
+
+        private IEnumerator Init()
+        {
+            yield return new WaitForEndOfFrame();
             Reequip(activeLeftWeapon, activeRightWeapon);
         }
 

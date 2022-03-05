@@ -17,9 +17,23 @@ namespace DoubTech.MCC.IK
         [SerializeField] private Transform targetTransform;
         [SerializeField] private Transform targetHintTransform;
 
-        public IKAttachmentType AttachmentType => attachmentType;
-        public Transform TargetTransform => targetTransform;
-        public Transform TargetHintTransform => targetHintTransform;
+        public IKAttachmentType AttachmentType
+        {
+            get => attachmentType;
+            set => attachmentType = value;
+        }
+
+        public Transform TargetTransform
+        {
+            get => targetTransform;
+            set => targetTransform = value;
+        }
+
+        public Transform TargetHintTransform
+        {
+            get => targetHintTransform;
+            set => targetHintTransform = value;
+        }
 
         public float TargetTransformLerp => targetTransformLerp;
         public float TargetHintTransformLerp => targetHintTransformLerp;
