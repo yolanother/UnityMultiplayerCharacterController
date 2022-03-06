@@ -26,15 +26,17 @@ namespace DoubTech.MCC.Input
             "The follow target set in the Cinemachine Virtual Camera that the camera will follow")]
         public GameObject FPSCameraTarget;
         public GameObject TPSCameraTarget;
-        
+
         // cinemachine
         [SerializeField] private float _cinemachineTargetYaw;
         [SerializeField] private float _cinemachineTargetPitch;
 
         [SerializeField] private float inputThreshold = 0.001f;
-        
+
         protected IPlayerInputSync playerInputSync;
         private GameObject _mainCamera;
+
+        public float sensitivity = 1;
 
 
         protected virtual void Awake()
@@ -50,16 +52,16 @@ namespace DoubTech.MCC.Input
         {
             playerInputSync = GetComponentInParent<IPlayerInputSync>();
         }
-        
+
         private void CameraRotation()
         {
             if (null == playerInputSync) return;
-            
+
             // if there is an input and camera position is not fixed
             if (playerInputSync.Look.sqrMagnitude >= inputThreshold && !LockCameraPosition)
             {
-                _cinemachineTargetYaw += playerInputSync.Look.x * Time.deltaTime;
-                _cinemachineTargetPitch += playerInputSync.Look.y * Time.deltaTime;
+                _cinemachineTargetYaw += playerInputSync.Look.x * Time.deltaTime * sensitivity;
+                _cinemachineTargetPitch += playerInputSync.Look.y * Time.deltaTime * sensitivity;
             }
 
             // clamp our rotations so our values are limited 360 degrees

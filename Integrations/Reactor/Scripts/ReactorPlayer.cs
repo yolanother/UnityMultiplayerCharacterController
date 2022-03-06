@@ -8,7 +8,7 @@ namespace DoubTech.MCC.Integrations.Reactor
 {
     public class ReactorPlayer : MonoBehaviour, IPlayerInfoProvider, ICharacterController
     {
-        [ksEditable] private uint propertyStart = 2000;
+        [ksEditable] private uint propertyStart = 1000;
         [ksEditable] private uint rpcStart = 2000;
         private ksEntityScript entity;
         private string playerName;
@@ -30,10 +30,6 @@ namespace DoubTech.MCC.Integrations.Reactor
             set
             {
                 entity = value;
-                if (!string.IsNullOrEmpty(playerName))
-                {
-                    PlayerName = playerName;
-                }
 
                 if (IsLocalPlayer)
                 {
@@ -43,6 +39,8 @@ namespace DoubTech.MCC.Integrations.Reactor
                 {
                     player.OnStartRemotePlayer();
                 }
+
+                name = PlayerName;
             }
         }
 
@@ -86,7 +84,7 @@ namespace DoubTech.MCC.Integrations.Reactor
             set
             {
                 entity.Room.CallRPC(RPC_ROTATION, value);
-            } 
+            }
         }
 
         public Vector3 Velocity

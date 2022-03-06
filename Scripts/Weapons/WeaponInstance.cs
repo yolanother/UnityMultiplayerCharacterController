@@ -50,7 +50,7 @@ namespace DoubTech.MCC.Weapons
         public bool IsEquipped => equipped;
         public bool IsEquipping => equipping;
 
-        private bool equipping = true;
+        private bool equipping;
 
         private Transform rightHandAttachmentPivot;
         private Transform leftHandAttachmentPivot;
@@ -142,9 +142,14 @@ namespace DoubTech.MCC.Weapons
         public void Equip()
         {
             StopAllCoroutines();
+            if (!enabled || !gameObject.activeInHierarchy)
+            {
+                Debug.LogWarning("Attempted to equip while disabled.");
+                return;
+            }
             StartCoroutine(EquipAsync());
         }
-        
+
         public IEnumerator EquipAsync()
         {
             if (equipped) yield break;
@@ -152,7 +157,7 @@ namespace DoubTech.MCC.Weapons
 
             equipping = true;
             equipped = true;
-            
+
             OnWeaponEquipStarted.Invoke();
             TriggerEvent(e => e.OnWeaponEquipStarted());
 
@@ -247,10 +252,16 @@ namespace DoubTech.MCC.Weapons
         public void Unequip(Action onUnequipComplete)
         {
             StopAllCoroutines();
+            if (!enabled || !gameObject.activeInHierarchy)
+            {
+                Debug.LogWarning("Attempted to unequip while inactive;");
+                return;
+            }
+
             StartCoroutine(UnequipAsync(onUnequipComplete));
         }
-        
-        private IEnumerator UnequipAsync(Action onUnequipComplete) 
+
+        private IEnumerator UnequipAsync(Action onUnequipComplete)
         {
             if (!equipped) yield break;
             equipping = true;
@@ -265,7 +276,7 @@ namespace DoubTech.MCC.Weapons
             yield return new WaitForSeconds(weaponConfiguration.unequpReleaseTime);
             ParentToUnequipped();
             yield return new WaitForSeconds(weaponConfiguration.unequip.length - weaponConfiguration.unequpReleaseTime);
-            
+
             OnWeaponUnequipped.Invoke();
             TriggerEvent(e => e.OnWeaponUnequipped());
             if(rig) yield return Tween.Fade(rig.weight, true, .2f, w => rig.weight = w);

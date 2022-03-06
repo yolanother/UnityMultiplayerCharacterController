@@ -52,7 +52,7 @@ namespace DoubTech.MCC.Weapons
 
         public WeaponInstance RightWeapon => activeRightWeapon >= 0 && activeRightWeapon < rightHandInstances.Length ? rightHandInstances[activeRightWeapon] : null;
         public WeaponInstance LeftWeapon => activeLeftWeapon >= 0 && activeLeftWeapon < leftHandInstances.Length ? leftHandInstances[activeLeftWeapon] : null;
-        
+
         public int RightWeaponIndex
         {
             get => activeRightWeapon;
@@ -74,7 +74,7 @@ namespace DoubTech.MCC.Weapons
                 rightHandInstances[activeRightWeapon].Unequip(() => SetWeaponIndex(value));
                 return;
             }
-                    
+
             activeRightWeapon = value;
             onWeaponChanged.Invoke();
             var weapon = RightWeapon;
@@ -88,7 +88,7 @@ namespace DoubTech.MCC.Weapons
         private void OnEnable()
         {
             armatureRoot.OnAnimatorChanged += OnAnimationChanged;
-            
+
             Reposition(true);
             StartCoroutine(Init());
 
@@ -112,6 +112,7 @@ namespace DoubTech.MCC.Weapons
             activeRightWeapon = -1;
             LeftWeaponIndex = leftWeapon;
             RightWeaponIndex = rightWeapon;
+            SetWeaponIndex(rightWeapon);
         }
 
         private void OnAnimationChanged(Animator animator)

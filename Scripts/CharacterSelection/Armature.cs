@@ -22,7 +22,7 @@ namespace DoubTech.MCC.CharacterSelection
                 thirdPerson.SelectedMaterial = value;
             }
         }
-        
+
         public bool FPSMode
         {
             get => fpsMode;
@@ -51,17 +51,21 @@ namespace DoubTech.MCC.CharacterSelection
         public MaterialSet ActiveMaterialSet => fpsMode ? firstPerson : thirdPerson;
 
         public void ResetRigBuilder() => StartCoroutine(ResetRigBuilder(ActiveMaterialSet));
-        
+
         private IEnumerator ResetRigBuilder(MaterialSet materialSet)
         {
             var rigBuilder = materialSet.GetComponent<RigBuilder>();
-            // Hacky solution to reset Animation rigging and make sure it is working
-            yield return new WaitForSeconds(.1f);
-            yield return new WaitForEndOfFrame();
-            rigBuilder.enabled = false;
-            yield return new WaitForSeconds(2f);
-            yield return new WaitForEndOfFrame();
-            rigBuilder.enabled = true;
+
+            if (rigBuilder)
+            {
+                // Hacky solution to reset Animation rigging and make sure it is working
+                yield return new WaitForSeconds(.1f);
+                yield return new WaitForEndOfFrame();
+                rigBuilder.enabled = false;
+                yield return new WaitForSeconds(2f);
+                yield return new WaitForEndOfFrame();
+                rigBuilder.enabled = true;
+            }
         }
 
         public int MaterialCount => fpsMode ? firstPerson.Count : thirdPerson.Count;

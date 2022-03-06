@@ -285,6 +285,8 @@ namespace DoubTech.MCC
         bool Crouch { get; set; }
         AnimatorOverrideController OverrideController { get; set; }
 
+        public void PlayEquip(AnimationClip clip);
+        public void PlayUnequip(AnimationClip clip);
         public void PlayAction(AnimationClip clip);
         public void PlayLoopingAction(AnimationClip clip);
         void PlayTrigger(int hash);

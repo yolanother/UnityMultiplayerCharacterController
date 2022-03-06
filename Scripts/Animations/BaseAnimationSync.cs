@@ -10,10 +10,10 @@ namespace MessyJammersADF.Com.Doubtech.Unity.Mirrorcharactercontroller.Animation
         [SerializeField] private Transform animatorParent;
 
         private IAnimatorProvider animProvider;
-        
+
         private bool currentAction;
         private bool currentLoop;
-        
+
         private AnimatorOverrideController overrideController;
 
         private string CurrentActionTrigger => currentAction ? "Action 1" : "Action 2";
@@ -39,13 +39,25 @@ namespace MessyJammersADF.Com.Doubtech.Unity.Mirrorcharactercontroller.Animation
                 if(overrideController) overrideController[CurrentLoopName] = value;
             }
         }
-        
+
         public void PlayLoopingAction(AnimationClip clip)
         {
             Loop = clip;
             animProvider.Animator.SetTrigger(CurrentLoopTrigger);
         }
-        
+
+        public void PlayEquip(AnimationClip clip)
+        {
+            overrideController["Equip"] = clip;
+            animProvider.Animator.SetTrigger("Equip");
+        }
+
+        public void PlayUnequip(AnimationClip clip)
+        {
+            overrideController["Unequip"] = clip;
+            animProvider.Animator.SetTrigger("Unequip");
+        }
+
         public void PlayAction(AnimationClip clip)
         {
             Action = clip;
@@ -109,7 +121,7 @@ namespace MessyJammersADF.Com.Doubtech.Unity.Mirrorcharactercontroller.Animation
                     animProvider = GetComponentInChildren<IAnimatorProvider>();
                 }
             }
-            
+
             if(null != animProvider) animProvider.OnAnimatorChanged += OnAnimatorChanged;
             if(animProvider?.Animator) OnAnimatorChanged(animProvider.Animator);
         }
@@ -180,7 +192,7 @@ namespace MessyJammersADF.Com.Doubtech.Unity.Mirrorcharactercontroller.Animation
         private static int _animIDHorizontal = Animator.StringToHash("Horizontal");
         private static int _animIDVertical = Animator.StringToHash("Vertical");
         private static int _animIDTurn = Animator.StringToHash("Turn");
-        
+
         // Bools
         private static int _animIDGrounded = Animator.StringToHash("Grounded");
         private static int _animIDJump = Animator.StringToHash("Jump");
