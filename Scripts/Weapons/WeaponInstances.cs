@@ -28,6 +28,8 @@ namespace DoubTech.MCC.Weapons
         [Header("Events")]
         [SerializeField] private UnityEvent onWeaponChanged = new UnityEvent();
         [SerializeField] public UnityEvent<WeaponConfiguration> onWeaponConfigChanged = new UnityEvent<WeaponConfiguration>();
+        [SerializeField] public UnityEvent<WeaponInstance> onWeaponEquipped = new UnityEvent<WeaponInstance>();
+        [SerializeField] public UnityEvent<WeaponInstance> onWeaponUnequipped = new UnityEvent<WeaponInstance>();
 
         public int LeftWeaponIndex
         {
@@ -89,6 +91,13 @@ namespace DoubTech.MCC.Weapons
             
             Reposition(true);
             StartCoroutine(Init());
+
+            foreach (var instance in rightHandInstances)
+            {
+                var weapon = instance;
+                instance.OnWeaponEquipped.AddListener(() => onWeaponEquipped.Invoke(weapon));
+                instance.OnWeaponUnequipped.AddListener(() => onWeaponUnequipped.Invoke(weapon));
+            }
         }
 
         private IEnumerator Init()

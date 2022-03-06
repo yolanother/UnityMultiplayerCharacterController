@@ -45,6 +45,7 @@ namespace DoubTech.MCC.Input
         public UnityEvent onChangeCamera = new UnityEvent();
         public UnityEvent<bool> onTalk = new UnityEvent<bool>();
         public UnityEvent onUse = new UnityEvent();
+        public UnityEvent<bool> onAim = new UnityEvent<bool>();
 
 #if !UNITY_IOS || !UNITY_ANDROID
         [Header("Mouse Cursor Settings")] public bool cursorInputForLook = true;
@@ -99,6 +100,7 @@ namespace DoubTech.MCC.Input
         public void OnAim(InputValue value)
         {
             aim = (InputEnabled && value.isPressed);
+            onAim.Invoke(aim);
         }
 
         public void OnCrouch(InputValue value)

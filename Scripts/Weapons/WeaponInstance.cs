@@ -19,31 +19,31 @@ namespace DoubTech.MCC.Weapons
         [Header("IK")]
         [SerializeField] private IKAttachmentManager ikManager;
         [SerializeField] private Transform aimTarget;
-        [SerializeField] private IKAttachmentPoint leftHandAttachmentPoint;
-        [SerializeField] private IKAttachmentPoint rightHandAttachmentPoint;
+        [SerializeField] public IKAttachmentPoint leftHandAttachmentPoint;
+        [SerializeField] public IKAttachmentPoint rightHandAttachmentPoint;
+
+        [Header("Model")]
+        [SerializeField] private GameObject model;
 
         [Header("Equip Events")]
-        [SerializeField] private UnityEvent OnWeaponEquipStarted = new UnityEvent();
-        [SerializeField] private UnityEvent OnWeaponEquipped = new UnityEvent();
+        [SerializeField] public UnityEvent OnWeaponEquipStarted = new UnityEvent();
+        [SerializeField] public UnityEvent OnWeaponEquipped = new UnityEvent();
 
-        [SerializeField] private UnityEvent OnWeaponUnequipStarted = new UnityEvent();
-        [SerializeField] private UnityEvent OnWeaponUnequipped = new UnityEvent();
+        [SerializeField] public UnityEvent OnWeaponUnequipStarted = new UnityEvent();
+        [SerializeField] public UnityEvent OnWeaponUnequipped = new UnityEvent();
 
         [Header("Fire Events")]
-        [SerializeField] private UnityEvent<Transform> OnWeaponPrimaryFired = new UnityEvent<Transform>();
-        [SerializeField] private UnityEvent<Transform> OnWeaponSecondaryFired = new UnityEvent<Transform>();
-        [SerializeField] private UnityEvent<Transform> OnWeaponPrimaryFiredWithNoAmmo = new UnityEvent<Transform>();
-        [SerializeField] private UnityEvent<Transform> OnWeaponSecondaryFiredWithNoAmmo = new UnityEvent<Transform>();
-        [SerializeField] private UnityEvent<Transform> OnWeaponReloading = new UnityEvent<Transform>();
-        [SerializeField] private UnityEvent<Transform> OnWeaponReloaded = new UnityEvent<Transform>();
+        [SerializeField] public UnityEvent<Transform> OnWeaponPrimaryFired = new UnityEvent<Transform>();
+        [SerializeField] public UnityEvent<Transform> OnWeaponSecondaryFired = new UnityEvent<Transform>();
+        [SerializeField] public UnityEvent<Transform> OnWeaponPrimaryFiredWithNoAmmo = new UnityEvent<Transform>();
+        [SerializeField] public UnityEvent<Transform> OnWeaponSecondaryFiredWithNoAmmo = new UnityEvent<Transform>();
+        [SerializeField] public UnityEvent<Transform> OnWeaponReloading = new UnityEvent<Transform>();
+        [SerializeField] public UnityEvent<Transform> OnWeaponReloaded = new UnityEvent<Transform>();
 
         [Header("Animations")]
         [SerializeField] private WeaponAnimationLayer[] animationLayers;
         private IAnimationController animController;
         private IAnimatorProvider animator;
-
-        [Header("Model")]
-        [SerializeField] private GameObject model;
 
         public Transform MuzzleTransform => muzzleTransform;
         public WeaponConfiguration WeaponConfiguration => weaponConfiguration;
@@ -59,10 +59,13 @@ namespace DoubTech.MCC.Weapons
         private bool equipped;
         private MaterialSet materialSet;
 
+        private IWeaponEventHandler[] weaponEventhandlers;
+
         private Transform equippedParent;
         private void Awake()
         {
             equippedParent = transform.parent;
+            weaponEventhandlers = GetComponents<IWeaponEventHandler>();
         }
 
         private void OnEnable()
@@ -70,6 +73,14 @@ namespace DoubTech.MCC.Weapons
             animator = GetComponentInParent<IAnimatorProvider>();
             animator.OnAnimatorChanged += OnAnimatorChanged;
             OnAnimatorChanged(animator.Animator);
+        }
+
+        private void TriggerEvent(Action<IWeaponEventHandler> handler)
+        {
+            for (int i = 0; i < weaponEventhandlers.Length; i++)
+            {
+                if(null != handler) handler.Invoke(weaponEventhandlers[i]);
+            }
         }
 
         private void OnAnimatorChanged(Animator animator)
@@ -86,31 +97,37 @@ namespace DoubTech.MCC.Weapons
         public void FirePrimaryNoAmmo()
         {
             OnWeaponPrimaryFiredWithNoAmmo.Invoke(transform);
+            TriggerEvent(e => e.OnWeaponFiredWithNoAmmo());
         }
 
         public void FireSecondaryNoAmmo()
         {
             OnWeaponSecondaryFiredWithNoAmmo.Invoke(transform);
+            TriggerEvent(e => e.OnWeaponSecondaryFiredWithNoAmmo());
         }
 
         public void FirePrimary()
         {
             OnWeaponPrimaryFired.Invoke(transform);
+            TriggerEvent(e => e.OnWeaponPrimaryFired());
         }
 
         public void FireSecondary()
         {
             OnWeaponSecondaryFired.Invoke(transform);
+            TriggerEvent(e => e.OnWeaponSecondaryFired());
         }
 
         public void Reloading()
         {
             OnWeaponReloading.Invoke(transform);
+            TriggerEvent(e => e.OnWeaponReloading());
         }
 
         public void Reloaded()
         {
             OnWeaponReloaded.Invoke(transform);
+            TriggerEvent(e => e.OnWeaponReloaded());
         }
 
         private void FixedUpdate()
@@ -137,11 +154,12 @@ namespace DoubTech.MCC.Weapons
             equipped = true;
             
             OnWeaponEquipStarted.Invoke();
+            TriggerEvent(e => e.OnWeaponEquipStarted());
 
             ikManager.Detach();
 
             var rig = animator.Animator.GetComponentInChildren<Rig>();
-            yield return Tween.Fade(rig.weight, false, .2f, w => rig.weight = w);
+            if(rig) yield return Tween.Fade(rig.weight, false, .2f, w => rig.weight = w);
             animController?.PlayAction(weaponConfiguration.equip);
             yield return new WaitForSeconds(weaponConfiguration.equipGrabTime);
             transform.parent = equippedParent;
@@ -154,9 +172,10 @@ namespace DoubTech.MCC.Weapons
                 StartCoroutine(LerpLayer(layer));
             }
             OnWeaponEquipped.Invoke();
+            TriggerEvent(e => e.OnWeaponEquipped());
 
             AttachWeapon();
-            yield return Tween.Fade(rig.weight, true, .2f, w => rig.weight = w);
+            if(rig) yield return Tween.Fade(rig.weight, true, .2f, w => rig.weight = w);
             equipping = false;
         }
 
@@ -237,17 +256,19 @@ namespace DoubTech.MCC.Weapons
             equipping = true;
             equipped = false;
             var rig = animator.Animator.GetComponentInChildren<Rig>();
-            yield return Tween.Fade(rig.weight, false, .2f, w => rig.weight = w);
+            if(rig) yield return Tween.Fade(rig.weight, false, .2f, w => rig.weight = w);
             ikManager.Detach();
             animController?.PlayAction(weaponConfiguration.unequip);
             OnWeaponUnequipStarted.Invoke();
+            TriggerEvent(e => e.OnWeaponUnequipStarted());
 
             yield return new WaitForSeconds(weaponConfiguration.unequpReleaseTime);
             ParentToUnequipped();
             yield return new WaitForSeconds(weaponConfiguration.unequip.length - weaponConfiguration.unequpReleaseTime);
             
             OnWeaponUnequipped.Invoke();
-            yield return Tween.Fade(rig.weight, true, .2f, w => rig.weight = w);
+            TriggerEvent(e => e.OnWeaponUnequipped());
+            if(rig) yield return Tween.Fade(rig.weight, true, .2f, w => rig.weight = w);
             equipping = false;
             onUnequipComplete.Invoke();
         }
@@ -305,6 +326,20 @@ namespace DoubTech.MCC.Weapons
 
             return done;
         }
+    }
+
+    public interface IWeaponEventHandler
+    {
+        void OnWeaponEquipStarted();
+        void OnWeaponEquipped();
+        void OnWeaponUnequipStarted();
+        void OnWeaponUnequipped();
+        void OnWeaponPrimaryFired();
+        void OnWeaponSecondaryFired();
+        void OnWeaponReloading();
+        void OnWeaponReloaded();
+        void OnWeaponFiredWithNoAmmo();
+        void OnWeaponSecondaryFiredWithNoAmmo();
     }
 
     public class Tween

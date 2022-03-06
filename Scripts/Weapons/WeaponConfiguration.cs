@@ -16,6 +16,7 @@ namespace DoubTech.MCC.Weapons
         [SerializeField] public float equipGrabTime;
         [SerializeField] public AnimationClip unequip;
         [SerializeField] public float unequpReleaseTime;
+        [SerializeField] public bool isSniper;
         
         [SerializeField] public AnimationClip reload;
 
